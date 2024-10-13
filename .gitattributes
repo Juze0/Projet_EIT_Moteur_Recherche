@@ -1,0 +1,2 @@
+json_files_for_tf_idf/tf_idf_spacy_vectors.json filter=lfs diff=lfs merge=lfs -text
+json_files_for_tf_idf/tf_idf_nltk_vectors.json filter=lfs diff=lfs merge=lfs -text
