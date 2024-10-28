@@ -6,9 +6,12 @@ from rich.console import Console
 from rich.table import Table
 from rich.text import Text
 
+from Preprocessing.nltk_preprocessor import NLTKPreprocessor
+from Preprocessing.spacy_preprocessor import SpaCyPreprocessor
+
 # Test the normalize method
 link = "./wiki_split_extract_2k"
-tools = Tools.Tools()
+tools = Tools.Tools(SpaCyPreprocessor())
 console = Console()
 
 
@@ -31,7 +34,7 @@ while True:
         break
     console.print("Recherche des documents les plus pertinents en cours...\n")
     results = {}
-    results = tools.calculate_docs_to_answer_query_docs(query, tf_idf_vectors,idf,library="spacy")
+    results = tools.calculate_docs_to_answer_query_docs(query, tf_idf_vectors,idf)
     
     if len(results.keys()) <= 0:
         print("Aucun document n'a été trouvé pour votre recherche." + emoji.emojize(":neutral_face:"))

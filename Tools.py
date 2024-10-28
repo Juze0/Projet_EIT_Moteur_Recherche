@@ -1,15 +1,7 @@
 import os
-import string
-import re
 import json
-import spacy
-import sklearn
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
-import nltk
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-from nltk.stem import SnowballStemmer
 from collections import defaultdict
 
 
@@ -19,50 +11,24 @@ class Tools:
 
     nlp = None
 
-    def __init__(self):
-        self.nlp = spacy.load("fr_core_news_md")
-        self.stopwords = set(stopwords.words("french"))
-        self.regex = re.compile(r"^[\wÀ-ÿ]+$", re.UNICODE) # Regex pour les mots français avec caractères spéciaux
-        self.lemmatizer = SnowballStemmer("french")
+    def __init__(self, preprocessor):
+        self.__preprocessor = preprocessor
 
-    def normalize_document_nltk(self,file):
-        """
-        Prend un lien en paramètre et normalise le texte issu du lien afin de le normaliser (retire la ponctuation
-        les espaces, les caractères spéciaux, les stopwords etc.)
-        Retourne une liste de tokens normalisés associés au fichier link
-        """
-        #new_file = open(link + "_normalized.txt", "x")
-        token_list = []
-        #for filename in os.listdir(directory_link):
-            #f = os.path.join(directory_link, filename)
-            #if os.path.isfile(f)and f.endswith(".txt"):
-        with open(file, 'r', encoding='utf-8') as f:
-            for line in f:
-                line = line.lower() # Met en minuscule
-                line = word_tokenize(line, "french") # Tokenize le texte
-                line = [word for word in line if word not in self.stopwords and self.regex.match(word)] # Retire les stopwords (déterminants, mots de liaison...) et garde les mots français avec caractères spéciaux 
-                token_list.extend(line)
-        return token_list
+    # ******** Preprocessor's methods
+    def normalize_text(self, text):
+        return self.__preprocessor.normalize_text(text)
+
+    def normalize_document(self, file):
+        return self.__preprocessor.normalize_document(file)
+
+    def lemmatize(self, tokens):
+        return self.__preprocessor.lemmatize(tokens)
     
-    def normalize_text(self, text, library='nltk'):
-        """
-        Cette fonction prend un texte en paramètre et le normalise (retire la ponctuation, les espaces, les caractères spéciaux, les stopwords, etc.) en fonction de la librairie choisie.
-        """
-        token_list = []
-        if library == 'nltk':
-            text = text.lower()
-            text = word_tokenize(text, "french")
-            text = [word for word in text if word not in self.stopwords and self.regex.match(word)]
-            token_list.extend(text)
-        elif library == 'spacy':
-            doc = self.nlp(text)
-            for token in doc:
-                if (token.text.lower() not in self.stopwords and not token.is_stop 
-                        and token.is_alpha and self.regex.match(token.text)):
-                    token_list.append(token.text.lower())
-        return token_list
+    def get_preprocessor_name(self):
+        return self.__preprocessor.name
+
     
-    def extract_full_vocab(self, directory_link, library='nltk', save_index=False):
+    def extract_full_vocab(self, directory_link, save_index=False):
         """
         Prend un dossier de fichiers en paramètre et renvoie le vocabulaire complet (normalisé et lemmatisé) des fichiers.
         """
@@ -70,31 +36,18 @@ class Tools:
         for filename in os.listdir(directory_link):
             f = os.path.join(directory_link, filename)
             if os.path.isfile(f) and f.endswith(".txt"):
-                if library == 'nltk':
-                    tokens_by_file = self.normalize_document_nltk(f)
-                    lemmatized_tokens = self.lemmatize_nltk(tokens_by_file)
-                    full_vocab.update(lemmatized_tokens)
-                elif library == 'spacy':
-                    tokens_by_file = self.normalize_document_spacy(f)
-                    lemmatized_tokens = self.lemmatize_spacy(tokens_by_file)
-                    full_vocab.update(lemmatized_tokens)
+                # library
+                tokens_by_file = self.normalize_document(f)
+                lemmatized_tokens = self.lemmatize(tokens_by_file)
+                full_vocab.update(lemmatized_tokens)
+                # ---
         if save_index:
-            with open("full_vocab_" + library + ".json", "w", encoding='utf-8') as f:
+            with open("full_vocab_" + self.get_preprocessor_name() + ".json", "w", encoding='utf-8') as f:
                 json.dump(list(full_vocab), f, ensure_ascii=False, indent=4)
         return full_vocab
     
-    def lemmatize_nltk(self,tokens):
-        """
-        Prend une liste de tokens en paramètre et retourne une liste de tokens lemmatisés
-        """
-        lemmatized_tokens = []
-        
-        lemmatizer = self.lemmatizer
-        for token in tokens:
-            lemmatized_tokens.append(lemmatizer.stem(token))
-        return lemmatized_tokens
     
-    def create_index(self, directory_link, library='nltk', save_index=False):
+    def create_index(self, directory_link, save_index=False):
         """
         Prend un dossier en paramètre et crée un index (dictionnaire) associant les fichiers à leur liste de mots normalisés et lemmatisés.
         """
@@ -102,17 +55,17 @@ class Tools:
         for filename in os.listdir(directory_link):
             f = os.path.join(directory_link, filename)
             if os.path.isfile(f) and f.endswith(".txt"):
-                if library == 'nltk':
-                    tokens_by_file = self.normalize_document_nltk(f)
-                    lemmatized_tokens = self.lemmatize_nltk(tokens_by_file)
-                    index[filename] = lemmatized_tokens
-                    name = "index_nltk.json"
-                elif library == 'spacy':
-                    tokens_by_file = self.normalize_document_spacy(f)
-                    lemmatized_tokens = self.lemmatize_spacy(tokens_by_file)
-                    index[filename] = lemmatized_tokens
-                    name = "index_spacy.json"
+                # library
+                tokens_by_file = self.normalize_document(f)
+                lemmatized_tokens = self.lemmatize(tokens_by_file)
+                index[filename] = lemmatized_tokens
 
+                library_name = self.get_preprocessor_name()
+                if library_name == 'nltk':
+                    name = "index_nltk.json"
+                elif library_name == 'spacy':
+                    name = "index_spacy.json"
+                # ---
         if save_index:
             with open(name, "w", encoding='utf-8') as f:
                 json.dump(index, f, ensure_ascii=False, indent=4)
@@ -126,13 +79,15 @@ class Tools:
             index = json.load(f)
         return index
     
-    def create_inversed_index(self, directory_link, library='nltk', save_index=False):
+    def create_inversed_index(self, directory_link, save_index=False):
         """
         Prend un dossier en paramètre et renvoie un index inversé (dictionnaire) associant les mots à leur occurence dans les documents.
         """
         inverse_index = defaultdict(lambda: defaultdict(int))
-        index = self.create_index(directory_link, library)
-        name = "inverse_index_" + library + ".json"
+
+        library_name = self.get_preprocessor_name()
+        index = self.create_index(directory_link, library_name)
+        name = "inverse_index_" + library_name + ".json"
         for filename in index:
             for token in index[filename]:
                 inverse_index[token][filename] += 1
@@ -154,7 +109,7 @@ class Tools:
                 json.dump(word_count, f, ensure_ascii=False, indent=4)
         return word_count
     
-    def calculate_tf(self, index, library='nltk',save_index=False):
+    def calculate_tf(self, index, save_index=False):
         """
         Prend un dictionnaire associant les fichiers à leur liste de mots.
         Retourne un dictionnaire associant les fichiers à leur liste de mots et leur fréquence normalisée.
@@ -171,11 +126,11 @@ class Tools:
             for token in tf[filename]:
                 tf[filename][token] = tf[filename][token] / count_words  # On divise le nombre d'occurrences de chaque mot par le nombre total de mots dans le fichier
         if save_index:
-            with open("tf_" + library + ".json", "w", encoding='utf-8') as f:
+            with open("tf_" + self.get_preprocessor_name() + ".json", "w", encoding='utf-8') as f:
                 json.dump(tf, f, ensure_ascii=False, indent=4)
         return tf
         
-    def calculate_idf(self, inverse_index, library='nltk', save_index=False):
+    def calculate_idf(self, inverse_index, save_index=False):
         """
         Prend un dictionnaire associant les mots à leur occurence dans les documents.
         Retourne un dictionnaire associant les mots à leur fréquence inverse de document.
@@ -188,11 +143,11 @@ class Tools:
             if token not in idf:
                 idf[token] = np.log10(((nb_docs)/(len(inverse_index[token].keys()))) + 1) #On calcule le logarithme du nombre de documents divisé par le nombre de documents contenant le mot
         if save_index:
-            with open("idf_" + library + ".json", "w", encoding='utf-8') as f:
+            with open("idf_" + self.get_preprocessor_name() + ".json", "w", encoding='utf-8') as f:
                 json.dump(idf, f, ensure_ascii=False, indent=4)
         return idf
 
-    def calculate_tf_idf(self, tf_dict, idf_dict, library='nltk', save_index=False):
+    def calculate_tf_idf(self, tf_dict, idf_dict, save_index=False):
         """
         Prend un dictionnaire associant les fichiers à leurs mots avec fréquence normalisée 
         et un dictionnaire associant les mots à leur fréquence inverse de document (IDF).
@@ -209,11 +164,11 @@ class Tools:
                     tf_idf[filename][token] = tf_idf_score
                     #index_tf_idf[filename].append((tf_idf_score))
         if save_index:
-            with open("tf_idf_" +library +".json", "w", encoding='utf-8') as f:
+            with open("tf_idf_" + self.get_preprocessor_name() +".json", "w", encoding='utf-8') as f:
                 json.dump(tf_idf, f, ensure_ascii=False, indent=4)
         return tf_idf
     
-    def create_tf_idf_vectors(self, tf_idf_dict, full_vocab, library="nltk", save_index=False):
+    def create_tf_idf_vectors(self, tf_idf_dict, full_vocab, save_index=False):
         """
         Prend un dictionnaire associant les fichiers à leurs mots avec les scores TF-IDF et le vocabulaire complet.
         Retourne un dictionnaire associant les fichiers à leur vecteur TF-IDF.
@@ -227,37 +182,31 @@ class Tools:
                 if token in tokens:
                     tf_idf_vectors[filename][i] = tokens[token]  # Remplir le vecteur avec le score TF-IDF
         if save_index:
-            with open("tf_idf_" + library + "_vectors.json", "w", encoding='utf-8') as f:
+            with open("tf_idf_" + self.get_preprocessor_name() + "_vectors.json", "w", encoding='utf-8') as f:
                 json.dump(tf_idf_vectors, f, ensure_ascii=False, indent=4)
         return tf_idf_vectors
     
-    def search_documents_query_inversed_index(self, preprocessed_query, inverse_index, library='nltk'):
+    def search_documents_query_inversed_index(self, preprocessed_query, inverse_index):
         """
         Prend une requête utilisateur prétraitée et l'index inversé.
         Retourne un dictionnaire associant les documents et leur fréquence d'apparition dans la requête utilisateur.
         """
 
-    def preprocess_query(self, query, library='nltk'):
+    def preprocess_query(self, query):
         """
         Prend une requête utilisateur en paramètre et la normalise (retire la ponctuation, les espaces, les caractères spéciaux, les stopwords, etc.)
         Retourne une liste de tokens normalisés associés à la requête utilisateur.
         """
         query_tokens = []
-        if library == 'nltk':
-            query_tokens = self.normalize_text(query, library)
-            query_tokens = self.lemmatize_nltk(query_tokens)
-
-        elif library == 'spacy':
-            query_tokens = self.normalize_text(query, library) 
-            query_tokens = self.lemmatize_spacy(query_tokens)
+        query_tokens = self.lemmatize(self.normalize_text(query))
         return query_tokens
     
-    def calculate_docs_to_answer_query_docs(self, query, tf_idf_vectors, idf_dict, library='nltk'):
+    def calculate_docs_to_answer_query_docs(self, query, tf_idf_vectors, idf_dict):
         """
         Prend une requête utilisateur, le dictionnaire de tf*idf des documents et le dictionnaire des idf des mots.
         Retourne un dictionnaire associant les documents et leur similarité cosinus avec la requête utilisateur. Le dictionnaire est en ordre décroissant.
         """
-        query_tokens = self.preprocess_query(query,library)
+        query_tokens = self.preprocess_query(query)
         query_tf = {}
         dict_tokens = self.count_words(query_tokens)
         nb_words = len(query_tokens)
@@ -273,9 +222,10 @@ class Tools:
         #print("Tokens de la requête : ")
         #print(query_tf)
         full_vocab = {}
-        if library == 'nltk':
+        library_name = self.get_preprocessor_name()
+        if library_name == 'nltk':
             full_vocab = self.load_json("./json_files_for_tf_idf/full_vocab_nltk.json")
-        elif library == 'spacy':
+        elif library_name == 'spacy':
             full_vocab = self.load_json("./json_files_for_tf_idf/full_vocab_spacy.json")
           
         query_vector = [0.0] * len(full_vocab)
@@ -293,36 +243,7 @@ class Tools:
         docs_to_answer_query = dict(sorted(docs_to_answer_query.items(), key=lambda x: x[1], reverse=True))
         return docs_to_answer_query
 
-        
-        
 
-    def normalize_document_spacy(self, link):
-        """
-        Prend un lien en paramètre et normalise le texte issu du lien afin de le normaliser (retire la ponctuation,
-        les espaces, les caractères spéciaux, les stopwords, etc.)
-        """
-        token_list = []
-        with open(link, 'r', encoding='utf-8') as file:
-            text = file.read()  # Lire tout le fichier d'un coup
-            doc = self.nlp(text)  # Traiter le texte entier
-            
-            for token in doc:
-                if (token.text.lower() not in self.stopwords and not token.is_stop 
-                        and token.is_alpha and self.regex.match(token.text)):
-                    token_list.append(token.text.lower())  
-        return token_list
-
-    def lemmatize_spacy(self, tokens):
-        """
-        Prend une liste de tokens en paramètre et retourne les lemmes des tokens dans une liste.
-        """
-        lemmatized_tokens = []
-        if tokens:  # Vérifie si la liste de tokens n'est pas vide
-            doc = self.nlp(" ".join(tokens))
-            for token in doc:
-                lemmatized_tokens.append(token.lemma_)
-        return lemmatized_tokens
-    
     def count_words(self,tokens):
         """
         Prend une liste de tokens en paramètre et retourne un dictionnaire avec les mots et leur fréquence
