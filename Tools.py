@@ -1,9 +1,10 @@
 import os
-import json
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 from collections import defaultdict
 
+from data.json_handler import JSONHandler
+from data.json_file_type import JSONFileType
 
 """ La lemmatisation avec Spacy est plus précise que celle de NLTK, on doit choisir entre les deux """
 
@@ -27,6 +28,12 @@ class Tools:
     def get_preprocessor_name(self):
         return self.__preprocessor.name
 
+    # ******** Data handler
+    def save_as_json(self, data, file_name_prefix, preprocessor_name=""):
+        JSONHandler.save_as_json(data, file_name_prefix, preprocessor_name)
+
+    def load_json(self, file_name_prefix, preprocessor_name=""):
+        return JSONHandler.load_json(file_name_prefix, preprocessor_name)
     
     def extract_full_vocab(self, directory_link, save_index=False):
         """
@@ -42,8 +49,7 @@ class Tools:
                 full_vocab.update(lemmatized_tokens)
                 # ---
         if save_index:
-            with open("full_vocab_" + self.get_preprocessor_name() + ".json", "w", encoding='utf-8') as f:
-                json.dump(list(full_vocab), f, ensure_ascii=False, indent=4)
+            self.save_as_json(list(full_vocab), JSONFileType.FULL_VOCAB, self.get_preprocessor_name())
         return full_vocab
     
     
@@ -59,24 +65,9 @@ class Tools:
                 tokens_by_file = self.normalize_document(f)
                 lemmatized_tokens = self.lemmatize(tokens_by_file)
                 index[filename] = lemmatized_tokens
-
-                library_name = self.get_preprocessor_name()
-                if library_name == 'nltk':
-                    name = "index_nltk.json"
-                elif library_name == 'spacy':
-                    name = "index_spacy.json"
                 # ---
         if save_index:
-            with open(name, "w", encoding='utf-8') as f:
-                json.dump(index, f, ensure_ascii=False, indent=4)
-        return index
-    
-    def load_json(self, name):
-        """
-        Prend le nom d'un fichier json en paramètre et renvoie le dictionnaire associé.
-        """
-        with open(name, "r", encoding='utf-8') as f:
-            index = json.load(f)
+            self.save_as_json(index, JSONFileType.INDEX, self.get_preprocessor_name())
         return index
     
     def create_inversed_index(self, directory_link, save_index=False):
@@ -87,13 +78,11 @@ class Tools:
 
         library_name = self.get_preprocessor_name()
         index = self.create_index(directory_link, library_name)
-        name = "inverse_index_" + library_name + ".json"
         for filename in index:
             for token in index[filename]:
                 inverse_index[token][filename] += 1
         if save_index:
-            with open(name, "w", encoding='utf-8') as f:
-                json.dump(inverse_index, f, ensure_ascii=False, indent=4)
+            self.save_as_json(inverse_index, JSONFileType.INVERSE_INDEX, self.get_preprocessor_name())
         return inverse_index
     
     def create_dict_word_count(self, index, save_index=False):
@@ -105,8 +94,7 @@ class Tools:
         for filename in index:
             word_count[filename] = self.count_words(index[filename])
         if save_index:
-            with open("word_count.json", "w", encoding='utf-8') as f:
-                json.dump(word_count, f, ensure_ascii=False, indent=4)
+           self.save_as_json(word_count, JSONFileType.WORD_COUNT)
         return word_count
     
     def calculate_tf(self, index, save_index=False):
@@ -126,8 +114,7 @@ class Tools:
             for token in tf[filename]:
                 tf[filename][token] = tf[filename][token] / count_words  # On divise le nombre d'occurrences de chaque mot par le nombre total de mots dans le fichier
         if save_index:
-            with open("tf_" + self.get_preprocessor_name() + ".json", "w", encoding='utf-8') as f:
-                json.dump(tf, f, ensure_ascii=False, indent=4)
+            self.save_as_json(tf, JSONFileType.TF, self.get_preprocessor_name())
         return tf
         
     def calculate_idf(self, inverse_index, save_index=False):
@@ -143,8 +130,7 @@ class Tools:
             if token not in idf:
                 idf[token] = np.log10(((nb_docs)/(len(inverse_index[token].keys()))) + 1) #On calcule le logarithme du nombre de documents divisé par le nombre de documents contenant le mot
         if save_index:
-            with open("idf_" + self.get_preprocessor_name() + ".json", "w", encoding='utf-8') as f:
-                json.dump(idf, f, ensure_ascii=False, indent=4)
+            self.save_as_json(idf, JSONFileType.IDF, self.get_preprocessor_name())
         return idf
 
     def calculate_tf_idf(self, tf_dict, idf_dict, save_index=False):
@@ -164,8 +150,7 @@ class Tools:
                     tf_idf[filename][token] = tf_idf_score
                     #index_tf_idf[filename].append((tf_idf_score))
         if save_index:
-            with open("tf_idf_" + self.get_preprocessor_name() +".json", "w", encoding='utf-8') as f:
-                json.dump(tf_idf, f, ensure_ascii=False, indent=4)
+            self.save_as_json(tf_idf, JSONFileType.TF_IDF, self.get_preprocessor_name())
         return tf_idf
     
     def create_tf_idf_vectors(self, tf_idf_dict, full_vocab, save_index=False):
@@ -182,8 +167,7 @@ class Tools:
                 if token in tokens:
                     tf_idf_vectors[filename][i] = tokens[token]  # Remplir le vecteur avec le score TF-IDF
         if save_index:
-            with open("tf_idf_" + self.get_preprocessor_name() + "_vectors.json", "w", encoding='utf-8') as f:
-                json.dump(tf_idf_vectors, f, ensure_ascii=False, indent=4)
+            self.save_as_json(tf_idf_vectors, JSONFileType.TF_IDF_VECTORS, self.get_preprocessor_name())
         return tf_idf_vectors
     
     def search_documents_query_inversed_index(self, preprocessed_query, inverse_index):
@@ -222,12 +206,8 @@ class Tools:
         #print("Tokens de la requête : ")
         #print(query_tf)
         full_vocab = {}
-        library_name = self.get_preprocessor_name()
-        if library_name == 'nltk':
-            full_vocab = self.load_json("./json_files_for_tf_idf/full_vocab_nltk.json")
-        elif library_name == 'spacy':
-            full_vocab = self.load_json("./json_files_for_tf_idf/full_vocab_spacy.json")
-          
+        full_vocab = self.load_json(JSONFileType.FULL_VOCAB, self.get_preprocessor_name())
+        
         query_vector = [0.0] * len(full_vocab)
         
         #print("Taille du vecteur de la requête : ", len(query_vector))

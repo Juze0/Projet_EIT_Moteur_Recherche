@@ -9,9 +9,12 @@ from rich.text import Text
 from Preprocessing.nltk_preprocessor import NLTKPreprocessor
 from Preprocessing.spacy_preprocessor import SpaCyPreprocessor
 
+from data.json_file_type import JSONFileType
+
 # Test the normalize method
 link = "./wiki_split_extract_2k"
-tools = Tools.Tools(SpaCyPreprocessor())
+preprocessor = SpaCyPreprocessor()
+tools = Tools.Tools(preprocessor)
 console = Console()
 
 
@@ -20,8 +23,8 @@ console.print(Text.assemble("Test de la recherche avec", Text(" tf-idf \n", styl
 
 print("Chargement des fichiers pour la recherche avec tf-idf en cours ...\n")
 
-idf = tools.load_json('./json_files_for_tf_idf/idf_spacy.json')
-tf_idf_vectors = tools.load_json('./json_files_for_tf_idf/tf_idf_spacy_vectors.json')
+idf = idf = tools.load_json(JSONFileType.IDF, preprocessor.name)
+tf_idf_vectors = tools.load_json(JSONFileType.TF_IDF_VECTORS, preprocessor.name)
 
 while True:
 
