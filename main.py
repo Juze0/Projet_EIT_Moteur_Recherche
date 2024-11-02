@@ -1,20 +1,16 @@
-import Tools
-import time
 import emoji
-import rich 
 from rich.console import Console
 from rich.table import Table
 from rich.text import Text
 
 from Preprocessing.nltk_preprocessor import NLTKPreprocessor
 from Preprocessing.spacy_preprocessor import SpaCyPreprocessor
-
-from data.json_file_type import JSONFileType
+from tfidf_search.tf_idf_search_model import TFIDFSearchModel
 
 # Test the normalize method
 link = "./wiki_split_extract_2k"
 preprocessor = SpaCyPreprocessor()
-tools = Tools.Tools(preprocessor)
+tf_idf_search_model = TFIDFSearchModel(preprocessor)
 console = Console()
 
 
@@ -22,9 +18,6 @@ console.print(Text("Bonjour et bienvenue sur votre moteur de recherche de docume
 console.print(Text.assemble("Test de la recherche avec", Text(" tf-idf \n", style="bold red")))
 
 print("Chargement des fichiers pour la recherche avec tf-idf en cours ...\n")
-
-idf = idf = tools.load_json(JSONFileType.IDF, preprocessor.name)
-tf_idf_vectors = tools.load_json(JSONFileType.TF_IDF_VECTORS, preprocessor.name)
 
 while True:
 
@@ -37,7 +30,7 @@ while True:
         break
     console.print("Recherche des documents les plus pertinents en cours...\n")
     results = {}
-    results = tools.calculate_docs_to_answer_query_docs(query, tf_idf_vectors,idf)
+    results = tf_idf_search_model.calculate_docs_to_answer_query_docs(query)
     
     if len(results.keys()) <= 0:
         print("Aucun document n'a été trouvé pour votre recherche." + emoji.emojize(":neutral_face:"))
