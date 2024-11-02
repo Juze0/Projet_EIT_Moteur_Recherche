@@ -3,8 +3,11 @@ from enum import Enum
 
 class JSONFileType(Enum):
     
-    # --- FOLDER_NAME
-    FOLDER_NAME = "json_files_for_tf_idf"
+    ######## FOLDER_NAME
+    # wiki-date file folder
+    WIKI_FOLDER = "wiki_split_extract_2k"
+    # Result file folder
+    JSON_FILES_FOLDER = "json_files_for_tf_idf"
     # --- VOCAB
     FULL_VOCAB = "full_vocab"
     # --- INDEX
