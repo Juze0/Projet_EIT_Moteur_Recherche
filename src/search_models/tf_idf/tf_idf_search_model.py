@@ -1,9 +1,9 @@
 from sklearn.metrics.pairwise import cosine_similarity
 
-from data.json_file_type import JSONFileType
-from data.json_file_handler import JSONFileHandler
-from tfidf_search.index_vocab_calculator import IndexAndVocabCalculator
-from tfidf_search.tf_idf_calculator import TFIDFCalculator
+from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
+from src.file_handlers.json_file_handler import JSONFileHandler
+from src.search_models.tf_idf.index_vocab_calculator import IndexAndVocabCalculator
+from src.search_models.tf_idf.tf_idf_calculator import TFIDFCalculator
 
 """ La lemmatisation avec Spacy est plus précise que celle de NLTK, on doit choisir entre les deux """
 
@@ -12,15 +12,15 @@ class TFIDFSearchModel:
     nlp = None
 
     def __init__(self, preprocessor):
+        #### EXTERN DEPENDENCIES !!!
+        TFIDFCalculator(preprocessor)
+        #### -----------------------
         self.preprocessor = preprocessor
-        # ORDER MATTERS (because of dependencies !!)
-        self.vocab_idx_reverse_idx = IndexAndVocabCalculator(preprocessor)
-        self.tf_idf = TFIDFCalculator(preprocessor.name)
         self.json_file_handler = JSONFileHandler()
 
     # ******** Data handler
-    def load_json(self, json_file_type, remaining_name=""):
-        return self.json_file_handler.load_json_using_enum(json_file_type, remaining_name)
+    def load(self, file_enum, remaining_name=""):
+        return self.json_file_handler.load_using_enum(file_enum, remaining_name)
     
     # ******** DEALING WITH USER REQUEST
 
@@ -42,8 +42,8 @@ class TFIDFSearchModel:
         # [SPECIFIC] Chargement des données nécessaires pour TF-IDF, ici `idf_dict` et `tf_idf_vectors`
         # Pour un autre modèle (Word Embeddings ou BERT), il chargerait ses propres données,
         # comme un espace vectoriel d'embeddings.
-        idf_dict = self.load_json(JSONFileType.IDF, self.preprocessor.name)
-        tf_idf_vectors = self.load_json(JSONFileType.TF_IDF_VECTORS, self.preprocessor.name)
+        idf_dict = self.load(FileHierarchyEnum.IDF, self.preprocessor.name)
+        tf_idf_vectors = self.load(FileHierarchyEnum.TF_IDF_VECTORS, self.preprocessor.name)
 
         # [ALL] Prétraitement de la requête
         query_tokens = self.preprocess_query(query)
@@ -68,7 +68,7 @@ class TFIDFSearchModel:
         #print("Tokens de la requête : ")
         #print(query_tf)
         full_vocab = {}
-        full_vocab = self.load_json(JSONFileType.FULL_VOCAB, self.preprocessor.name)
+        full_vocab = self.load(FileHierarchyEnum.FULL_VOCAB, self.preprocessor.name)
         
         query_vector = [0.0] * len(full_vocab)
         
@@ -126,5 +126,5 @@ class TFIDFSearchModel:
         for filename in index:
             word_count[filename] = self.count_words(index[filename])
         if save_index:
-           self.save_as_json(word_count, JSONFileType.WORD_COUNT)
+           self.save_as_json(word_count, FileHierarchyEnum.WORD_COUNT)
         return word_count

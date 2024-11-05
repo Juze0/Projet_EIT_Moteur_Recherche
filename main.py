@@ -3,12 +3,14 @@ from rich.console import Console
 from rich.table import Table
 from rich.text import Text
 
-from Preprocessing.nltk_preprocessor import NLTKPreprocessor
-from Preprocessing.spacy_preprocessor import SpaCyPreprocessor
-from tfidf_search.tf_idf_search_model import TFIDFSearchModel
+from src.preprocessing.nltk_preprocessor import NLTKPreprocessor
+from src.preprocessing.spacy_preprocessor import SpaCyPreprocessor
+from src.search_models.tf_idf.tf_idf_search_model import TFIDFSearchModel
+from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
+
 
 # Test the normalize method
-link = "./wiki_split_extract_2k"
+link = FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER) # Cette mission est à déléguer à un document retriever !!!!
 preprocessor = SpaCyPreprocessor()
 tf_idf_search_model = TFIDFSearchModel(preprocessor)
 console = Console()
