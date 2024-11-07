@@ -8,10 +8,15 @@ from src.preprocessing.spacy_preprocessor import SpaCyPreprocessor
 from src.search_models.tf_idf.tf_idf_search_model import TFIDFSearchModel
 from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
 
+from src.search_models.we_fasttext.we_calculator import WECalculator
 
 # Test the normalize method
 link = FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER) # Cette mission est à déléguer à un document retriever !!!!
 preprocessor = SpaCyPreprocessor()
+# Test du fasttext model
+fasttext_search_model = WECalculator(preprocessor, "skipgram") # cbow or skipgram only
+fasttext_search_model.test_model("nasa")
+# --
 tf_idf_search_model = TFIDFSearchModel(preprocessor)
 console = Console()
 
