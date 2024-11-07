@@ -3,15 +3,12 @@ from collections import defaultdict
 
 from src.search_models.calculator import Calculator
 from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
-from src.utils.result_file_ensurer import ResultFileEnsurer
 from src.file_handlers.json_file_handler import JSONFileHandler
 
 class IndexAndVocabCalculator(Calculator):
 
     def __init__(self, preprocessor):
-        self.preprocessor = preprocessor
-        self.result_files_ensurer = ResultFileEnsurer(self.get_file_processing_map(), JSONFileHandler())
-        self.result_files_ensurer.check_and_create_all("le vocabulaire, l'index et l'index inversé", self.preprocessor.name)
+        super().__init__(preprocessor, JSONFileHandler(), "le vocabulaire, l'index et l'index inversé")
 
     ### parent method to override
     def get_file_processing_map(self):

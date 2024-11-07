@@ -6,18 +6,13 @@ from src.search_models.tf_idf.index_vocab_calculator import IndexAndVocabCalcula
 from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
 from src.file_handlers.json_file_handler import JSONFileHandler
 
-from src.utils.result_file_ensurer import ResultFileEnsurer
-
-
 class TFIDFCalculator(Calculator):
 
     def __init__(self, preprocessor):
         #### EXTERN DEPENDENCIES !!!
         IndexAndVocabCalculator(preprocessor)
         #### -----------------------
-        self.preprocessor_name = preprocessor.name
-        self.result_files_ensurer = ResultFileEnsurer(self.get_file_processing_map(), JSONFileHandler())
-        self.result_files_ensurer.check_and_create_all("TF-IDF", self.preprocessor_name)
+        super().__init__(preprocessor, JSONFileHandler(), "TF-IDF")
 
     ### Method of Calculator class to override
     def get_file_processing_map(self):
