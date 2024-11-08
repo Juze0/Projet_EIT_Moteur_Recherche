@@ -1,4 +1,5 @@
 import time
+from src.file_handlers.file_compressor_decorator import FileCompressorDecorator
 
 class ResultFileEnsurer():
 
@@ -14,8 +15,8 @@ class ResultFileEnsurer():
     def save(self, data, file_path):
         self.file_handler.save(data, file_path)
 
-    def load_using_enum(self, json_file_type, file_name_remaining=""):
-        return self.file_handler.load_using_enum(json_file_type, file_name_remaining)
+    def load_using_enum(self, filename_enum, file_name_suffix=""):
+        return self.file_handler.load_using_enum(filename_enum, file_name_suffix)
 
     #setter
     def set_file_handler(self, new_file_handler):
@@ -35,6 +36,10 @@ class ResultFileEnsurer():
         " Vérifie l'existence du fichier et le crée si nécessaire."
         if self.file_handler.path_exists(complete_file_path):
             print(f"[INFO] Le fichier {complete_file_path} est disponible !")
+            return
+        if self.file_handler.path_exists(f"{complete_file_path}.xz"): # Le fichier existe au format compréssé !
+            print(f"[INFO] Le fichier {complete_file_path} est disponible au format compréssé. Lancement de la décompression !")
+            FileCompressorDecorator(self.file_handler).load(complete_file_path)
             return
         self.create_missing_file(complete_file_path, calculation_method)
 

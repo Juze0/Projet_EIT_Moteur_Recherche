@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
-from os import makedirs
-from os.path import exists, join, dirname
+from os import makedirs, remove
+from os.path import exists, join, dirname, getsize
 from sys import exit
 
 from .file_hierarchy_enum import FileHierarchyEnum
@@ -50,6 +50,12 @@ class FileHandler(ABC):
         print(f"[ERROR]: {message}")
         exit(1)
 
+    def path_getsize(self, file_path):
+        return getsize(file_path)
+    
+    def remove_path(self, file_path):
+        remove(file_path)
+
     ###### SAVE AND LOAD OPERATIONS
     ### 1) From the outside, all save and load operations use file_hierarchy_enum
     ### 2) The base classe requires its children to implement both save and load methods
@@ -64,9 +70,9 @@ class FileHandler(ABC):
         """Méthode abstraite pour enregistrer des données dans un fichier."""
         raise NotImplementedError("This method in not implemented in the subclasses !")
 
-    def load_using_enum(self, json_file_type, file_name_remaining=""):
+    def load_using_enum(self, filename_enum, file_name_remaining=""):
         """Utilise l'enum de l'arboresence des fichiers pour savoir où charger le fichier en paramètre !"""
-        file_path = self.get_file_path(json_file_type, file_name_remaining)
+        file_path = self.get_file_path(filename_enum, file_name_remaining)
         return self.load(file_path)
 
     @abstractmethod

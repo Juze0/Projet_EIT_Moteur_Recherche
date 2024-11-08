@@ -1,8 +1,6 @@
 from sklearn.metrics.pairwise import cosine_similarity
 
 from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
-from src.file_handlers.json_file_handler import JSONFileHandler
-from src.search_models.tf_idf.index_vocab_calculator import IndexAndVocabCalculator
 from src.search_models.tf_idf.tf_idf_calculator import TFIDFCalculator
 
 """ La lemmatisation avec Spacy est plus précise que celle de NLTK, on doit choisir entre les deux """
@@ -13,14 +11,14 @@ class TFIDFSearchModel:
 
     def __init__(self, preprocessor):
         #### EXTERN DEPENDENCIES !!!
-        TFIDFCalculator(preprocessor)
+        tf_idf = TFIDFCalculator(preprocessor)
         #### -----------------------
         self.preprocessor = preprocessor
-        self.json_file_handler = JSONFileHandler()
+        self.result_files_ensurer = tf_idf.result_files_ensurer
 
     # ******** Data handler
     def load(self, file_enum, remaining_name=""):
-        return self.json_file_handler.load_using_enum(file_enum, remaining_name)
+        return self.result_files_ensurer.load_using_enum(file_enum, remaining_name)
     
     # ******** DEALING WITH USER REQUEST
 

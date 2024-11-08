@@ -1,3 +1,6 @@
 .venv
 __pycache__
-data/output/tf_idf/json/tf_idf_vectors*
+# Les fichiers spécifiés font tous deux plus de 1 Giga, on les ajoute pas au dépot.
+# Par contre, leurs versions compressées sont de l'ordre du Mo et ne sont pas donc concernés par le gitignore
+data/output/tf_idf/json/tf_idf_vectors_spacy.json
+data/output/tf_idf/json/tf_idf_vectors_nltk.json
