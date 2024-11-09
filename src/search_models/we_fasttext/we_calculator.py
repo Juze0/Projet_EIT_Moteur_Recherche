@@ -8,10 +8,11 @@ from src.file_handlers.text_file_handler import TextFileHandler
 
 class WECalculator(Calculator):
 
-    def __init__(self, preprocessor, model_type):
+    def __init__(self, preprocessor, model_type, max_docs=None):
         self.check_model_type(model_type)
         self.model = None
         self.model_type = model_type
+        self.max_docs = max_docs
         super().__init__(preprocessor, TextFileHandler(), "word embeddings")
         self.load_fasttext_model()
 
@@ -21,7 +22,7 @@ class WECalculator(Calculator):
         #### INTERN DEPENDENCIES => HERE THE ORDER MATTERS !!!
         return {
             FileHierarchyEnum.WE_PREPROCESSED_MERGED_CORPUS:self.preprocess_and_merge_texts,
-            FileHierarchyEnum.WE_FASTTEXT_MODEL: (self.load_fasttext_model, self.model_type)
+            FileHierarchyEnum.WE_FASTTEXT_MODEL: (self.train_and_save_model, self.model_type)
         }
 
     def preprocess_and_merge_texts(self):
@@ -32,9 +33,10 @@ class WECalculator(Calculator):
         :return: Chaîne contenant le texte prétraité de tous les fichiers, séparé par des retours à la ligne.
         """
         folder_name = FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER)
+        file_list = sorted(listdir(folder_name))[:self.max_docs] if self.max_docs is not None else sorted(listdir(folder_name))
+        # On se met d'accord sur l'ordre (ici alphabétique) et ON UTILISE LE MEME à chaque fois !!!
+        
         merged_content = []
-
-        file_list = sorted(listdir(folder_name))
         for filename in file_list:
             file_path = join(folder_name, filename)
             if isfile(file_path):
@@ -75,6 +77,8 @@ class WECalculator(Calculator):
         self.save_fasstext_model()
 
     def get_model_complete_file_path(self):
+        """Chaque calculator dépend de la technique de préprocessing. Et commme dans get_file_processing_map, on a ajouté le type du model,
+        on est obligé de le repasser ici en paramètre"""
         return FileHierarchyEnum.get_file_path(FileHierarchyEnum.WE_FASTTEXT_MODEL, f"{self.preprocessor_name}_{self.model_type}") #We keep info about preprocessing and model type used !
 
     def save_fasstext_model(self):
@@ -86,7 +90,7 @@ class WECalculator(Calculator):
     def load_fasttext_model(self):
         model_file_path = self.get_model_complete_file_path()
         if not exists(model_file_path):
-            self.train_and_save_model()
+            raise ValueError("Le modèle doit être chargé ou entraîné avant de l'utiliser.")
         self.model = fasttext.load_model(model_file_path)
         print(f"[READ] Le modèle fasttext a été chargé depuis {model_file_path}")
     
@@ -96,10 +100,3 @@ class WECalculator(Calculator):
             return self.model.get_nearest_neighbors(word, k=top_n)
         else:
             raise ValueError("Le modèle doit être chargé ou entraîné avant de l'utiliser.")
-        
-    def test_model(self, search_word):
-        similar_words = self.find_similar_words(search_word)
-
-        print(f"Mots les plus proches de '{search_word}':")
-        for similarity, word in similar_words:
-            print(f"{word}: Similarité = {similarity:.4f}")

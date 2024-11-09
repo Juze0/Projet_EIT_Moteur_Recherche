@@ -1,3 +1,5 @@
 .venv
 __pycache__
 data/output/tf_idf/json/tf_idf_vectors*
+# Le model fasstext entrainé dépasse la limite de 100 Mo par fichier
+data/output/word_embeddings/model/fasttext_wiki2k_model/

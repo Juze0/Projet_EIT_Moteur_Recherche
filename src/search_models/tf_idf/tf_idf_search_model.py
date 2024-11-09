@@ -2,12 +2,13 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
 from src.file_handlers.json_file_handler import JSONFileHandler
+from src.search_models.search_model import SearchModel
 from src.search_models.tf_idf.index_vocab_calculator import IndexAndVocabCalculator
 from src.search_models.tf_idf.tf_idf_calculator import TFIDFCalculator
 
 """ La lemmatisation avec Spacy est plus précise que celle de NLTK, on doit choisir entre les deux """
 
-class TFIDFSearchModel:
+class TFIDFSearchModel(SearchModel):
 
     nlp = None
 
@@ -33,7 +34,7 @@ class TFIDFSearchModel:
         query_tokens = self.preprocessor.lemmatize(self.preprocessor.normalize_text(query))
         return query_tokens
     
-    def calculate_docs_to_answer_query_docs(self, query):
+    def calculate_docs_to_answer_query_docs(self, query, top_n=10):
         """
         Prend une requête utilisateur, le dictionnaire de tf*idf des documents et le dictionnaire des idf des mots.
         Retourne un dictionnaire associant les documents et leur similarité cosinus avec la requête utilisateur. Le dictionnaire est en ordre décroissant.

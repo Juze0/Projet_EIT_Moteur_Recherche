@@ -13,6 +13,7 @@ class FileHierarchyEnum(Enum):
     |   │   ├── /word_embeddings
     |   │   |   ├── /text
     |   │   |   ├── /json
+    |   |   │   |   ├── /fasttext_doc_embeddings
     |   │   |   ├── /model
     |   |   │   |   ├── /fasttext_wiki2k_model{preprocessor}_{model_type}.bin
     """
@@ -43,7 +44,7 @@ class FileHierarchyEnum(Enum):
     ####### word_embeddings files
     WE_PREPROCESSED_MERGED_CORPUS = "preprocessed_merged_corpus"
     WE_FASTTEXT_MODEL = "fasttext_wiki2k_model"
-
+    WE_FASSTEXT_DOCUMENT_EMBEDDINGS = "fasttext_doc_embeddings"
 
     @staticmethod
     def valid_filename_enum(filename_enum):
@@ -64,7 +65,7 @@ class FileHierarchyEnum(Enum):
     def get_we_authorized_files():
         # Catégories de fichiers pour faciliter le regroupement
         return {FileHierarchyEnum.WE_PREPROCESSED_MERGED_CORPUS, FileHierarchyEnum.WE_MODEL_FOLDER,
-                FileHierarchyEnum.WE_FASTTEXT_MODEL}
+                FileHierarchyEnum.WE_FASTTEXT_MODEL, FileHierarchyEnum.WE_FASSTEXT_DOCUMENT_EMBEDDINGS}
 
 
     @staticmethod
@@ -88,6 +89,8 @@ class FileHierarchyEnum(Enum):
         
         if filename_enum in FileHierarchyEnum.get_we_authorized_files():
             current_path = join(base_path, FileHierarchyEnum.WORD_EMBEDDINGS_FOLDER.value)
+            if filename_enum == FileHierarchyEnum.WE_FASSTEXT_DOCUMENT_EMBEDDINGS:
+                return join(current_path, FileHierarchyEnum.JSON_FOLDER.value, f"{complete_filename}.json")
             if filename_enum == FileHierarchyEnum.WE_FASTTEXT_MODEL:
                 return join(current_path, FileHierarchyEnum.WE_MODEL_FOLDER.value, FileHierarchyEnum.WE_FASTTEXT_MODEL.value, f"{complete_filename}.bin")
             return join(current_path, f"{complete_filename}.txt")
