@@ -16,7 +16,12 @@ def compress_all_files(file_handler, files_path_to_compress):
     for file_path in files_path_to_compress:
         print("----------------")
         print(f"Traitement de la compression pour le fichier: {file_path}")
-        file_compressor.save(file_handler.load(file_path), file_path)
+        # OPTIONNEL => ici, remplacer data par ceci: file_handler.load(file_path), UNIQUEMENT si directement après avoir écrit, on souhaite compresser
+        # (voir le fichier file_compressor_decorator) pour plus d'information !
+        
+        # Lorsque data = None, cela veut dire que l'on souhaite compresser n'importe quel fichier, seul le chemin est important !
+        data = None
+        file_compressor.save(data, file_path)
         print("----------------")
 
 

@@ -4,3 +4,8 @@ __pycache__
 # Par contre, leurs versions compressées sont de l'ordre du Mo et ne sont pas donc concernés par le gitignore
 data/output/tf_idf/json/tf_idf_vectors_spacy.json
 data/output/tf_idf/json/tf_idf_vectors_nltk.json
+# Le model fasstext entrainé dépasse la limite de 100 Mo par fichier, pire encore, malgré l'algorihtme de compression lzma,
+# le fichier fait plus de 100 Mo, ainsi, on ne le met pas le dépot. Par conséquent, nous excluons également le fichier
+# doc_embeddings, pour qu'il soit recalculer une fois que le model est reconstitué !
+data/output/word_embeddings/model/fasttext_wiki2k_model/
+data/output/word_embeddings/json/

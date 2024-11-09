@@ -14,7 +14,7 @@ class FileCompressorDecorator(FileHandler):
     def save(self, data, file_path):
         """Génère le fichier correspondant puis le compresse"""
         # 1/2 - On délègue l'écriture du fichier à la méthode save de notre service file_handler!
-        self.file_handler.save(data, file_path)
+        #self.file_handler.save(data, file_path) => pas nécessaire car on utilise jamais le save de cette facon! La compression est réalisé depuis ask_compressioon 
         original_size = self.path_getsize(file_path)
 
         # 2/2 - On lance notre algorithme de compression sur le contenu du fichier créer dans l'étape 1, enfin on le supprime !
