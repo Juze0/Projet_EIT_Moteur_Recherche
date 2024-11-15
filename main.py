@@ -50,6 +50,9 @@ while True:
     results = {}
     results = model.calculate_docs_to_answer_query_docs(query)
     
+
+    rel_p = []
+
     if len(results.keys()) <= 0:
         print("Aucun document n'a été trouvé pour votre recherche." + emoji.emojize(":neutral_face:"))
         break
@@ -62,7 +65,9 @@ while True:
             if i < 10 and results[result] > 0:
                 relevance_doc_i = round(results[result]*100, 2)
                 table.add_row(result + ": " + title, str(relevance_doc_i) + "%", style="white")
+                rel_p.append((result, relevance_doc_i))
         console.print(table)
+        print("\n\n", rel, "\n\n")
     
     change_model = input("\nSouhaitez-vous changer de modèle ? (o/n) : ")
     if change_model.lower() == "o":
