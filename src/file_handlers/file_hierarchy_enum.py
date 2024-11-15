@@ -7,6 +7,7 @@ class FileHierarchyEnum(Enum):
 
     ├── /data
     │   ├── /wiki-corpus
+    │   ├── /correction
     │   ├── /output
     |   │   ├── /tf_idf
     |   │   |   ├── /json
@@ -16,6 +17,9 @@ class FileHierarchyEnum(Enum):
     |   |   │   |   ├── /fasttext_doc_embeddings
     |   │   |   ├── /model
     |   |   │   |   ├── /fasttext_wiki2k_model{preprocessor}_{model_type}.bin
+    |   │   ├── /evaluation
+    |   |   │   ├── /eval_TFIDF.jsonl
+    |   |   │   ├── /eval_EMBEDDINGS.jsonl
     """
     
     # Dossiers principaux
@@ -26,6 +30,8 @@ class FileHierarchyEnum(Enum):
     WIKI_CORPUS_FOLDER = "wiki-corpus"
     TF_IDF_FOLDER = "tf_idf"
     WORD_EMBEDDINGS_FOLDER = "word_embeddings"
+    CORRECTION_FOLDER = "correction"
+    EVALUATION_FOLDER = "evaluation"
     JSON_FOLDER = "json"
     TEXT_FOLDER = "text"
     WE_MODEL_FOLDER = "model"
@@ -45,6 +51,10 @@ class FileHierarchyEnum(Enum):
     WE_PREPROCESSED_MERGED_CORPUS = "preprocessed_merged_corpus"
     WE_FASTTEXT_MODEL = "fasttext_wiki2k_model"
     WE_FASSTEXT_DOCUMENT_EMBEDDINGS = "fasttext_doc_embeddings"
+
+    ####### evaluation files
+    EVAL_TFIDF = "eval_TFIDF"
+    EVAL_EMBEDDINGS = "eval_EMBEDDINGS"
 
     @staticmethod
     def valid_filename_enum(filename_enum):
@@ -67,6 +77,11 @@ class FileHierarchyEnum(Enum):
         return {FileHierarchyEnum.WE_PREPROCESSED_MERGED_CORPUS, FileHierarchyEnum.WE_MODEL_FOLDER,
                 FileHierarchyEnum.WE_FASTTEXT_MODEL, FileHierarchyEnum.WE_FASSTEXT_DOCUMENT_EMBEDDINGS}
 
+    @staticmethod
+    def get_eval_files():
+        # Catégories de fichiers pour faciliter le regroupement
+        return {FileHierarchyEnum.EVAL_TFIDF, FileHierarchyEnum.EVAL_EMBEDDINGS}
+
 
     @staticmethod
     def get_file_path(filename_enum, filename_suffix=""):
@@ -79,6 +94,9 @@ class FileHierarchyEnum(Enum):
         # READ OPERATIONS
         if filename_enum == FileHierarchyEnum.WIKI_CORPUS_FOLDER:
             return join(FileHierarchyEnum.DATA_FOLDER.value, FileHierarchyEnum.WIKI_CORPUS_FOLDER.value)
+        
+        if filename_enum == FileHierarchyEnum.CORRECTION_FOLDER:
+            return join(FileHierarchyEnum.DATA_FOLDER.value, FileHierarchyEnum.CORRECTION_FOLDER.value, "requetes.jsonl")
 
         # WRITE OPERATIONS (or read on a file that had been obtained before through calcul) => OUTPUT FOLDER      
         base_path = join(FileHierarchyEnum.DATA_FOLDER.value, FileHierarchyEnum.OUTPUT_FOLDER.value)  # data/output
@@ -94,6 +112,9 @@ class FileHierarchyEnum(Enum):
             if filename_enum == FileHierarchyEnum.WE_FASTTEXT_MODEL:
                 return join(current_path, FileHierarchyEnum.WE_MODEL_FOLDER.value, FileHierarchyEnum.WE_FASTTEXT_MODEL.value, f"{complete_filename}.bin")
             return join(current_path, f"{complete_filename}.txt")
+        
+        if filename_enum in FileHierarchyEnum.get_eval_files():
+            return join(base_path, FileHierarchyEnum.EVALUATION_FOLDER.value, f"{complete_filename}.jsonl")
 
         else:
             raise ValueError(f"[ERROR FILE HIERARCHY ENUM] {filename_enum.value} is an invalid file enum for path generation")
