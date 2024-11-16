@@ -194,17 +194,6 @@ class Test:
                     print("Ligne mal formée ignorée.")
         return data
 
-"metrics": {
-                "precision": self.precision_rappel(rel, res)[0],
-                "recall": self.precision_rappel(rel, res)[1],
-                "F_measure_1": self.Fmesure_1_2_05(*self.precision_rappel(rel, res))[0],
-                "F_measure_2": self.Fmesure_1_2_05(*self.precision_rappel(rel, res))[1],
-                "F_measure_0.5": self.Fmesure_1_2_05(*self.precision_rappel(rel, res))[2],
-                "AP": self.AP(rel, res),#[0],
-                "DCG": self.DCG(res, pertinance)
-            }
-
-
     def calculate_map_avgMetrics(self, file_path):
         """
         Calcule la Mean Average Precision (MAP), et la moyenne des autres metrics,
