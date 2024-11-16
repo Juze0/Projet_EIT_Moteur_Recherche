@@ -24,14 +24,37 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-4. Pour utiliser TF/IDF, il faut vérifier si les fichiers tf_idf_spacy_vectors et tf_idf_nltk_vectors sont présents dans le dossier json_files_for_tf_idf. Si ce n'est pas le cas, il faut les importer manuellement en exécutant le script suivant :
-```bash
-git lfs pull
-```
-
 NB : Ne pas oublier d'activer l'envrionnement virtuel à chaque fois que vous travaillez sur le projet.
 
 Si vous installer des dépendances supplémentaires, n'oubliez pas de les ajouter au fichier requirements.txt avec la commande suivante :
 ```bash
 pip freeze > requirements.txt
+```
+
+## Utilisation
+
+- Le programme peut s'utiliser de deux facons, via la CLI ou la GUI. Si vous êtes sous Linux et que vous souhaitez utiliser la GUI, il se peut que vous deviez installer tkinter manuellement car il n'est pas inclus par défaut avec Python. Pour l'installer :
+```bash
+sudo apt-get install python3-tk
+```
+
+## Lancement de l'application
+
+L'application peut être lancée en ligne de commande avec plusieurs options. Voici les commandes principales :
+
+### Options de commande
+
+Pour voir toutes les options disponibles, utilisez l'argument ```-h``` ou ```--help``` :
+```bash
+python main.py -h
+```
+
+Lancer en ligne de commande (CLI):
+```bash
+python main.py -i cli
+```
+
+Lancer l'interface graphique (GUI):
+```bash
+python main.py -i gui
 ```
