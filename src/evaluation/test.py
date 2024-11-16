@@ -194,29 +194,67 @@ class Test:
                     print("Ligne mal formée ignorée.")
         return data
 
-    def calculate_map(self, file_path):
+"metrics": {
+                "precision": self.precision_rappel(rel, res)[0],
+                "recall": self.precision_rappel(rel, res)[1],
+                "F_measure_1": self.Fmesure_1_2_05(*self.precision_rappel(rel, res))[0],
+                "F_measure_2": self.Fmesure_1_2_05(*self.precision_rappel(rel, res))[1],
+                "F_measure_0.5": self.Fmesure_1_2_05(*self.precision_rappel(rel, res))[2],
+                "AP": self.AP(rel, res),#[0],
+                "DCG": self.DCG(res, pertinance)
+            }
+
+
+    def calculate_map_avgMetrics(self, file_path):
         """
-        Calcule la Mean Average Precision (MAP) à partir du fichier JSONL d'évaluations.
+        Calcule la Mean Average Precision (MAP), et la moyenne des autres metrics,
+        à partir du fichier JSONL d'évaluations.
         """
         # Charger les données du fichier JSONL
         data = self.load_evaluation_data(file_path)
         
         map_score = 0
+
+        precision = 0
+        recall= 0
+
+        F_m1 = 0
+        F_m2 = 0
+        F_m05 = 0
+
         q = 0
         for entry in data:
-            ap = entry["metrics"]["AP"]
+            map_score += entry["metrics"]["AP"]
+            #
+            precision += ["metrics"]["precision"]
+            recall += ["metrics"]["recall"]
+            F_m1 += entry["metrics"]["F_measure_1"]
+            F_m2 += entry["metrics"]["F_measure_2"]
+            F_m05 += entry["metrics"]["F_measure_05"]
+            #
             q += 1
-            map_score += ap
 
         # Calcul du MAP
         if q > 0:
             map_score /= q 
+            #
+            precision /=q
+            recall /= q
+            F_m1 /= q
+            F_m2 /= q
+            F_m05 /= q
         
-        return map_score
+        return map_score, precision, recall, F_m1, F_m2, F_m05
             
     def eval_model(self, file_input):
-        map_score = self.calculate_map(file_input)
+        map_score, precision, recall, F_m1, F_m2, F_m05 = self.calculate_map_avgMetrics(file_input)
         print(f"Mean Average Precision (MAP): {map_score:.4f}")
+        print(f"Average Precision: {precision:.4f}")
+        print(f"Average Recall: {recall:.4f}")
+        print(f"Average F-measure 1: {F_m1:.4f}")
+        print(f"Average F-measure 2: {F_m2:.4f}")
+        print(f"Average F-measure 0.5: {F_m05:.4f}")
+        
 
     ############################# III) évaluation complète
     
