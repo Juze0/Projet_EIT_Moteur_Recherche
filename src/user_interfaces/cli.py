@@ -20,6 +20,7 @@ class CLI(UI):
             "help":     ("Affiche cette aide", self.display_help),
             "newPrepro":("Change le préprocesseur actuel (NLTK ou SpaCy)", self.choose_preprocessor),
             "newModel": ("Change le modèle de recherche actuel (TF-IDF ou Embedding)", self.choose_model),
+            "startEval":("Lance une évaluation sur le modèle actuel !", self.start_evaluation),
             "stop":     ("Arrête l'application", None)
         }
 
@@ -117,14 +118,3 @@ class CLI(UI):
             table.add_row(f"{result}: {title}", f"{relevance_score}%", style="white")
 
         self.console.print(table)
-    
-
-
-# chat je veux ceci
-
-
-# CHangement de model (ex: TF-IDF vers Embedding => à prépro CONSTANT, garde le meme prepro)
-# m = new Model(prepro_meme_qu'avant)
-
-# Changmernt de prepro (ex: Spacy => NTLK => à model constant, MAIS ON DECLARE UN NOUVEAU MODEL !!!)
-# m = new Model => meme classe que le model actuel(nouveau_prepro)
