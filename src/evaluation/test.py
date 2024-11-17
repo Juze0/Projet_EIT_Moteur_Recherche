@@ -222,10 +222,11 @@ class Test:
     
     def file_path_to_write_in(self):
         model_class = self.model_to_test.__class__
+        prepro_during_eval = self.model_to_test.get_model_preprocessor_name()
         if model_class == TFIDFSearchModel:
-            return FileHierarchyEnum.get_file_path(FileHierarchyEnum.EVAL_TFIDF)
+            return FileHierarchyEnum.get_file_path(FileHierarchyEnum.EVAL_TFIDF, prepro_during_eval)
         if model_class == EmbeddingSearchModel:
-            return FileHierarchyEnum.get_file_path(FileHierarchyEnum.EVAL_EMBEDDINGS)
+            return FileHierarchyEnum.get_file_path(FileHierarchyEnum.EVAL_EMBEDDINGS, prepro_during_eval)
 
     def complete_eval(self):
         eval_file_path = self.file_path_to_write_in()

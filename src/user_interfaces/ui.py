@@ -20,7 +20,7 @@ class UI(ABC):
         self.preprocessor = SpaCyPreprocessor()
         self.model = TFIDFSearchModel(self.preprocessor)
         self.test_model = Test(self.model)
-        self.result_test_reader = ResultTestReader(FileHierarchyEnum.get_file_path(FileHierarchyEnum.EVAL_TFIDF))
+        self.result_test_reader = ResultTestReader(FileHierarchyEnum.get_file_path(FileHierarchyEnum.EVAL_TFIDF, self.preprocessor.name))
 
 
     ######## Setters
@@ -34,10 +34,10 @@ class UI(ABC):
         """Met à jour le modèle en fonction de la classe du modèle et du préprocesseur actuel."""
         if model_class == TFIDFSearchModel:
             self.model = TFIDFSearchModel(self.preprocessor)  # Crée un modèle TF-IDF avec le préprocesseur actuel
-            self.result_test_reader.set_file_path(FileHierarchyEnum.get_file_path(FileHierarchyEnum.EVAL_TFIDF))
+            self.result_test_reader.set_file_path(FileHierarchyEnum.get_file_path(FileHierarchyEnum.EVAL_TFIDF, self.preprocessor.name))
         elif model_class == EmbeddingSearchModel:
             self.model = EmbeddingSearchModel(self.preprocessor)  # Crée un modèle Embedding avec le préprocesseur actuel
-            self.result_test_reader.set_file_path(FileHierarchyEnum.get_file_path(FileHierarchyEnum.EVAL_EMBEDDINGS))
+            self.result_test_reader.set_file_path(FileHierarchyEnum.get_file_path(FileHierarchyEnum.EVAL_EMBEDDINGS, self.preprocessor.name))
         else:
             raise ValueError(f"Modèle {model_class} non pris en charge.")
         self.test_model.set_model_to_test(self.model)

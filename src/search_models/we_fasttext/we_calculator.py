@@ -58,9 +58,9 @@ class WECalculator(Calculator):
     def get_training_parameters(self):
         return {
                 "model": self.model_type,
-                "lr": 0.05,
+                "lr": 0.3,
                 "epoch": 5,
-                "dim": 50,
+                "dim": 100,
                 "ws": 10
             }
 

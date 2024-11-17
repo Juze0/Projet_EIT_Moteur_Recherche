@@ -9,6 +9,9 @@ class SearchModel(ABC):
     def __init__(self, preprocessor):
         self.preprocessor = preprocessor
 
+    def get_model_preprocessor_name(self):
+        return self.preprocessor.name
+
     @abstractmethod
     def preprocess_query(self, query):
         """Prend une requête utilisateur et effectue le prétraitement pour la transformer en liste de tokens."""
