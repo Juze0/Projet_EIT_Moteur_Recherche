@@ -86,7 +86,7 @@ class Test:
 
         return sum_
 
-    def evaluation(self, query, res, rel, pertinance, file_path, remplacer=False):
+    def evaluation(self, query, res, rel, pertinance, file_path, remplacer=True):
         # Initialisation des données pour l'entrée
         data_entry = {
             "query": query,
