@@ -1,29 +1,12 @@
 from numpy import log10
 
-from src.search_models.calculator import Calculator
-from src.search_models.tf_idf.index_vocab_calculator import IndexAndVocabCalculator
-
 from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
-from src.file_handlers.json_file_handler import JSONFileHandler
 
-class TFIDFCalculator(Calculator):
+class TFIDFCalculator():
 
-    def __init__(self, preprocessor):
-        #### EXTERN DEPENDENCIES !!!
-        IndexAndVocabCalculator(preprocessor)
-        #### -----------------------
-        super().__init__(preprocessor, JSONFileHandler(), "TF-IDF")
-
-    ### Method of Calculator class to override
-    def get_file_processing_map(self):
-        """Retourne une carte associant les types de fichiers aux méthodes de traitement."""
-        #### INTERN DEPENDENCIES => HERE THE ORDER MATTERS !!!
-        return {
-            FileHierarchyEnum.TF:            self.calculate_tf,
-            FileHierarchyEnum.IDF:           self.calculate_idf,
-            FileHierarchyEnum.TF_IDF:        self.calculate_tf_idf,
-            FileHierarchyEnum.TF_IDF_VECTORS:self.create_tf_idf_vectors,
-        }
+    def __init__(self, preprocessor_name: str, result_files_ensurer):
+        self.preprocessor_name = preprocessor_name
+        self.result_files_ensurer = result_files_ensurer
 
     ### all calculations methods
     def calculate_tf(self):

@@ -1,24 +1,13 @@
 import os
 from collections import defaultdict
 
-from src.search_models.calculator import Calculator
 from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
-from src.file_handlers.json_file_handler import JSONFileHandler
 
-class IndexAndVocabCalculator(Calculator):
+class IndexAndVocabCalculator():
 
-    def __init__(self, preprocessor):
-        super().__init__(preprocessor, JSONFileHandler(), "le vocabulaire, l'index et l'index inversé")
-
-    ### parent method to override
-    def get_file_processing_map(self):
-        """Retourne une carte associant les types de fichiers aux méthodes de traitement."""
-        #### INTERN DEPENDENCIES => HERE THE ORDER MATTERS !!!
-        return {
-            FileHierarchyEnum.INDEX:            self.create_index,
-            FileHierarchyEnum.INVERSE_INDEX:    self.create_inversed_index,
-            FileHierarchyEnum.FULL_VOCAB:       self.extract_full_vocab,
-        }
+    def __init__(self, preprocessor, result_files_ensurer):
+        self.preprocessor = preprocessor
+        self.result_files_ensurer = result_files_ensurer
 
     ### all calculations methods
     def create_index(self):
