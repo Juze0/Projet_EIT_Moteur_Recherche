@@ -2,26 +2,13 @@ import argparse
 from src.user_interfaces.cli import CLI
 from src.user_interfaces.gui import GUI
 
+from src.tf_idf.tf_idf_command import TfIdfCommand
+from src.tf_idf.tf_idf_dependencies_handler import TfIdfDependenciesHandler
+
 def main():
-    # Configuration de l'argument parser
-    parser = argparse.ArgumentParser(description="Choisissez l'interface utilisateur.")
-    parser.add_argument(
-        "-i", "--interface",
-        choices=["cli", "gui"],
-        default="cli",
-        help="Choisissez l'interface utilisateur : 'cli' pour la ligne de commande ou 'gui' pour l'interface graphique."
-    )
-    
-    args = parser.parse_args()
-    
-    # Initialisation de l'interface choisie
-    if args.interface == "cli":
-        interface = CLI()
-    else:
-        interface = GUI()
-    
-    # Lancement de l'application
-    interface.run()
+    command = TfIdfCommand("dummy", "dummy", "dummy")
+    commandHandler = TfIdfDependenciesHandler()
+    commandHandler.handle(command)
 
 if __name__ == "__main__":
     main()

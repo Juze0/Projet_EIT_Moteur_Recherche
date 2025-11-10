@@ -6,7 +6,7 @@ class DependenciesHandler(BaseHandler):
 
     def __init__(self, file_handler):
         super().__init__()
-        self._file_handler = file_handler
+        self.file_handler = file_handler
 
     
     def save(self, data, file_path):
