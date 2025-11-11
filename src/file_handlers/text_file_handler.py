@@ -6,13 +6,6 @@ class TextFileHandler(FileHandler):
     Classe dédiée au chargement et à la sauvegarde des données texte.
     Hérite de FileHandler pour bénéficier des opérations génériques sur les fichiers.
     """
-
-    ## SINGLETON IMPLEMENTATION
-    _instance = None
-    def __new__(cls, *args, **kwargs):
-        if cls._instance is None:
-            cls._instance = super(TextFileHandler, cls).__new__(cls)
-        return cls._instance
     
     def __init__(self):
         super().__init__(file_hierarchy_enum=FileHierarchyEnum)
