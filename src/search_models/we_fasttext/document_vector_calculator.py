@@ -2,7 +2,6 @@ from os import listdir
 from numpy import zeros, mean, amax, concatenate
 
 from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
-from src.file_handlers.json_file_handler import JSONFileHandler
 from src.shared.files.file import File
 
 
