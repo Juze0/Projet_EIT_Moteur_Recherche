@@ -13,7 +13,12 @@ class File:
         print(f"[READ]: Chargement du fichier {self._file_path}")
         with open(self._file_path, "r", encoding='utf-8') as f:
             return f.read()
-
+        
+    def iter_lines(self):
+        print(f"[READ]: Lecture ligne par ligne du fichier {self._file_path}")
+        with open(self._file_path, "r", encoding="utf-8") as f:
+            for line in f:
+                yield line
 
     def load_json_content(self) -> list[str]:
         print(f"[READ]: Chargement du fichier {self._file_path}")

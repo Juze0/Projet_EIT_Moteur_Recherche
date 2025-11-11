@@ -2,20 +2,15 @@ from os import listdir
 from os.path import exists, join, isfile
 import fasttext
 
-from src.search_models.calculator import Calculator
-from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
-from src.file_handlers.text_file_handler import TextFileHandler
 from src.shared.files.file import File
 
-class WECalculator(Calculator):
+class WECalculator():
 
     def __init__(self, preprocessor, model_type, max_docs=None):
         self.model = None
+        self.preprocessor = preprocessor
         self.model_type = model_type
         self.max_docs = max_docs
-        super().__init__(preprocessor, TextFileHandler(), "word embeddings")
-        self.load_fasttext_model()
-
 
     def normalize_and_merge_texts(self, files: list[File]):
         # TODO statuer sur le max_docs

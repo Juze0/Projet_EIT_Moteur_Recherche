@@ -56,3 +56,12 @@ class EmbeddingDependenciesHandler(DependenciesHandler):
         self.if_file_not_found_launch_calculation(inverse_index_file, index_voc_calculator.create_inversed_index, index_file)
         self.if_file_not_found_launch_calculation(full_vocab_file, index_voc_calculator.extract_full_vocab, corpus_files)
         print()
+
+
+    ### Method of Calculator class to override
+    def get_file_processing_map(self):
+        """Retourne une carte associant les types de fichiers aux méthodes de traitement."""
+        #### INTERN DEPENDENCIES => HERE THE ORDER MATTERS !!!
+        return {
+            FileHierarchyEnum.WE_FASSTEXT_DOCUMENT_EMBEDDINGS:  self.calculate_embeddings_for_all_documents,
+        }

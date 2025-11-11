@@ -3,6 +3,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
 from src.search_models.search_model import SearchModel
 from src.search_models.tf_idf.tf_idf_calculator import TFIDFCalculator
+from src.shared.files.file import File
 
 """ La lemmatisation avec Spacy est plus précise que celle de NLTK, on doit choisir entre les deux """
 
@@ -11,15 +12,7 @@ class TFIDFSearchModel(SearchModel):
     nlp = None
 
     def __init__(self, preprocessor):
-        #### EXTERN DEPENDENCIES !!!
-        tf_idf = TFIDFCalculator(preprocessor)
-        #### -----------------------
         self.preprocessor = preprocessor
-        self.result_files_ensurer = tf_idf.result_files_ensurer
-
-    # ******** Data handler
-    def load(self, file_enum, remaining_name=""):
-        return self.result_files_ensurer.load_using_enum(file_enum, remaining_name)
     
     # ******** DEALING WITH USER REQUEST
 
@@ -32,7 +25,7 @@ class TFIDFSearchModel(SearchModel):
         query_tokens = self.preprocessor.lemmatize(self.preprocessor.normalize_text(query))
         return query_tokens
     
-    def calculate_docs_to_answer_query_docs(self, query, top_n=10):
+    def calculate_docs_to_answer_query_docs(self, query, idf_dict:File, tf_idf_vectors:File, full_vocab:File, top_n=10):
         """
         Prend une requête utilisateur, le dictionnaire de tf*idf des documents et le dictionnaire des idf des mots.
         Retourne un dictionnaire associant les documents et leur similarité cosinus avec la requête utilisateur. Le dictionnaire est en ordre décroissant.
@@ -41,8 +34,6 @@ class TFIDFSearchModel(SearchModel):
         # [SPECIFIC] Chargement des données nécessaires pour TF-IDF, ici `idf_dict` et `tf_idf_vectors`
         # Pour un autre modèle (Word Embeddings ou BERT), il chargerait ses propres données,
         # comme un espace vectoriel d'embeddings.
-        idf_dict = self.load(FileHierarchyEnum.IDF, self.preprocessor.name)
-        tf_idf_vectors = self.load(FileHierarchyEnum.TF_IDF_VECTORS, self.preprocessor.name)
 
         # [ALL] Prétraitement de la requête
         query_tokens = self.preprocess_query(query)
@@ -66,9 +57,6 @@ class TFIDFSearchModel(SearchModel):
         # [ALL] Préparation du vecteur de la requête
         #print("Tokens de la requête : ")
         #print(query_tf)
-        full_vocab = {}
-        full_vocab = self.load(FileHierarchyEnum.FULL_VOCAB, self.preprocessor.name)
-        
         query_vector = [0.0] * len(full_vocab)
         
         # [SPECIFIC] Construction du vecteur en utilisant des scores TF-IDF

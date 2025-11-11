@@ -1,30 +1,18 @@
 from os import listdir
 from numpy import zeros, mean, amax, concatenate
 
-from src.search_models.calculator import Calculator
-from src.search_models.we_fasttext.we_calculator import WECalculator
-
 from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
 from src.file_handlers.json_file_handler import JSONFileHandler
+from src.shared.files.file import File
 
-class DocumentVectorCalculator(Calculator):
+
+class DocumentVectorCalculator():
 
     def __init__(self, preprocessor, max_docs=None):
         self.max_docs = max_docs
-        #### EXTERN DEPENDENCIES !!!
-        self.word_embeddings_calculator = WECalculator(preprocessor, "skipgram", max_docs)
         self.model = self.word_embeddings_calculator.model
-        #### -----------------------
-        super().__init__(preprocessor, JSONFileHandler(), "les embeddings de chaque document du corpus !")
+        self.preprocessor = preprocessor
         self.document_embeddings = None
-
-    ### Method of Calculator class to override
-    def get_file_processing_map(self):
-        """Retourne une carte associant les types de fichiers aux méthodes de traitement."""
-        #### INTERN DEPENDENCIES => HERE THE ORDER MATTERS !!!
-        return {
-            FileHierarchyEnum.WE_FASSTEXT_DOCUMENT_EMBEDDINGS:  self.calculate_embeddings_for_all_documents,
-        }
 
     def create_mean_embedding(self, words):
         """Calcule l'embedding moyen pour une liste de mots."""
@@ -53,18 +41,13 @@ class DocumentVectorCalculator(Calculator):
         return concatenate([mean_embedding, max_embedding])
 
 
-    def calculate_embeddings_for_all_documents(self):
+    def calculate_embeddings_for_all_documents(self, preprocessed_merged_corpus: File, ordered_file_list: list[str]):
         """Calcule les embeddings pour chaque document pré-traité dans le fichier unique de corpus."""
-        wiki_folder_path = FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER)
-        file_list = sorted(listdir(wiki_folder_path))[:self.max_docs] if self.max_docs is not None else sorted(listdir(wiki_folder_path))
         # La fonction preprocess_and_merge_texts de WECalculator a elle aussi utilisé l'ordre alphabétique !!!
-
-        preprocessed_texts_file_path = FileHierarchyEnum.get_file_path(FileHierarchyEnum.WE_PREPROCESSED_MERGED_CORPUS, self.preprocessor_name)
         document_embeddings = {}
-        with open(preprocessed_texts_file_path, "r", encoding="utf-8") as f:
-            for idx, line in enumerate(f):
-                processed_words = line.strip().split()  # Chaque ligne est déjà pré-traitée en une liste de mots
-                document_embedding = self.create_document_embedding(processed_words)
-                document_embeddings[file_list[idx]] = document_embedding.tolist()
+        for idx, line in enumerate(preprocessed_merged_corpus.iter_lines()):
+            processed_words = line.strip().split()  # Chaque ligne est déjà pré-traitée en une liste de mots
+            document_embedding = self.create_document_embedding(processed_words)
+            document_embeddings[ordered_file_list[idx]] = document_embedding.tolist()
         self.document_embeddings = document_embeddings
         return document_embeddings

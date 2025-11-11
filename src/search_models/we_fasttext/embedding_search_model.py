@@ -5,13 +5,11 @@ from heapq import nlargest
 from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
 from src.search_models.search_model import SearchModel
 from src.search_models.we_fasttext.document_vector_calculator import DocumentVectorCalculator
+from src.shared.files.file import File
 
 class EmbeddingSearchModel(SearchModel):
 
     def __init__(self, preprocessor):
-        #### EXTERN DEPENDENCIES !!!
-        self.document_vector_calculator = DocumentVectorCalculator(preprocessor)
-        #### -----------------------
         super().__init__(preprocessor)
 
     def preprocess_query(self, query):
@@ -32,7 +30,7 @@ class EmbeddingSearchModel(SearchModel):
         return dot(vector1, vector2) / (norm(vector1) * norm(vector2))
     
 
-    def calculate_docs_to_answer_query_docs(self, query, top_n=10):
+    def calculate_docs_to_answer_query_docs(self, query, document_embeddings:File, top_n=10):
         """
         Trouve les documents les plus pertinents pour une requête utilisateur.
         :param query: Texte brut de la requête utilisateur.
@@ -42,9 +40,7 @@ class EmbeddingSearchModel(SearchModel):
         # 1/3 - Calculer l'embedding de la requête
         query_embedding = self.calculate_query_embedding(query)
 
-        # 2/3 - Calculer la similarité entre la requête et chaque document
-        document_embeddings = self.document_vector_calculator.result_files_ensurer.load_using_enum(FileHierarchyEnum.WE_FASSTEXT_DOCUMENT_EMBEDDINGS, self.preprocessor.name)
-        
+        # 2/3 - Calculer la similarité entre la requête et chaque document     
         docs_to_answer_query = {}
         for doc_name, doc_embedding in document_embeddings.items():
             # Vérification que les dimensions sont compatibles avant de calculer la similarité
