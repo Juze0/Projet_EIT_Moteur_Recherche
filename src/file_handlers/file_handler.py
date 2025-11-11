@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from os import makedirs, remove
+from os import makedirs, remove, listdir
 from os.path import exists, join, dirname, getsize
 from sys import exit
 
@@ -55,6 +55,9 @@ class FileHandler(ABC):
     
     def remove_path(self, file_path):
         remove(file_path)
+
+    def get_full_path_files_of_folder(self, folder_name: str) -> list[str]:
+        return [join(folder_name, filename) for filename in listdir(folder_name)]
 
     ###### SAVE AND LOAD OPERATIONS
     ### 1) From the outside, all save and load operations use file_hierarchy_enum
