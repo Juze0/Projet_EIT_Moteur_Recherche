@@ -1,6 +1,7 @@
 import time
 from src.shared.handler.base_handler import BaseHandler
 from src.file_handlers.file_compressor_decorator import FileCompressorDecorator
+from src.shared.files.file import File
 
 class DependenciesHandler(BaseHandler):
 
@@ -74,3 +75,22 @@ class DependenciesHandler(BaseHandler):
             return f"{creation_time:.4f} seconds"
         creation_time_minutes = creation_time / 60
         return f"{creation_time_minutes:.2f} minutes"
+    
+    
+    def if_file_not_found_launch_calculation(self, file: File, calculation_func, *args, **kwargs):
+        if file.exists():
+            print(f"[INFO] Le fichier {file.get_file_name()} est disponible ! Voici son chemin {file.get_path()}")
+            return
+        print("-----------------")
+        print(f"[CREATION START] Le fichier {file.get_path()} n'existe pas, création en cours...")
+        self.file_handler.create_all_missing_folders(file.get_path())
+        start_time = time.time()
+        data_to_save = calculation_func(*args, **kwargs)
+        end_time = time.time()
+        print(f"[CREATION END] La création du fichier {file.get_file_name()} s'est terminée en {self.get_creation_duration_time(start_time, end_time)}!")
+        if data_to_save is None:
+            # TODO changer ce comportement là, la sauvegarde est forcément réaliser par un DependencieHandler
+            print(f"[INFO] La sauvegarde du fichier a été déléguée au fichier de calcul correspondant")
+        else:
+            file.save_json(data_to_save) # TODO, On addresse désormais ce problème
+        print("-----------------")

@@ -1,11 +1,5 @@
 from os import listdir
-from os.path import join
 from numpy import zeros, mean, amax, concatenate
-
-from numpy import dot
-from numpy.linalg import norm
-from heapq import nlargest
-
 
 from src.search_models.calculator import Calculator
 from src.search_models.we_fasttext.we_calculator import WECalculator

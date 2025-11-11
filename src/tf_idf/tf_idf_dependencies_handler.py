@@ -25,25 +25,6 @@ class TfIdfDependenciesHandler(DependenciesHandler):
         self.resolve_index_inversed_index_and_full_vocab()
         self.resolve_tf_idf_and_its_vectors()
         #TODO Afficher à nouveau le cadre (voir ci-dessus): self.check_and_create_all("le vocabulaire, l'index et l'index inversé", self.get_voc_index_map(), self.preprocessor.name)
-    
-
-    def if_file_not_found_launch_calculation(self, file: File, calculation_func, *args, **kwargs):
-        if file.exists():
-            print(f"[INFO] Le fichier {file.get_file_name()} est disponible ! Voici son chemin {file.get_path()}")
-            return
-        print("-----------------")
-        print(f"[CREATION START] Le fichier {file.get_path()} n'existe pas, création en cours...")
-        self.file_handler.create_all_missing_folders(file.get_path())
-        start_time = time.time()
-        data_to_save = calculation_func(*args, **kwargs)
-        end_time = time.time()
-        print(f"[CREATION END] La création du fichier {file.get_file_name()} s'est terminée en {self.get_creation_duration_time(start_time, end_time)}!")
-        if data_to_save is None:
-            # TODO changer ce comportement là, la sauvegarde est forcément réaliser par un DependencieHandler
-            print(f"[INFO] La sauvegarde du fichier a été déléguée au fichier de calcul correspondant")
-        else:
-            file.save_json(data_to_save)
-        print("-----------------")
 
 
     def resolve_index_inversed_index_and_full_vocab(self):
