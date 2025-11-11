@@ -23,11 +23,9 @@ class TfIdfDependenciesHandler(DependenciesHandler):
 
     def resolve_dependencies(self):
         self.resolve_index_inversed_index_and_full_vocab()
-        #TODO Afficher à nouveau le cadre (voir ci-dessus)
-        #self.check_and_create_all("le vocabulaire, l'index et l'index inversé", self.get_voc_index_map(), self.preprocessor.name)
-        # 2nd type : TfIDF
-        #self.check_and_create_all("TF-IDF", self.get_tf_idf_map(), self.preprocessor.name)
-        pass
+        self.resolve_tf_idf_and_its_vectors()
+        #TODO Afficher à nouveau le cadre (voir ci-dessus): self.check_and_create_all("le vocabulaire, l'index et l'index inversé", self.get_voc_index_map(), self.preprocessor.name)
+    
 
     def if_file_not_found_launch_calculation(self, file: File, calculation_func, *args, **kwargs):
         if file.exists():
@@ -49,9 +47,10 @@ class TfIdfDependenciesHandler(DependenciesHandler):
 
 
     def resolve_index_inversed_index_and_full_vocab(self):
-        corpus_files = [File(full_path_file) for full_path_file in self.file_handler.get_full_path_files_of_folder(FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER))]
+        print(f"\n#####  Vérification des prérequis pour utiliser le vocabulaire, l'index et l'index inversé")
         index_voc_calculator = IndexAndVocabCalculator(self.preprocessor)
 
+        corpus_files = [File(full_path_file) for full_path_file in self.file_handler.get_full_path_files_of_folder(FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER))]
         index_file = File(self.file_handler.get_file_path(FileHierarchyEnum.INDEX, self.preprocessor.name))
         inverse_index_file = File(self.file_handler.get_file_path(FileHierarchyEnum.INVERSE_INDEX, self.preprocessor.name))
         full_vocab_file = File(self.file_handler.get_file_path(FileHierarchyEnum.FULL_VOCAB, self.preprocessor.name))
@@ -59,14 +58,23 @@ class TfIdfDependenciesHandler(DependenciesHandler):
         self.if_file_not_found_launch_calculation(index_file, index_voc_calculator.create_index, corpus_files)
         self.if_file_not_found_launch_calculation(inverse_index_file, index_voc_calculator.create_inversed_index, index_file)
         self.if_file_not_found_launch_calculation(full_vocab_file, index_voc_calculator.extract_full_vocab, corpus_files)
+        print()
     
-    def get_tf_idf_map(self):
-        """Retourne une carte associant les types de fichiers aux méthodes de traitement."""
-        #### INTERN DEPENDENCIES => HERE THE ORDER MATTERS !!!
-        tf_idf_calculator = TFIDFCalculator(self.preprocessor.name, self)
-        return {
-            FileHierarchyEnum.TF:            tf_idf_calculator.calculate_tf,
-            FileHierarchyEnum.IDF:           tf_idf_calculator.calculate_idf,
-            FileHierarchyEnum.TF_IDF:        tf_idf_calculator.calculate_tf_idf,
-            FileHierarchyEnum.TF_IDF_VECTORS:tf_idf_calculator.create_tf_idf_vectors,
-        }
+    def resolve_tf_idf_and_its_vectors(self):
+        print(f"\n#####  Vérification des prérequis pour utiliser tf-idf")
+        tf_idf_calculator = TFIDFCalculator(self.preprocessor.name)
+
+        index_file = File(self.file_handler.get_file_path(FileHierarchyEnum.INDEX, self.preprocessor.name))
+        inverse_index_file = File(self.file_handler.get_file_path(FileHierarchyEnum.INVERSE_INDEX, self.preprocessor.name))
+        full_vocab_file = File(self.file_handler.get_file_path(FileHierarchyEnum.FULL_VOCAB, self.preprocessor.name))
+
+        tf_file = File(self.file_handler.get_file_path(FileHierarchyEnum.TF, self.preprocessor.name))
+        idf_file = File(self.file_handler.get_file_path(FileHierarchyEnum.IDF, self.preprocessor.name))
+        tf_idf_file = File(self.file_handler.get_file_path(FileHierarchyEnum.TF_IDF, self.preprocessor.name))
+        tf_idf_vectors_file = File(self.file_handler.get_file_path(FileHierarchyEnum.TF_IDF_VECTORS, self.preprocessor.name))
+
+        self.if_file_not_found_launch_calculation(tf_file, tf_idf_calculator.calculate_tf, index_file)
+        self.if_file_not_found_launch_calculation(idf_file, tf_idf_calculator.calculate_idf, inverse_index_file)
+        self.if_file_not_found_launch_calculation(tf_idf_file, tf_idf_calculator.calculate_tf_idf, tf_file, idf_file)
+        self.if_file_not_found_launch_calculation(tf_idf_vectors_file, tf_idf_calculator.create_tf_idf_vectors, tf_idf_file, full_vocab_file)
+        print()
