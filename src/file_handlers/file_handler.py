@@ -17,7 +17,7 @@ class FileHandler(ABC):
     def get_file_name(self) -> str:
         return self._file_path.split("/")[-1]
 
-    def exists(self) -> str:
+    def exists(self) -> bool:
         return exists(self._file_path)
     
     def get_directory(self, file_or_folder_path: str) -> str:
