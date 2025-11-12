@@ -19,7 +19,7 @@ class DependenciesHandler(BaseHandler):
             return
         print("-----------------")
         print(f"[CREATION START] Le fichier {file.get_path()} n'existe pas, création en cours...")
-        file.create_all_missing_folders()
+        file.create_all_missing_folders() # TODO, délégué cette méthode 
         start_time = time.time()
         data_to_save = calculation_func(*args, **kwargs)
         end_time = time.time()

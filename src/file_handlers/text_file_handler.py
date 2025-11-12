@@ -1,33 +1,23 @@
-from .file_hierarchy_enum import FileHierarchyEnum
 from .file_handler import FileHandler
 
 class TextFileHandler(FileHandler):
-    """
-    Classe dédiée au chargement et à la sauvegarde des données texte.
-    Hérite de FileHandler pour bénéficier des opérations génériques sur les fichiers.
-    """
     
-    def __init__(self):
-        super().__init__(file_hierarchy_enum=FileHierarchyEnum)
+    def __init__(self, file_path: str):
+        super().__init__(file_path)
 
-    # SAVE AND LOAD METHODS TO OVERRIDE
-    # Implémentation de la méthode save de FileHandler pour les fichiers texte
-    def save(self, data, file_path):
-        """
-        Enregistre les données sous forme de texte dans un fichier.
-        """    
-        with open(file_path, "w", encoding='utf-8') as f:
-            f.write(data)
-        print(f"[SAVE]: Données sauvegardées dans {file_path}")
 
-    # Implémentation de la méthode load de FileHandler pour les fichiers texte
-    def load(self, file_path):
-        """
-        Charge le contenu d'un fichier texte et le renvoie sous forme de chaîne de caractères.
-        """
-        if not self.path_exists(file_path):
-            self.exit_with_error(f"Le fichier {file_path} n'existe pas.")
-        
-        print(f"[READ]: Chargement du fichier {file_path}")
-        with open(file_path, "r", encoding='utf-8') as f:
-            return f.read()
+    def save(self, data_to_save):
+        with open(self._file_path, "w", encoding='utf-8') as f:
+            f.write(data_to_save)
+        print(f"[SAVE]: Données sauvegardées dans {self._file_path}")
+
+
+    def load(self, use_iterator=False):
+        if (use_iterator is False):
+            print(f"[READ]: Chargement du fichier {self._file_path}")
+            with open(self._file_path, "r", encoding='utf-8') as f:
+                return f.read()
+        print(f"[READ]: Lecture ligne par ligne du fichier {self._file_path}")
+        with open(self._file_path, "r", encoding="utf-8") as f:
+            for line in f:
+                yield line
