@@ -1,22 +1,20 @@
-from os import listdir
-from os.path import exists, join, isfile
+from os.path import exists
 import fasttext
 
-from src.shared.files.file import File
+from src.file_handlers.file import File
+from src.preprocessing.preprocessor import Preprocessor
 
 class WECalculator():
 
-    def __init__(self, preprocessor, model_type, max_docs=None):
-        self.model = None
-        self.preprocessor = preprocessor
+    def __init__(self, model_type, max_docs=None):
         self.model_type = model_type
         self.max_docs = max_docs
 
-    def normalize_and_merge_texts(self, files: list[File]):
+    def normalize_and_merge_texts(self, preprocessor:Preprocessor, files: list[File]):
         # TODO statuer sur le max_docs
         merged_content = []
         for f in files:
-            merged_content.append(" ".join(self.preprocessor.normalize_text(f.load_text_content())))
+            merged_content.append(" ".join(preprocessor.normalize_text(f.load())))
         return "\n".join(merged_content)
 
     ######## MODEL TRAINING PART (training, save and load operations)
@@ -35,30 +33,18 @@ class WECalculator():
                 "ws": 10
             }
 
-    def train_and_save_model(self, preprocessed_merged_corpus: File):
+    def train_model(self, preprocessed_merged_corpus: File):
         preprocessed_merged_corpus_path = preprocessed_merged_corpus.get_path()
         params = self.get_training_parameters()
         print(f"[INFO] Début de l'entraînement du modèle fasstext sur le fichier {preprocessed_merged_corpus_path}...")
-        self.model = fasttext.train_unsupervised(preprocessed_merged_corpus_path, 
+        return fasttext.train_unsupervised(preprocessed_merged_corpus_path, 
                                                  model=params["model"],
                                                  lr=params["lr"],
                                                  epoch=params["epoch"], 
                                                  dim=params["dim"], 
                                                  ws=params["ws"])
-        self.save_fasstext_model()
-
-    def save_fasstext_model(self, model_file_path: str):
-        self.model.save_model(model_file_path)
-        print(f"[SAVE] Le modèle fasttext a été entraîné et est sauvegardé dans {model_file_path}")
-
-
-    def load_fasttext_model(self, model_file_path: str):
-        if not exists(model_file_path):
-            raise ValueError("Le modèle doit être chargé ou entraîné avant de l'utiliser.")
-        self.model = fasttext.load_model(model_file_path)
-        print(f"[READ] Le modèle fasttext a été chargé depuis {model_file_path}")
-    
-    
+        
+    # TODO cette méthode n'a rien à faire ici ...
     def find_similar_words(self, word, top_n=10):
         if self.model:
             return self.model.get_nearest_neighbors(word, k=top_n)

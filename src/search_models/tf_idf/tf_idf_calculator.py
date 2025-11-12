@@ -1,18 +1,18 @@
 from numpy import log10
 
-from src.shared.files.file import File
+from src.file_handlers.file import File
 
 class TFIDFCalculator():
 
-    def __init__(self, preprocessor_name: str):
-        self.preprocessor_name = preprocessor_name
-
+    def __init__(self):
+        pass
+    
     def calculate_tf(self, index_file: File):
         """
         Prend un dictionnaire associant les fichiers à leur liste de mots.
         Retourne un dictionnaire associant les fichiers à leur liste de mots et leur fréquence normalisée.
         """
-        index = index_file.load_json_content()
+        index = index_file.load()
         tf = {}
         for filename in index:  # On itère sur les clés du dictionnaire index
             tf[filename] = {}  # On crée un dictionnaire vide pour chaque fichier, il contiendra les mots et leur fréquence
@@ -31,7 +31,7 @@ class TFIDFCalculator():
         Prend un dictionnaire associant les mots à leur occurence dans les documents.
         Retourne un dictionnaire associant les mots à leur fréquence inverse de document.
         """
-        inverse_index = inverse_index_file.load_json_content()
+        inverse_index = inverse_index_file.load()
         idf = {}
         nb_docs = len(inverse_index.keys()) #On compte le nombre de documents
         for token in inverse_index: #On itère sur les tokens de l'index inversé
@@ -45,8 +45,8 @@ class TFIDFCalculator():
         et un dictionnaire associant les mots à leur fréquence inverse de document (IDF).
         Retourne un dictionnaire associant les fichiers à leurs mots avec les scores TF-IDF.
         """
-        tf_dict = tf_file.load_json_content()
-        idf_dict = idf_file.load_json_content()
+        tf_dict = tf_file.load()
+        idf_dict = idf_file.load()
 
         tf_idf = {}
         #index_tf_idf = {}
@@ -65,8 +65,8 @@ class TFIDFCalculator():
         Prend un dictionnaire associant les fichiers à leurs mots avec les scores TF-IDF et le vocabulaire complet.
         Retourne un dictionnaire associant les fichiers à leur vecteur TF-IDF.
         """
-        tf_idf_dict = tf_idf_file.load_json_content()
-        full_vocab = full_vocab_file.load_json_content()
+        tf_idf_dict = tf_idf_file.load()
+        full_vocab = full_vocab_file.load()
 
         tf_idf_vectors = {}
         print("Taille du vocabulaire : ", len(full_vocab))
