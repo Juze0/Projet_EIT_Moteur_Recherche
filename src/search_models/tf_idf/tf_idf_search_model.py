@@ -2,8 +2,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
 from src.search_models.search_model import SearchModel
-from src.search_models.tf_idf.tf_idf_calculator import TFIDFCalculator
-from src.shared.files.file import File
+from src.file_handlers.file import File
 
 """ La lemmatisation avec Spacy est plus précise que celle de NLTK, on doit choisir entre les deux """
 
@@ -25,7 +24,7 @@ class TFIDFSearchModel(SearchModel):
         query_tokens = self.preprocessor.lemmatize(self.preprocessor.normalize_text(query))
         return query_tokens
     
-    def calculate_docs_to_answer_query_docs(self, query, idf_dict:File, tf_idf_vectors:File, full_vocab:File, top_n=10):
+    def calculate_docs_to_answer_query_docs(self, query, idf_dict_file:File, tf_idf_vectors_file:File, full_vocab_file:File, top_n=10):
         """
         Prend une requête utilisateur, le dictionnaire de tf*idf des documents et le dictionnaire des idf des mots.
         Retourne un dictionnaire associant les documents et leur similarité cosinus avec la requête utilisateur. Le dictionnaire est en ordre décroissant.
@@ -36,6 +35,7 @@ class TFIDFSearchModel(SearchModel):
         # comme un espace vectoriel d'embeddings.
 
         # [ALL] Prétraitement de la requête
+        idf_dict = idf_dict_file.load()
         query_tokens = self.preprocess_query(query)
         query_tf = {}
         dict_tokens = self.count_words(query_tokens)
@@ -57,6 +57,7 @@ class TFIDFSearchModel(SearchModel):
         # [ALL] Préparation du vecteur de la requête
         #print("Tokens de la requête : ")
         #print(query_tf)
+        full_vocab = full_vocab_file.load()
         query_vector = [0.0] * len(full_vocab)
         
         # [SPECIFIC] Construction du vecteur en utilisant des scores TF-IDF
@@ -72,7 +73,7 @@ class TFIDFSearchModel(SearchModel):
         # [SPECIFIC] Utilisation de la similarité cosinus pour TF-IDF (sauf si un autre modèle aussi utilise cosinus).
         # Par exemple, Word Embeddings ou BERT peuvent aussi utiliser cosinus, mais certains modèles peuvent opter pour d’autres mesures.
         docs_to_answer_query = {}
-        for filename, vector in tf_idf_vectors.items():
+        for filename, vector in tf_idf_vectors_file.load().items():
            
             # Vérification que les dimensions sont compatibles avant de calculer la similarité
             if len(query_vector) == len(vector):

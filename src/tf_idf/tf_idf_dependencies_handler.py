@@ -1,12 +1,10 @@
-import time
-
 from src.shared.handler.dependencies_handler import DependenciesHandler
 from src.shared.command import Command
 from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
 from src.search_models.tf_idf.tf_idf_calculator import TFIDFCalculator
 from src.search_models.tf_idf.index_vocab_calculator import IndexAndVocabCalculator
 from src.preprocessing.spacy_preprocessor import SpaCyPreprocessor
-from src.shared.files.file import File
+from src.file_handlers.file import File
 
 
 class TfIdfDependenciesHandler(DependenciesHandler):
@@ -28,7 +26,7 @@ class TfIdfDependenciesHandler(DependenciesHandler):
 
     def resolve_index_inversed_index_and_full_vocab(self):
         print(f"\n#####  Vérification des prérequis pour utiliser le vocabulaire, l'index et l'index inversé")
-        index_voc_calculator = IndexAndVocabCalculator(self.preprocessor)
+        index_voc_calculator = IndexAndVocabCalculator()
 
         corpus_files = [File(full_path_file) for full_path_file in self.get_full_path_files_of_folder(FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER))]
         index_file = File(self.get_file_path(FileHierarchyEnum.INDEX, self.preprocessor.name))

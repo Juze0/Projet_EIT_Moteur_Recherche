@@ -1,11 +1,10 @@
 import time
 from src.shared.handler.base_handler import BaseHandler
-from src.shared.files.file import File
+from src.file_handlers.file import File
 from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
 
-from os import makedirs, remove, listdir
-from os.path import exists, join, dirname, getsize
-from sys import exit
+from os import listdir
+from os.path import join
 
 class DependenciesHandler(BaseHandler):
 

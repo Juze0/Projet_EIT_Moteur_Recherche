@@ -7,11 +7,11 @@ from src.preprocessing.preprocessor import Preprocessor
 class WECalculator(Calculator):
 
     def __init__(self, model_type, max_docs=None):
-        super.__init__()
+        super().__init__()
         self.model_type = model_type
         self.max_docs = max_docs
 
-    def normalize_and_merge_texts(self, preprocessor:Preprocessor, files: list[File]):
+    def build_normalized_corpus(self, preprocessor:Preprocessor, files: list[File]):
         # TODO statuer sur le max_docs
         merged_content = []
         for f in files:

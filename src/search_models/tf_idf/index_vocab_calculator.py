@@ -7,7 +7,7 @@ from src.preprocessing.preprocessor import Preprocessor
 class IndexAndVocabCalculator(Calculator):
 
     def __init__(self):
-        super.__init__()
+        super().__init__()
 
 
     def create_index(self, preprocessor: Preprocessor, files: list[File]):

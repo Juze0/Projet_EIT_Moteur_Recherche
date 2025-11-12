@@ -2,10 +2,8 @@ from numpy import dot
 from numpy.linalg import norm
 from heapq import nlargest
 
-from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
 from src.search_models.search_model import SearchModel
-from src.search_models.we_fasttext.document_vector_calculator import DocumentVectorCalculator
-from src.shared.files.file import File
+from src.file_handlers.file import File
 
 class EmbeddingSearchModel(SearchModel):
 
