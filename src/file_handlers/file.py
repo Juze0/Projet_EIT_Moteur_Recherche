@@ -4,7 +4,7 @@ from os.path import exists, join, dirname, getsize
 from sys import exit
 
 
-class FileHandler(ABC):
+class File(ABC):
     """
     Classe générique abstraite dédiée aux opérations de manipulation de fichiers.
     """

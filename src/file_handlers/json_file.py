@@ -1,11 +1,7 @@
 import json
-from .file_handler import FileHandler
+from .file import File
 
-class JSONFileHandler(FileHandler):
-    """
-    Classe dédiée au chargement et à la sauvegarde des données JSON.
-    Hérite de FileHandler pour bénéficier des opérations génériques sur les fichiers.
-    """
+class JSONFile(File):
     
     def __init__(self, file_path: str):
         super().__init__(file_path)

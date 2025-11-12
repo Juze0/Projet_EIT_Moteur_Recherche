@@ -1,6 +1,6 @@
-from .file_handler import FileHandler
+from .file import File
 
-class TextFileHandler(FileHandler):
+class TextFile(File):
     
     def __init__(self, file_path: str):
         super().__init__(file_path)

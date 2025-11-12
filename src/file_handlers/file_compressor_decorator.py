@@ -1,8 +1,8 @@
 import lzma
 from time import time
-from .file_handler import FileHandler
+from .file import File
 
-class FileCompressorDecorator(FileHandler):
+class FileCompressorDecorator(File):
     """Implémentaton d'un decorator de FileHandler afin de traiter la compression/décomrpession de fichier gérés par FileHandler.
     C'est un décorateur, car on ajoute ces nouveaux comportements à l'éxecution, exemple: Compressor(JSONFileHandler)"""
     
