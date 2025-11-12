@@ -1,11 +1,13 @@
 from numpy import zeros, mean, amax, concatenate
 
+from src.search_models.calculator import Calculator
 from src.file_handlers.file import File
 
 
-class DocumentVectorCalculator():
+class DocumentVectorCalculator(Calculator):
 
     def __init__(self, max_docs=None):
+        super.__init__()
         self.max_docs = max_docs
         self.document_embeddings = None # TODO Vérifie que le modèle de recherche cherche l'info différemment
 

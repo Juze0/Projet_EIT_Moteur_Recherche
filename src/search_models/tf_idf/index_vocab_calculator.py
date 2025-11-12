@@ -1,12 +1,13 @@
 from collections import defaultdict
 
+from src.search_models.calculator import Calculator
 from src.file_handlers.file import File
 from src.preprocessing.preprocessor import Preprocessor
 
-class IndexAndVocabCalculator():
+class IndexAndVocabCalculator(Calculator):
 
     def __init__(self):
-        pass  
+        super.__init__()
 
 
     def create_index(self, preprocessor: Preprocessor, files: list[File]):

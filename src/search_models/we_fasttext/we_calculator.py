@@ -1,12 +1,13 @@
-from os.path import exists
 import fasttext
 
+from src.search_models.calculator import Calculator
 from src.file_handlers.file import File
 from src.preprocessing.preprocessor import Preprocessor
 
-class WECalculator():
+class WECalculator(Calculator):
 
     def __init__(self, model_type, max_docs=None):
+        super.__init__()
         self.model_type = model_type
         self.max_docs = max_docs
 

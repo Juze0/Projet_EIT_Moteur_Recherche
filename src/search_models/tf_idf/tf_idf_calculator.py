@@ -1,11 +1,12 @@
 from numpy import log10
 
+from src.search_models.calculator import Calculator
 from src.file_handlers.file import File
 
-class TFIDFCalculator():
+class TFIDFCalculator(Calculator):
 
     def __init__(self):
-        pass
+        super.__init__()
     
     def calculate_tf(self, index_file: File):
         """
