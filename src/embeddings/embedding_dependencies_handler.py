@@ -2,8 +2,10 @@ from src.shared.handler.dependencies_handler import DependenciesHandler
 from src.shared.command import Command
 from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
 from src.preprocessing.spacy_preprocessor import SpaCyPreprocessor
-from src.shared.files.file import File
+from src.file_handlers.text_file import TextFile
+from src.file_handlers.fasttext_file import FasttextFile
 from src.search_models.we_fasttext.we_calculator import WECalculator
+from src.search_models.we_fasttext.document_vector_calculator import DocumentVectorCalculator
 
 
 class EmbeddingDependenciesHandler(DependenciesHandler):
@@ -18,45 +20,36 @@ class EmbeddingDependenciesHandler(DependenciesHandler):
 
 
     def resolve_dependencies(self):
-        self.resolve_index_inversed_index_and_full_vocab()
-        #self.resolve_tf_idf_and_its_vectors()
-        #TODO Afficher à nouveau le cadre (voir ci-dessus): self.check_and_create_all("le vocabulaire, l'index et l'index inversé", self.get_voc_index_map(), self.preprocessor.name)
+        self.resolve_preprocessed_merged_corpus_and_model_training()
+        self.resolve_documents_embeddings()
 
-    ### parent method to override
-    def get_file_processing_map(self):
+
+    def resolve_preprocessed_merged_corpus_and_model_training(self):
         """Retourne une carte associant les types de fichiers aux méthodes de traitement."""
-        we_calculator = WECalculator(self.preprocessor)
+        print(f"\n#####  Vérification des prérequis pour utiliser les word embeddings")
+        we_calculator = WECalculator("TODO_MODEL_TYPE")
 
-        corpus_files = [File(full_path_file) for full_path_file in self.get_full_path_files_of_folder(FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER))]
+        corpus_files = [TextFile(full_path_file) for full_path_file in self.get_full_path_files_of_folder(FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER))]
         ordered_corpus_files = sorted([f.get_file_name() for f in corpus_files])
 
-        preprocessed_merged_corpus_file = File(self.get_file_path(FileHierarchyEnum.WE_PREPROCESSED_MERGED_CORPUS, self.preprocessor.name))
-        fasttext_model = File(self.get_file_path(FileHierarchyEnum.WE_FASTTEXT_MODEL, f"{self.preprocessor.name}_{"skipgram"}"))
-        # TODO, il faut désromais passer la bonne instance de file à la méthode de calcul
+        preprocessed_merged_corpus_file = TextFile(self.get_file_path(FileHierarchyEnum.WE_PREPROCESSED_MERGED_CORPUS, self.preprocessor.name))
+        fasttext_model = FasttextFile(self.get_file_path(FileHierarchyEnum.WE_FASTTEXT_MODEL, f"{self.preprocessor.name}_{"skipgram"}"))
 
-        self.if_file_not_found_launch_calculation(preprocessed_merged_corpus_file, we_calculator.normalize_and_merge_texts, ordered_corpus_files)
-        self.if_file_not_found_launch_calculation(fasttext_model, we_calculator.train_and_save_model, preprocessed_merged_corpus_file)
+        self.if_file_not_found_launch_calculation(preprocessed_merged_corpus_file, we_calculator.build_normalized_corpus, ordered_corpus_files)
+        self.if_file_not_found_launch_calculation(fasttext_model, we_calculator.train_model, preprocessed_merged_corpus_file)
     
 
-    def resolve_index_inversed_index_and_full_vocab(self):
-        print(f"\n#####  Vérification des prérequis pour utiliser le vocabulaire, l'index et l'index inversé")
-        index_voc_calculator = WECalculator(self.preprocessor)
+    def resolve_documents_embeddings(self):
+        print(f"\n#####  Vérification des prérequis pour utiliser les embeddings de chaque document du corpus !")
+        document_vector_calculator = DocumentVectorCalculator("TODO_MODEL_TYPE")
 
-        corpus_files = [File(full_path_file) for full_path_file in self.get_full_path_files_of_folder(FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER))]
-        index_file = File(self.get_file_path(FileHierarchyEnum.INDEX, self.preprocessor.name))
-        inverse_index_file = File(self.get_file_path(FileHierarchyEnum.INVERSE_INDEX, self.preprocessor.name))
-        full_vocab_file = File(self.get_file_path(FileHierarchyEnum.FULL_VOCAB, self.preprocessor.name))
+        preprocessed_merged_corpus_file = TextFile(self.get_file_path(FileHierarchyEnum.WE_PREPROCESSED_MERGED_CORPUS, self.preprocessor.name))
+        fasttext_model = FasttextFile(self.get_file_path(FileHierarchyEnum.WE_FASTTEXT_MODEL, f"{self.preprocessor.name}_{"skipgram"}"))
 
-        self.if_file_not_found_launch_calculation(index_file, index_voc_calculator.create_index, corpus_files)
-        self.if_file_not_found_launch_calculation(inverse_index_file, index_voc_calculator.create_inversed_index, index_file)
-        self.if_file_not_found_launch_calculation(full_vocab_file, index_voc_calculator.extract_full_vocab, corpus_files)
+        corpus_files = [TextFile(full_path_file) for full_path_file in self.get_full_path_files_of_folder(FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER))]
+        ordered_corpus_files = sorted([f.get_file_name() for f in corpus_files])
+
+        self.if_file_not_found_launch_calculation(preprocessed_merged_corpus_file,
+                                                  document_vector_calculator.calculate_embeddings_for_all_documents,
+                                                  fasttext_model, preprocessed_merged_corpus_file, ordered_corpus_files)
         print()
-
-
-    ### Method of Calculator class to override
-    def get_file_processing_map(self):
-        """Retourne une carte associant les types de fichiers aux méthodes de traitement."""
-        #### INTERN DEPENDENCIES => HERE THE ORDER MATTERS !!!
-        return {
-            FileHierarchyEnum.WE_FASSTEXT_DOCUMENT_EMBEDDINGS:  self.calculate_embeddings_for_all_documents,
-        }
