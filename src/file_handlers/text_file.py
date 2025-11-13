@@ -13,12 +13,15 @@ class TextFile(File):
 
 
     def load(self, use_iterator=False):
-        if (use_iterator is False):
+        if not use_iterator:
             print(f"[READ]: Chargement du fichier {self._file_path}")
             with open(self._file_path, "r", encoding='utf-8') as f:
                 return f.read()
-        else:
-            print(f"[READ]: Lecture ligne par ligne du fichier {self._file_path}")
-            with open(self._file_path, "r", encoding="utf-8") as f:
-                for line in f:
-                    yield line
+        return self._load_using_iterator()
+
+
+    def _load_using_iterator(self):
+        print(f"[READ]: Lecture ligne par ligne du fichier {self._file_path}")
+        with open(self._file_path, "r", encoding="utf-8") as f:
+            for line in f:
+                yield line

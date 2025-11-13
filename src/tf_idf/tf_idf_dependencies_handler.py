@@ -34,9 +34,9 @@ class TfIdfDependenciesHandler(DependenciesHandler):
         inverse_index_file = JSONFile(self.get_file_path(FileHierarchyEnum.INVERSE_INDEX, self.preprocessor.name))
         full_vocab_file = JSONFile(self.get_file_path(FileHierarchyEnum.FULL_VOCAB, self.preprocessor.name))
 
-        self.if_file_not_found_launch_calculation(index_file, index_voc_calculator.create_index, corpus_files)
+        self.if_file_not_found_launch_calculation(index_file, index_voc_calculator.create_index, self.preprocessor, corpus_files)
         self.if_file_not_found_launch_calculation(inverse_index_file, index_voc_calculator.create_inversed_index, index_file)
-        self.if_file_not_found_launch_calculation(full_vocab_file, index_voc_calculator.extract_full_vocab, corpus_files)
+        self.if_file_not_found_launch_calculation(full_vocab_file, index_voc_calculator.extract_full_vocab, self.preprocessor, corpus_files)
         print()
     
     def resolve_tf_idf_and_its_vectors(self):
