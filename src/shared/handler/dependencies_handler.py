@@ -1,4 +1,3 @@
-import time
 from src.shared.handler.base_handler import BaseHandler
 from src.file_handlers.file import File
 from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
@@ -19,10 +18,7 @@ class DependenciesHandler(BaseHandler):
         print("-----------------")
         print(f"[CREATION START] Le fichier {file.get_path()} n'existe pas, création en cours...")
         file.create_all_missing_folders() # TODO, délégué cette méthode 
-        start_time = time.time()
         data_to_save = calculation_func(*args, **kwargs)
-        end_time = time.time()
-        print(f"[CREATION END] La création du fichier {file.get_file_name()} s'est terminée en {self.get_creation_duration_time(start_time, end_time)}!")
         if data_to_save is None:
             # TODO changer ce comportement là, la sauvegarde est forcément réaliser par un DependencieHandler
             print(f"[INFO] La sauvegarde du fichier a été déléguée au fichier de calcul correspondant")

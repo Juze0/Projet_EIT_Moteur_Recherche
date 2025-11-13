@@ -17,7 +17,8 @@ class TextFile(File):
             print(f"[READ]: Chargement du fichier {self._file_path}")
             with open(self._file_path, "r", encoding='utf-8') as f:
                 return f.read()
-        print(f"[READ]: Lecture ligne par ligne du fichier {self._file_path}")
-        with open(self._file_path, "r", encoding="utf-8") as f:
-            for line in f:
-                yield line
+        else:
+            print(f"[READ]: Lecture ligne par ligne du fichier {self._file_path}")
+            with open(self._file_path, "r", encoding="utf-8") as f:
+                for line in f:
+                    yield line
