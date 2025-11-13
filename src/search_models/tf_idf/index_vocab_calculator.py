@@ -21,7 +21,7 @@ class IndexAndVocabCalculator(Calculator):
         """
         Renvoie un index inversé associant les mots à leur occurence dans les documents.
         """
-        index = index_file.load_json_content()
+        index = index_file.load()
         inverse_index = defaultdict(lambda: defaultdict(int))
         for filename in index:
             for token in index[filename]:

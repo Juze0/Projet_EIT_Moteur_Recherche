@@ -6,7 +6,7 @@ from src.file_handlers.file import File
 class TFIDFCalculator(Calculator):
 
     def __init__(self):
-        super.__init__()
+        super().__init__()
     
     def calculate_tf(self, index_file: File):
         """
