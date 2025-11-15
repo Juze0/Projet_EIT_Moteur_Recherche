@@ -1,5 +1,5 @@
 from src.refacto.shared.handler.dependencies_handler import DependenciesHandler
-from src.refacto.shared.command import Command
+from src.refacto.shared.commands.command import Command
 from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
 from src.preprocessing.spacy_preprocessor import SpaCyPreprocessor
 from src.file_handlers.text_file import TextFile
