@@ -1,6 +1,0 @@
-from typing import Protocol
-from src.shared.command import Command
-
-class IHandler(Protocol):
-    def setNext(self, handler): ...
-    def handle(self, command: Command): ...

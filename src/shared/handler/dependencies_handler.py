@@ -1,11 +1,11 @@
-from src.shared.handler.base_handler import BaseHandler
+from src.shared.handler.handler import Handler
 from src.file_handlers.file import File
 from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
 
 from os import listdir
 from os.path import join
 
-class DependenciesHandler(BaseHandler):
+class DependenciesHandler(Handler):
 
     def __init__(self):
         super().__init__()
