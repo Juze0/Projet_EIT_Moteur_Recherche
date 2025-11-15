@@ -10,11 +10,16 @@ from src.refacto.shared.commands.raw_search_command import RawSearchCommand
 from src.preprocessing.spacy_preprocessor import SpaCyPreprocessor
 from src.search_models.tf_idf.tf_idf_search_model import TFIDFSearchModel
 
+from src.refacto.shared.handler.handler import Handler
+from src.refacto.shared.handler.enrich_command_handler import EnrichCommandHandler
+
+
 def main():
-    command = RawSearchCommand("Voici mon prepro", "Voici mon model", "query")
-    print(command.get_preprocessor())
-    print(command.get_search_model())
-    print(command.get_query())
+    commandFromUi = RawSearchCommand("Voici mon prepro", "Voici mon model", "query")
+
+    handler = EnrichCommandHandler()
+    handler.handle(commandFromUi)
+    
 
 if __name__ == "__main__":
     main()
