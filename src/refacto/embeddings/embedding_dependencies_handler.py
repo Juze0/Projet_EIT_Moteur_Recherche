@@ -41,7 +41,9 @@ class EmbeddingDependenciesHandler(DependenciesHandler):
 
     def resolve_documents_embeddings(self):
         print(f"\n#####  Vérification des prérequis pour utiliser les embeddings de chaque document du corpus !")
-        document_vector_calculator = DocumentVectorCalculator("skipgram")
+        fasttext_model = FasttextFile(self.get_file_path(FileHierarchyEnum.WE_FASTTEXT_MODEL, f"{self.preprocessor.name}_{"skipgram"}"))
+
+        document_vector_calculator = DocumentVectorCalculator(fasttext_model)
 
         preprocessed_merged_corpus_file = TextFile(self.get_file_path(FileHierarchyEnum.WE_PREPROCESSED_MERGED_CORPUS, self.preprocessor.name))
         fasttext_model = FasttextFile(self.get_file_path(FileHierarchyEnum.WE_FASTTEXT_MODEL, f"{self.preprocessor.name}_{"skipgram"}"))

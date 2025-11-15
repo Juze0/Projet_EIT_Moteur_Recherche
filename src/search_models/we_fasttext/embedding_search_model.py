@@ -4,17 +4,18 @@ from heapq import nlargest
 
 from src.search_models.search_model import SearchModel
 from src.file_handlers.file import File
+from src.search_models.we_fasttext.document_vector_calculator import DocumentVectorCalculator
 
 class EmbeddingSearchModel(SearchModel):
 
-    def __init__(self):
-        pass
+    def __init__(self, embedding_model: File):
+        self.embedding_model = DocumentVectorCalculator(embedding_model)
 
 
     def calculate_query_embedding(self, preprocessed_query: str):
         """Calcule l'embedding de la requête de l'utilisateur."""
         # Prétraiter la requête de l'utilisateur pour obtenir une liste de mots
-        query_embedding = self.document_vector_calculator.create_document_embedding(preprocessed_query)
+        query_embedding = self.embedding_model.create_document_embedding(preprocessed_query)
         return query_embedding
     
     def cosine_similarity(self, vector1, vector2):
