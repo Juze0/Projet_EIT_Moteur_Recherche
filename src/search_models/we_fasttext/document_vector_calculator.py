@@ -34,7 +34,7 @@ class DocumentVectorCalculator(Calculator):
         :param words: liste de mots du document
         :return: Le vecteur renvoyé est de dimension 2 * d et réprésente le document
         """
-        return concatenate([self.create_mean_embedding(self.embedding_model, words), self.create_max_embedding(self.embedding_model, words)])
+        return concatenate([self.create_mean_embedding(words), self.create_max_embedding(words)])
 
 
     def calculate_embeddings_for_all_documents(self, preprocessed_merged_corpus: File, ordered_file_list: list[str]):
@@ -43,7 +43,7 @@ class DocumentVectorCalculator(Calculator):
         document_embeddings = {}
         for idx, line in enumerate(preprocessed_merged_corpus.load(use_iterator=True)):
             processed_words = line.strip().split()
-            document_embedding = self.create_document_embedding(self.embedding_model, processed_words)
+            document_embedding = self.create_document_embedding(processed_words)
             document_embeddings[ordered_file_list[idx]] = document_embedding.tolist()
         self.document_embeddings = document_embeddings
         return document_embeddings

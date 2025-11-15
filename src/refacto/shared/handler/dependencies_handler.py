@@ -1,6 +1,5 @@
 from src.refacto.shared.handler.handler import Handler
 from src.file_handlers.file import File
-from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
 from src.refacto.shared.commands.command import Command
 
 from abc import abstractmethod
@@ -37,12 +36,3 @@ class DependenciesHandler(Handler):
         else:
             file.save(data_to_save) # TODO, On addresse désormais ce problème
         print("-----------------")
-
-
-    # Récupérer depuis file_handler
-    def get_full_path_files_of_folder(self, folder_name: str) -> list[str]:
-        return [join(folder_name, filename) for filename in listdir(folder_name)]
-    
-    def get_file_path(self, filename_enum, filename_suffix=""):
-        """Utilise l'enum décrivant la hierarchie de fichier pour obtenir le chemin du fichier spéicifié !"""
-        return FileHierarchyEnum.get_file_path(filename_enum, filename_suffix)
