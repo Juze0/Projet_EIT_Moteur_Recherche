@@ -6,9 +6,10 @@ from src.file_handlers.file import File
 
 class DocumentVectorCalculator(Calculator):
 
-    def __init__(self, embedding_model:File, max_docs=None):
+    def __init__(self, embedding_model_file:File, max_docs=None):
         super().__init__()
-        self.embedding_model = embedding_model.load()
+        self.embedding_model_file = embedding_model_file
+        self.embedding_model = None
         self.max_docs = max_docs
 
 
@@ -38,6 +39,7 @@ class DocumentVectorCalculator(Calculator):
 
     def calculate_embeddings_for_all_documents(self, preprocessed_merged_corpus: File, ordered_file_list: list[str]):
         """Calcule les embeddings pour chaque document pré-traité dans le fichier unique de corpus."""
+        if (self.embedding_model == None): self.embedding_model = self.embedding_model_file.load()
         document_embeddings = {}
         for idx, line in enumerate(preprocessed_merged_corpus.load(use_iterator=True)):
             processed_words = line.strip().split()

@@ -15,39 +15,34 @@ class EmbeddingDependenciesHandler(DependenciesHandler):
         super().__init__()
         self.preprocessor = SpaCyPreprocessor()
 
-
-    def handle(self, command: Command):
-        self.resolve_dependencies()
-
-
-    def resolve_dependencies(self):
-        self.resolve_preprocessed_merged_corpus_and_model_training()
-        self.resolve_documents_embeddings()
+    def resolve_dependencies(self, command: Command):
+        self.resolve_preprocessed_merged_corpus_and_model_training(command)
+        self.resolve_documents_embeddings(command)
 
 
-    def resolve_preprocessed_merged_corpus_and_model_training(self):
+    def resolve_preprocessed_merged_corpus_and_model_training(self, command: Command):
         """Retourne une carte associant les types de fichiers aux méthodes de traitement."""
         print(f"\n#####  Vérification des prérequis pour utiliser les word embeddings")
         we_calculator = WECalculator("skipgram")
 
         corpus_files = [TextFile(full_path_file) for full_path_file in sorted(self.get_full_path_files_of_folder(FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER)))]
 
-        preprocessed_merged_corpus_file = TextFile(self.get_file_path(FileHierarchyEnum.WE_PREPROCESSED_MERGED_CORPUS, self.preprocessor.name))
-        fasttext_model = FasttextFile(self.get_file_path(FileHierarchyEnum.WE_FASTTEXT_MODEL, f"{self.preprocessor.name}_{"skipgram"}"))
+        preprocessed_merged_corpus_file = TextFile(self.get_file_path(FileHierarchyEnum.WE_PREPROCESSED_MERGED_CORPUS, command._preprocessor.name))
+        fasttext_model = FasttextFile(self.get_file_path(FileHierarchyEnum.WE_FASTTEXT_MODEL, f"{command._preprocessor.name}_{"skipgram"}"))
 
-        self.if_file_not_found_launch_calculation(preprocessed_merged_corpus_file, we_calculator.build_normalized_corpus, self.preprocessor, corpus_files)
+        self.if_file_not_found_launch_calculation(preprocessed_merged_corpus_file, we_calculator.build_normalized_corpus, command._preprocessor, corpus_files)
         self.if_file_not_found_launch_calculation(fasttext_model, we_calculator.train_model, preprocessed_merged_corpus_file)
     
 
-    def resolve_documents_embeddings(self):
+    def resolve_documents_embeddings(self, command: Command):
         print(f"\n#####  Vérification des prérequis pour utiliser les embeddings de chaque document du corpus !")
-        fasttext_model = FasttextFile(self.get_file_path(FileHierarchyEnum.WE_FASTTEXT_MODEL, f"{self.preprocessor.name}_{"skipgram"}"))
+        fasttext_model = FasttextFile(self.get_file_path(FileHierarchyEnum.WE_FASTTEXT_MODEL, f"{command._preprocessor.name}_{"skipgram"}"))
 
         document_vector_calculator = DocumentVectorCalculator(fasttext_model)
 
-        preprocessed_merged_corpus_file = TextFile(self.get_file_path(FileHierarchyEnum.WE_PREPROCESSED_MERGED_CORPUS, self.preprocessor.name))
-        fasttext_model = FasttextFile(self.get_file_path(FileHierarchyEnum.WE_FASTTEXT_MODEL, f"{self.preprocessor.name}_{"skipgram"}"))
-        doc_embeddings = JSONFile(self.get_file_path(FileHierarchyEnum.WE_FASSTEXT_DOCUMENT_EMBEDDINGS, f"{self.preprocessor.name}_{"skipgram"}"))
+        preprocessed_merged_corpus_file = TextFile(self.get_file_path(FileHierarchyEnum.WE_PREPROCESSED_MERGED_CORPUS, command._preprocessor.name))
+        fasttext_model = FasttextFile(self.get_file_path(FileHierarchyEnum.WE_FASTTEXT_MODEL, f"{command._preprocessor.name}_{"skipgram"}"))
+        doc_embeddings = JSONFile(self.get_file_path(FileHierarchyEnum.WE_FASSTEXT_DOCUMENT_EMBEDDINGS, f"{command._preprocessor.name}_{"skipgram"}"))
 
         corpus_files = [TextFile(full_path_file) for full_path_file in self.get_full_path_files_of_folder(FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER))]
         ordered_corpus_files = sorted([f.get_file_name() for f in corpus_files])
