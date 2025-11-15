@@ -1,4 +1,4 @@
-from .rich_evaluation_command import RichSearchContextCommand
+from .rich_search_context_command import RichSearchContextCommand
 from src.search_models.search_model import SearchModel
 from src.preprocessing.preprocessor import Preprocessor
 
