@@ -1,4 +1,4 @@
-from src.refacto.shared.command import Command
+from src.refacto.shared.commands.command import Command
 from abc import ABC, abstractmethod
 
 class Handler(ABC):
