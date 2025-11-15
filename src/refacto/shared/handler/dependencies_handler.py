@@ -1,4 +1,4 @@
-from src.shared.handler.handler import Handler
+from src.refacto.shared.handler.handler import Handler
 from src.file_handlers.file import File
 from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
 
