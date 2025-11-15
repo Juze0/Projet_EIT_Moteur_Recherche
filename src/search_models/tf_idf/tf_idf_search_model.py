@@ -10,21 +10,11 @@ class TFIDFSearchModel(SearchModel):
 
     nlp = None
 
-    def __init__(self, preprocessor):
-        self.preprocessor = preprocessor
+    def __init__(self):
+        pass
     
-    # ******** DEALING WITH USER REQUEST
-
-    def preprocess_query(self, query):
-        """
-        Prend une requête utilisateur en paramètre et la normalise (retire la ponctuation, les espaces, les caractères spéciaux, les stopwords, etc.)
-        Retourne une liste de tokens normalisés associés à la requête utilisateur.
-        """
-        query_tokens = []
-        query_tokens = self.preprocessor.lemmatize(self.preprocessor.normalize_text(query))
-        return query_tokens
-    
-    def calculate_docs_to_answer_query_docs(self, query, idf_dict_file:File, tf_idf_vectors_file:File, full_vocab_file:File, top_n=10):
+   
+    def calculate_docs_to_answer_query_docs(self, preprocessed_query:str, idf_dict_file:File, tf_idf_vectors_file:File, full_vocab_file:File, top_n=10):
         """
         Prend une requête utilisateur, le dictionnaire de tf*idf des documents et le dictionnaire des idf des mots.
         Retourne un dictionnaire associant les documents et leur similarité cosinus avec la requête utilisateur. Le dictionnaire est en ordre décroissant.
@@ -36,10 +26,9 @@ class TFIDFSearchModel(SearchModel):
 
         # [ALL] Prétraitement de la requête
         idf_dict = idf_dict_file.load()
-        query_tokens = self.preprocess_query(query)
         query_tf = {}
-        dict_tokens = self.count_words(query_tokens)
-        nb_words = len(query_tokens)
+        dict_tokens = self.count_words(preprocessed_query)
+        nb_words = len(preprocessed_query)
         print("Nombre de mots dans la requête : ", nb_words)
         print("Mots de la requête : ", dict_tokens)
         for token in dict_tokens:

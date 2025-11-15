@@ -7,18 +7,14 @@ from src.file_handlers.file import File
 
 class EmbeddingSearchModel(SearchModel):
 
-    def __init__(self, preprocessor):
-        super().__init__(preprocessor)
-
-    def preprocess_query(self, query):
-        return self.preprocessor.normalize_text(query)
+    def __init__(self):
+        pass
 
 
-    def calculate_query_embedding(self, query):
+    def calculate_query_embedding(self, preprocessed_query: str):
         """Calcule l'embedding de la requête de l'utilisateur."""
         # Prétraiter la requête de l'utilisateur pour obtenir une liste de mots
-        processed_words = self.preprocess_query(query)
-        query_embedding = self.document_vector_calculator.create_document_embedding(processed_words)
+        query_embedding = self.document_vector_calculator.create_document_embedding(preprocessed_query)
         return query_embedding
     
     def cosine_similarity(self, vector1, vector2):
