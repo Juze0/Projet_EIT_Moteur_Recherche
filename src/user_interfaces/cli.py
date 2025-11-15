@@ -4,7 +4,6 @@ from rich.table import Table
 from rich.text import Text
 
 from .ui import UI
-from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
 from src.preprocessing.nltk_preprocessor import NLTKPreprocessor
 from src.preprocessing.spacy_preprocessor import SpaCyPreprocessor
 from src.search_models.tf_idf.tf_idf_search_model import TFIDFSearchModel
@@ -81,7 +80,7 @@ class CLI(UI):
 
     def search_and_display_results(self):
         """Prompts user for a query and displays search results."""
-        link = FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER)
+        link = None #TODO FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER)
         
         while True:
             query = input("Veuillez entrer votre requête (ou tapez 'help' pour voir les commandes disponibles) : ")

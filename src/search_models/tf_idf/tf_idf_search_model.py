@@ -1,6 +1,5 @@
 from sklearn.metrics.pairwise import cosine_similarity
 
-from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
 from src.search_models.search_model import SearchModel
 from src.file_handlers.file import File
 
@@ -103,5 +102,6 @@ class TFIDFSearchModel(SearchModel):
         for filename in index:
             word_count[filename] = self.count_words(index[filename])
         if save_index:
-           self.save_as_json(word_count, FileHierarchyEnum.WORD_COUNT)
+           # TODO self.save_as_json(word_count, FileHierarchyEnum.WORD_COUNT)
+           pass
         return word_count

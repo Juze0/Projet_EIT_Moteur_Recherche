@@ -6,7 +6,6 @@ from io import StringIO
 import customtkinter as ctk
 from CTkListbox import *
 from src.user_interfaces.ui import UI
-from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
 from src.search_models.tf_idf.tf_idf_search_model import TFIDFSearchModel
 from src.search_models.we_fasttext.embedding_search_model import EmbeddingSearchModel
 
@@ -274,7 +273,7 @@ class GUI(ctk.CTk, UI):
         self.listbox_query_results.delete("0", "end")  # Utilise "0" pour indiquer le début de la Listbox
         
         # Ajoute chaque résultat (nom de fichier) dans la Listbox
-        link = join(FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER))
+        link = None #TODO join(FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER))
         for i, result in enumerate(results.keys()):
             relevance_score = round(results[result] * 100, 2)
             with open(f"{link}/{result}", "r", encoding="utf-8") as file:
@@ -290,7 +289,7 @@ class GUI(ctk.CTk, UI):
         if idx_selection:
             file_name_and_info = self.listbox_query_results.get(idx_selection)
             file_name = file_name_and_info.split(".txt")[0] + ".txt"
-            file_path = join(FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER), file_name)
+            file_path = None #TODO join(FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER), file_name)
 
             # Lecture du contenu du fichier sélectionné
             with open(file_path, "r", encoding="utf-8") as file:
