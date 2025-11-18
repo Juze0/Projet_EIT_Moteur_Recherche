@@ -9,10 +9,6 @@ from src.preprocessing.spacy_preprocessor import SpaCyPreprocessor
 from src.search_models.search_model import SearchModel
 from src.search_models.we_fasttext.embedding_search_model import EmbeddingSearchModel
 from src.search_models.tf_idf.tf_idf_search_model import TFIDFSearchModel
-# dependencies handlers
-from src.refacto.shared.handler.dependencies_handler import DependenciesHandler
-from src.refacto.embeddings.embedding_dependency_resolver import EmbeddingDependenciesHandler
-from src.refacto.tf_idf.tf_idf_dependency_resolver import TfIdfDependenciesHandler
 
 from src.refacto.shared.service.search_file_service import SearchFileService
 
@@ -25,13 +21,13 @@ class EnrichCommandHandler(Handler):
 
 
     def _enrich_command(self, command: Command) -> Command:
-        
-        search_file_service = SearchFileService(command.get_search_model(), command.get_preprocessor())
-        search_model, dependencies_model_handler = self._get_search_model(command.get_search_model(), search_file_service)
+        cmd_search_model = command.get_search_model()
+        cmd_preprocessor = command.get_preprocessor()
+        search_file_service = SearchFileService(cmd_search_model, cmd_preprocessor)
+        search_model = self._get_search_model(cmd_search_model, search_file_service)
         return RichSearchCommand(
-            self._get_preprocessor(command.get_preprocessor()),
+            self._get_preprocessor(cmd_preprocessor),
             search_model,
-            dependencies_model_handler,
             search_file_service,
             command.get_query()
         )
@@ -49,10 +45,10 @@ class EnrichCommandHandler(Handler):
         raise ValueError("Le preprocesseur " + preprocessor + "n'est pas reconnu" )
     
     
-    def _get_search_model(self, search_model: str, search_file_service: SearchFileService) -> list[SearchModel, DependenciesHandler]:
+    def _get_search_model(self, search_model: str, search_file_service: SearchFileService) -> SearchModel:
         search_model = self._remove_spaces_and_lower(search_model)
-        if (search_model == "embedding"):  return EmbeddingSearchModel(search_file_service), EmbeddingDependenciesHandler()
-        if (search_model == "tfidf"):  return TFIDFSearchModel(), TfIdfDependenciesHandler()
+        if (search_model == "embedding"):  return EmbeddingSearchModel(search_file_service)
+        if (search_model == "tfidf"):  return TFIDFSearchModel()
         # TODO traiter mieux cette erreur (Le handler ne traite pas le requete et renvoi un message d'erreur à l'ui)
         raise ValueError("Le modèle de recherche " + search_model + "n'est pas reconnu" )
 
