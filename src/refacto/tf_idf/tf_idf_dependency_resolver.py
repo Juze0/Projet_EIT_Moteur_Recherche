@@ -1,11 +1,13 @@
 from src.refacto.shared.handler.search_model_dependency_resolver import SearchModelDependencyResolver
+from src.preprocessing.preprocessor import Preprocessor
+from src.refacto.shared.service.search_file_service import SearchFileService
 from src.search_models.tf_idf.tf_idf_calculator import TFIDFCalculator
 from src.search_models.tf_idf.index_vocab_calculator import IndexAndVocabCalculator
 
 
 class TfIdfDependencyResolver(SearchModelDependencyResolver):
 
-    def __init__(self, preprocessor, search_file_service):
+    def __init__(self, preprocessor: Preprocessor, search_file_service: SearchFileService):
         super().__init__(preprocessor, search_file_service)
 
 

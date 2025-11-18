@@ -1,10 +1,12 @@
 from src.refacto.shared.handler.search_model_dependency_resolver import SearchModelDependencyResolver
+from src.preprocessing.preprocessor import Preprocessor
+from src.refacto.shared.service.search_file_service import SearchFileService
 from src.search_models.we_fasttext.we_calculator import WECalculator
 from src.search_models.we_fasttext.document_vector_calculator import DocumentVectorCalculator
 
 class EmbeddingDependencyResolver(SearchModelDependencyResolver):
 
-    def __init__(self, preprocessor, search_file_service):
+    def __init__(self, preprocessor: Preprocessor, search_file_service: SearchFileService):
         super().__init__(preprocessor, search_file_service)
 
 
