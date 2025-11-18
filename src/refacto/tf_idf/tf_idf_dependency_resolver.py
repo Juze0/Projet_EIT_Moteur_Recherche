@@ -3,7 +3,7 @@ from src.search_models.tf_idf.tf_idf_calculator import TFIDFCalculator
 from src.search_models.tf_idf.index_vocab_calculator import IndexAndVocabCalculator
 
 
-class TfIdfDependenciesHandler(SearchModelDependencyResolver):
+class TfIdfDependencyResolver(SearchModelDependencyResolver):
 
     def __init__(self, preprocessor, search_file_service):
         super().__init__(preprocessor, search_file_service)

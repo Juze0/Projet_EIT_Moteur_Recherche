@@ -11,8 +11,8 @@ from src.search_models.we_fasttext.embedding_search_model import EmbeddingSearch
 from src.search_models.tf_idf.tf_idf_search_model import TFIDFSearchModel
 # dependencies handlers
 from src.refacto.shared.handler.dependencies_handler import DependenciesHandler
-from src.refacto.embeddings.embedding_dependencies_handler import EmbeddingDependenciesHandler
-from src.refacto.tf_idf.tf_idf_dependencies_handler import TfIdfDependenciesHandler
+from src.refacto.embeddings.embedding_dependency_resolver import EmbeddingDependenciesHandler
+from src.refacto.tf_idf.tf_idf_dependency_resolver import TfIdfDependenciesHandler
 
 from src.refacto.shared.service.search_file_service import SearchFileService
 
