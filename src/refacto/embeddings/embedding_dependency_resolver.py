@@ -24,7 +24,7 @@ class EmbeddingDependencyResolver(SearchModelDependencyResolver):
         preprocessed_merged_corpus_file = self._search_file_service.get_preprocessed_corpus()
         fasttext_model = self._search_file_service.get_fassttext_model()
 
-        self.if_file_not_found_launch_calculation(preprocessed_merged_corpus_file, we_calculator.build_normalized_corpus, command._preprocessor, corpus_files)
+        self.if_file_not_found_launch_calculation(preprocessed_merged_corpus_file, we_calculator.build_normalized_corpus, self._preprocessor, corpus_files)
         self.if_file_not_found_launch_calculation(fasttext_model, we_calculator.train_model, preprocessed_merged_corpus_file)
     
 
