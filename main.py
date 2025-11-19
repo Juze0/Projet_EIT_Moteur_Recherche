@@ -3,8 +3,8 @@ from src.user_interfaces.cli import CLI
 from src.user_interfaces.gui import GUI
 
 from src.refacto.tf_idf.tf_idf_command import TfIdfCommand
-from src.refacto.embeddings.embedding_dependencies_handler import EmbeddingDependenciesHandler
-from src.refacto.tf_idf.tf_idf_dependencies_handler import TfIdfDependenciesHandler
+from src.refacto.embeddings.embedding_dependency_resolver import EmbeddingDependencyResolver
+from src.refacto.tf_idf.tf_idf_dependency_resolver import TfIdfDependencyResolver
 
 from src.refacto.shared.commands.raw_search_command import RawSearchCommand
 from src.preprocessing.spacy_preprocessor import SpaCyPreprocessor

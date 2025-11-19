@@ -1,21 +1,15 @@
 from .rich_search_context_command import RichSearchContextCommand
 from src.search_models.search_model import SearchModel
 from src.preprocessing.preprocessor import Preprocessor
-from src.refacto.shared.handler.dependencies_handler import DependenciesHandler
 
 from src.refacto.shared.service.search_file_service import SearchFileService
 
 class RichSearchCommand(RichSearchContextCommand):
     
-    def __init__(self, preprocessor: Preprocessor, search_model: SearchModel, dependencies_handler:DependenciesHandler, search_file_service: SearchFileService,  query: str):
+    def __init__(self, preprocessor: Preprocessor, search_model: SearchModel, search_file_service: SearchFileService,  query: str):
         super().__init__(preprocessor, search_model)
-        self._dependencies_handler = dependencies_handler
         self._search_file_service = search_file_service
         self._query = query
-
-    
-    def get_dependencies_handler(self) -> DependenciesHandler:
-        return self._dependencies_handler
 
     def get_search_file_service(self) -> SearchFileService:
         return self._search_file_service
