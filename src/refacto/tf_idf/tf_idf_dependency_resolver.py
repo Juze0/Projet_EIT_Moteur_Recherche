@@ -25,9 +25,9 @@ class TfIdfDependencyResolver(SearchModelDependencyResolver):
         inverse_index_file = self._search_file_service.get_inverse_index()
         full_vocab_file = self._search_file_service.get_full_vocab()
 
-        self.if_file_not_found_launch_calculation(index_file, index_voc_calculator.create_index, command.preprocessor, corpus_files)
+        self.if_file_not_found_launch_calculation(index_file, index_voc_calculator.create_index, self._preprocessor, corpus_files)
         self.if_file_not_found_launch_calculation(inverse_index_file, index_voc_calculator.create_inversed_index, index_file)
-        self.if_file_not_found_launch_calculation(full_vocab_file, index_voc_calculator.extract_full_vocab, command.preprocessor, corpus_files)
+        self.if_file_not_found_launch_calculation(full_vocab_file, index_voc_calculator.extract_full_vocab, self._preprocessor, corpus_files)
         print()
     
     def resolve_tf_idf_and_its_vectors(self):
