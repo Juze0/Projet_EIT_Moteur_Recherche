@@ -24,7 +24,7 @@ class EnrichCommandHandler(Handler):
         cmd_search_model = command.get_search_model()
         cmd_preprocessor = command.get_preprocessor()
         search_file_service = SearchFileService(cmd_search_model, cmd_preprocessor)
-        search_model = self._get_search_model(cmd_search_model, search_file_service)
+        search_model = self._get_search_model(cmd_search_model)
         return RichSearchCommand(
             self._get_preprocessor(cmd_preprocessor),
             search_model,
@@ -45,9 +45,9 @@ class EnrichCommandHandler(Handler):
         raise ValueError("Le preprocesseur " + preprocessor + "n'est pas reconnu" )
     
     
-    def _get_search_model(self, search_model: str, search_file_service: SearchFileService) -> SearchModel:
+    def _get_search_model(self, search_model: str) -> SearchModel:
         search_model = self._remove_spaces_and_lower(search_model)
-        if (search_model == "embedding"):  return EmbeddingSearchModel(search_file_service)
+        if (search_model == "embedding"):  return EmbeddingSearchModel()
         if (search_model == "tfidf"):  return TFIDFSearchModel()
         # TODO traiter mieux cette erreur (Le handler ne traite pas le requete et renvoi un message d'erreur à l'ui)
         raise ValueError("Le modèle de recherche " + search_model + "n'est pas reconnu" )

@@ -7,16 +7,6 @@ from src.file_handlers.file import File
 from src.search_models.we_fasttext.document_vector_calculator import DocumentVectorCalculator
 
 class EmbeddingSearchModel(SearchModel):
-
-    def __init__(self, embedding_model: File):
-        self.embedding_model = DocumentVectorCalculator(embedding_model)
-
-
-    def calculate_query_embedding(self, preprocessed_query: str):
-        """Calcule l'embedding de la requête de l'utilisateur."""
-        # Prétraiter la requête de l'utilisateur pour obtenir une liste de mots
-        query_embedding = self.embedding_model.create_document_embedding(preprocessed_query)
-        return query_embedding
     
     def cosine_similarity(self, vector1, vector2):
         """Calcule la similarité cosinus entre deux vecteurs."""
@@ -25,7 +15,8 @@ class EmbeddingSearchModel(SearchModel):
         return dot(vector1, vector2) / (norm(vector1) * norm(vector2))
     
 
-    def calculate_docs_to_answer_query_docs(self, query, document_embeddings:File, top_n=10):
+    def calculate_docs_to_answer_query_docs(self, preprocessed_query: str, document_vector_calculator: DocumentVectorCalculator,
+                                            document_embeddings:File, top_n=10):
         """
         Trouve les documents les plus pertinents pour une requête utilisateur.
         :param query: Texte brut de la requête utilisateur.
@@ -33,7 +24,7 @@ class EmbeddingSearchModel(SearchModel):
         :return: Liste de tuples (nom du fichier, score de similarité) des documents les plus pertinents.
         """
         # 1/3 - Calculer l'embedding de la requête
-        query_embedding = self.calculate_query_embedding(query)
+        query_embedding = document_vector_calculator.create_document_embedding(preprocessed_query)
 
         # 2/3 - Calculer la similarité entre la requête et chaque document     
         docs_to_answer_query = {}
