@@ -28,7 +28,7 @@ class EmbeddingSearchModel(SearchModel):
 
         # 2/3 - Calculer la similarité entre la requête et chaque document     
         docs_to_answer_query = {}
-        for doc_name, doc_embedding in document_embeddings.items():
+        for doc_name, doc_embedding in document_embeddings.load().items():
             # Vérification que les dimensions sont compatibles avant de calculer la similarité
             if len(query_embedding) == len(doc_embedding):
                 similarity_score = self.cosine_similarity(query_embedding, doc_embedding)
@@ -38,6 +38,7 @@ class EmbeddingSearchModel(SearchModel):
 
         # 3/3 - Tri des résultats de recherche
         docs_to_answer_query = dict(sorted(docs_to_answer_query.items(), key=lambda x: x[1], reverse=True))
-        #top_documents = nlargest(top_n, docs_to_answer_query.items(), key=lambda item: item[1])
-
+        top_documents = nlargest(10, docs_to_answer_query.items(), key=lambda item: item[1])
+        for tuple in top_documents:
+            print(f"{tuple[0]}:{tuple[1]}")
         return docs_to_answer_query

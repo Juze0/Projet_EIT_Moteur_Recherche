@@ -1,4 +1,5 @@
 from sklearn.metrics.pairwise import cosine_similarity
+from heapq import nlargest
 
 from src.search_models.search_model import SearchModel
 from src.file_handlers.file import File
@@ -71,6 +72,9 @@ class TFIDFSearchModel(SearchModel):
 
         # [ALL] Tri des résultats de recherche
         docs_to_answer_query = dict(sorted(docs_to_answer_query.items(), key=lambda x: x[1], reverse=True))
+        top_documents = nlargest(10, docs_to_answer_query.items(), key=lambda item: item[1])
+        for tuple in top_documents:
+            print(f"{tuple[0]}:{tuple[1]}")
         return docs_to_answer_query
 
     def count_words(self,tokens):
