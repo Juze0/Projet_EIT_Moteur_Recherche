@@ -3,6 +3,7 @@ from heapq import nlargest
 
 from src.search_models.search_model import SearchModel
 from src.file_handlers.file import File
+from src.refacto.tf_idf.tf_idf_search_requirement import TfIdfSearchRequirement
 
 """ La lemmatisation avec Spacy est plus précise que celle de NLTK, on doit choisir entre les deux """
 
@@ -14,7 +15,7 @@ class TFIDFSearchModel(SearchModel):
         pass
     
    
-    def calculate_docs_to_answer_query_docs(self, preprocessed_query:str, idf_dict_file:File, tf_idf_vectors_file:File, full_vocab_file:File, top_n=10):
+    def calculate_docs_to_answer_query_docs(self, search_requirement: TfIdfSearchRequirement):
         """
         Prend une requête utilisateur, le dictionnaire de tf*idf des documents et le dictionnaire des idf des mots.
         Retourne un dictionnaire associant les documents et leur similarité cosinus avec la requête utilisateur. Le dictionnaire est en ordre décroissant.
@@ -25,10 +26,10 @@ class TFIDFSearchModel(SearchModel):
         # comme un espace vectoriel d'embeddings.
 
         # [ALL] Prétraitement de la requête
-        idf_dict = idf_dict_file.load()
+        idf_dict = search_requirement.get_idf().load()
         query_tf = {}
-        dict_tokens = self.count_words(preprocessed_query)
-        nb_words = len(preprocessed_query)
+        dict_tokens = self.count_words(search_requirement.get_preprocessed_query())
+        nb_words = len(search_requirement.get_preprocessed_query())
         print("Nombre de mots dans la requête : ", nb_words)
         print("Mots de la requête : ", dict_tokens)
         for token in dict_tokens:
@@ -46,7 +47,7 @@ class TFIDFSearchModel(SearchModel):
         # [ALL] Préparation du vecteur de la requête
         #print("Tokens de la requête : ")
         #print(query_tf)
-        full_vocab = full_vocab_file.load()
+        full_vocab = search_requirement.get_full_vocab().load()
         query_vector = [0.0] * len(full_vocab)
         
         # [SPECIFIC] Construction du vecteur en utilisant des scores TF-IDF
@@ -62,7 +63,7 @@ class TFIDFSearchModel(SearchModel):
         # [SPECIFIC] Utilisation de la similarité cosinus pour TF-IDF (sauf si un autre modèle aussi utilise cosinus).
         # Par exemple, Word Embeddings ou BERT peuvent aussi utiliser cosinus, mais certains modèles peuvent opter pour d’autres mesures.
         docs_to_answer_query = {}
-        for filename, vector in tf_idf_vectors_file.load().items():
+        for filename, vector in search_requirement.get_tf_idf_vectors().load().items():
            
             # Vérification que les dimensions sont compatibles avant de calculer la similarité
             if len(query_vector) == len(vector):

@@ -4,6 +4,8 @@ from src.refacto.shared.commands.rich_search_command import RichSearchCommand
 from src.search_models.we_fasttext.embedding_search_model import EmbeddingSearchModel
 from src.search_models.tf_idf.tf_idf_search_model import TFIDFSearchModel
 from src.search_models.we_fasttext.document_vector_calculator import DocumentVectorCalculator
+# search requirements
+from src.refacto.tf_idf.tf_idf_search_requirement import TfIdfSearchRequirement
 
 
 class SearchRequestHandler(Handler):
@@ -22,13 +24,15 @@ class SearchRequestHandler(Handler):
                 DocumentVectorCalculator(search_file_service.get_fassttext_model()),
                 document_embeddings
             )
-        if (isinstance(search_model, TFIDFSearchModel)): 
-            return search_model.calculate_docs_to_answer_query_docs(
+        if (isinstance(search_model, TFIDFSearchModel)):
+            requirement = TfIdfSearchRequirement(
                 preprocessed_query,
+                10,
                 search_file_service.get_idf(),
                 search_file_service.get_tf_idf_vectors(),
                 search_file_service.get_full_vocab()
             )
+            return search_model.calculate_docs_to_answer_query_docs(requirement)
         raise ValueError(f"Le modèle n'est pas reconnu !")
 
     def _preprocess_query(self, command: RichSearchCommand) -> str:
