@@ -22,7 +22,7 @@ def main():
     handler = EnrichCommandHandler()
     handler.setNext(DependenciesHandler()
           ).setNext(SearchRequestHandler())
-    print(handler.handle(commandFromUi))
+    handler.handle(commandFromUi)
     
 
 if __name__ == "__main__":
