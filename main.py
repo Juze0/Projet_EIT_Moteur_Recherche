@@ -13,13 +13,15 @@ from src.search_models.tf_idf.tf_idf_search_model import TFIDFSearchModel
 from src.refacto.shared.handler.handler import Handler
 from src.refacto.shared.handler.enrich_command_handler import EnrichCommandHandler
 from src.refacto.shared.handler.dependencies_handler import DependenciesHandler
+from src.refacto.shared.handler.search_request_handler import SearchRequestHandler
 
 
 def main():
-    commandFromUi = RawSearchCommand("SpaCy", "Embedding", "query")
+    commandFromUi = RawSearchCommand("SpaCy", "tfidf", "mission apollo NASA")
 
     handler = EnrichCommandHandler()
-    handler.setNext(DependenciesHandler())
+    handler.setNext(DependenciesHandler()
+          ).setNext(SearchRequestHandler())
     handler.handle(commandFromUi)
     
 
