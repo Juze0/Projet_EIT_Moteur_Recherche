@@ -16,21 +16,19 @@ class CLI(UI):
         super().__init__()
         self.console = Console()
         self.commands = {
-            "help":     ("Affiche cette aide", self.display_help),
-            "newPrepro":("Change le préprocesseur actuel (NLTK ou SpaCy)", self.choose_preprocessor),
-            "newModel": ("Change le modèle de recherche actuel (TF-IDF ou Embedding)", self.choose_model),
-            "startEval":("Lance une évaluation sur le modèle actuel !", self.start_evaluation),
-            "stop":     ("Arrête l'application", None)
+            "H":("Affiche cette aide", self.display_help),
+            "P":("Change le préprocesseur actuel (NLTK ou SpaCy)", self.choose_preprocessor),
+            "M":("Change le modèle de recherche actuel (TF-IDF ou Embedding)", self.choose_model),
+            "E":("Lance une évaluation sur le modèle actuel !", self.start_evaluation),
+            "Q":("Arrête l'application", None)
         }
 
-    ################################## Méthodes à redéfinir
 
     def run(self):
         """Runs the CLI interface."""
         self.display_intro()
         self.search_and_display_results()
 
-    ################################## Permet l'interaction avec les commandes depuis la CLI
 
     def display_help(self):
         """Displays available commands to the user."""
