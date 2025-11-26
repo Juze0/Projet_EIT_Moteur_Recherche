@@ -15,14 +15,18 @@ from src.refacto.shared.handler.enrich_command_handler import EnrichCommandHandl
 from src.refacto.shared.handler.dependencies_handler import DependenciesHandler
 from src.refacto.shared.handler.search_request_handler import SearchRequestHandler
 
+from src.refacto.shared.mediator import Mediator
+
 
 def main():
     commandFromUi = RawSearchCommand("SpaCy", "tfidf", "mission apollo NASA")
 
     handler = EnrichCommandHandler()
-    handler.setNext(DependenciesHandler()
-          ).setNext(SearchRequestHandler())
-    handler.handle(commandFromUi)
+    handler.setNext(DependenciesHandler()).setNext(SearchRequestHandler())
+
+    pipeline = Mediator()
+    pipeline.register_handler(RawSearchCommand, handler)
+    pipeline.send(commandFromUi)
     
 
 if __name__ == "__main__":
