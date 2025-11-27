@@ -1,5 +1,5 @@
 import argparse
-from src.user_interfaces.cli import CLI
+from src.front.search.ui.cli import CLI
 from src.user_interfaces.gui import GUI
 
 from src.refacto.shared.mediator_factory import build_mediator

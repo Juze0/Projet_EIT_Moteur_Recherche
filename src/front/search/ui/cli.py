@@ -3,7 +3,7 @@ from rich.console import Console
 from rich.table import Table
 from rich.text import Text
 
-from .ui import UI
+from ....user_interfaces.ui import UI
 from src.refacto.front.services.search_service import SearchService
 
 class CLI(UI):
