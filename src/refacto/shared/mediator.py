@@ -1,14 +1,25 @@
+from typing import Type, Dict
 from src.refacto.shared.commands.command import Command
 from src.refacto.shared.handler.handler import Handler
 
 class Mediator:
 
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
+
     def __init__(self):
-        self._handlers: dict[Command, Handler] = {}
+        if not hasattr(self, '_initialized'):
+            self._handlers: Dict[Type[Command], Handler] = {}
+            self._initialized = True
 
 
-    def register_handler(self, command: Command, handler: Handler):
-        self._handlers[command] = handler
+    def register_handler(self, command_type: Type[Command], handler: Handler):
+        self._handlers[command_type] = handler
 
 
     def send(self, command: Command):

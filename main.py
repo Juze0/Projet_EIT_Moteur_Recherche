@@ -2,32 +2,32 @@ import argparse
 from src.user_interfaces.cli import CLI
 from src.user_interfaces.gui import GUI
 
-from src.refacto.tf_idf.tf_idf_command import TfIdfCommand
-from src.refacto.embeddings.embedding_dependency_resolver import EmbeddingDependencyResolver
-from src.refacto.tf_idf.tf_idf_dependency_resolver import TfIdfDependencyResolver
-
-from src.refacto.shared.commands.raw_search_command import RawSearchCommand
-from src.preprocessing.spacy_preprocessor import SpaCyPreprocessor
-from src.search_models.tf_idf.tf_idf_search_model import TFIDFSearchModel
-
-from src.refacto.shared.handler.handler import Handler
-from src.refacto.shared.handler.enrich_command_handler import EnrichCommandHandler
-from src.refacto.shared.handler.dependencies_handler import DependenciesHandler
-from src.refacto.shared.handler.search_request_handler import SearchRequestHandler
-
-from src.refacto.shared.mediator import Mediator
-
+from src.refacto.shared.mediator_factory import build_mediator
+from src.refacto.shared.controller import Controller
+from src.refacto.front.services.search_service import SearchService
+from src.refacto.front.state.search_state import SearchState
 
 def main():
-    commandFromUi = RawSearchCommand("SpaCy", "tfidf", "mission apollo NASA")
-
-    handler = EnrichCommandHandler()
-    handler.setNext(DependenciesHandler()).setNext(SearchRequestHandler())
-
-    pipeline = Mediator()
-    pipeline.register_handler(RawSearchCommand, handler)
-    pipeline.send(commandFromUi)
+    # Configuration de l'argument parser
+    parser = argparse.ArgumentParser(description="Choisissez l'interface utilisateur.")
+    parser.add_argument(
+        "-i", "--interface",
+        choices=["cli", "gui"],
+        default="cli",
+        help="Choisissez l'interface utilisateur : 'cli' pour la ligne de commande ou 'gui' pour l'interface graphique."
+    )
     
+    args = parser.parse_args()
+    
+    # Initialisation de l'interface choisie
+    search_service = SearchService(Controller(build_mediator()), SearchState())
+    if args.interface == "cli":
+        interface = CLI(search_service)
+    else:
+        interface = GUI(search_service)
+    
+    # Lancement de l'application
+    interface.run()
 
 if __name__ == "__main__":
     main()

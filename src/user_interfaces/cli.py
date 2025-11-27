@@ -4,33 +4,28 @@ from rich.table import Table
 from rich.text import Text
 
 from .ui import UI
-from src.preprocessing.nltk_preprocessor import NLTKPreprocessor
-from src.preprocessing.spacy_preprocessor import SpaCyPreprocessor
-from src.search_models.tf_idf.tf_idf_search_model import TFIDFSearchModel
-from src.search_models.we_fasttext.embedding_search_model import EmbeddingSearchModel
+from src.refacto.front.services.search_service import SearchService
 
 class CLI(UI):
     """Class to manage CLI interactions for the document search engine."""
     
-    def __init__(self):
-        super().__init__()
+    def __init__(self, search_service: SearchService):
+        super().__init__(search_service)
         self.console = Console()
         self.commands = {
-            "help":     ("Affiche cette aide", self.display_help),
-            "newPrepro":("Change le préprocesseur actuel (NLTK ou SpaCy)", self.choose_preprocessor),
-            "newModel": ("Change le modèle de recherche actuel (TF-IDF ou Embedding)", self.choose_model),
-            "startEval":("Lance une évaluation sur le modèle actuel !", self.start_evaluation),
-            "stop":     ("Arrête l'application", None)
+            "H":("Affiche cette aide", self.display_help),
+            "P":("Change le préprocesseur actuel (NLTK ou SpaCy)", self.choose_preprocessor),
+            "M":("Change le modèle de recherche actuel (TF-IDF ou Embedding)", self.choose_model),
+            "E":("Lance une évaluation sur le modèle actuel !", self.start_evaluation),
+            "Q":("Arrête l'application", None)
         }
 
-    ################################## Méthodes à redéfinir
 
     def run(self):
         """Runs the CLI interface."""
         self.display_intro()
         self.search_and_display_results()
 
-    ################################## Permet l'interaction avec les commandes depuis la CLI
 
     def display_help(self):
         """Displays available commands to the user."""
@@ -49,9 +44,9 @@ class CLI(UI):
         self.console.print("2. SpaCy")
         prepro_choice = input("Entrez le numéro du préprocesseur: ")
         if prepro_choice == "1":
-            self.set_preprocessor(NLTKPreprocessor()) # Pas le choix il faut faire new Model(self.prepr)
+            self._search_service.change_preprocessor("nltk")
         elif prepro_choice == "2":
-            self.set_preprocessor(SpaCyPreprocessor())
+            self._search_service.change_preprocessor("spacy")
         else:
             self.console.print("Choix invalide, veuillez réessayer.")
             self.choose_preprocessor()
@@ -63,9 +58,9 @@ class CLI(UI):
         self.console.print("2. Embedding")
         model_choice = input("Entrez le numéro du modèle: ")
         if model_choice == "1":
-            self.set_model(TFIDFSearchModel)
+            self._search_service.change_model("tfidf")
         elif model_choice == "2":
-            self.set_model(EmbeddingSearchModel)
+            self._search_service.change_model("embedding")
         else:
             self.console.print("Choix invalide, veuillez réessayer.")
             self.choose_model()
@@ -96,7 +91,7 @@ class CLI(UI):
             self.console.print("Recherche des documents les plus pertinents en cours...\n")
 
             # Recherche des documents les + pertinents !
-            results = self.calculate_docs_to_answer_query_docs(query)
+            results = self._search_service.search(query)
             if not results:
                 self.console.print("Aucun document n'a été trouvé pour votre recherche." + emojize(":neutral_face:"))
             else:

@@ -16,7 +16,7 @@ class DependenciesHandler(Handler):
 
     def handle(self, command: RichSearchCommand):
         self.resolve_dependencies(command)
-        self._next.handle(command)
+        return self._next.handle(command) # TODO retirer le return
 
     def resolve_dependencies(self, command: RichSearchCommand):
         preprocessor = command.get_preprocessor()
