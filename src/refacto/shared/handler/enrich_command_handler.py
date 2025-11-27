@@ -17,8 +17,7 @@ from re import sub
 class EnrichCommandHandler(Handler):
 
     def handle(self, command: Command):
-        self._next.handle(self._enrich_command(command))
-
+        return self._next.handle(self._enrich_command(command)) # TODO Procéder sans return
 
     def _enrich_command(self, command: Command) -> Command:
         cmd_search_model = command.get_search_model()
