@@ -6,16 +6,15 @@ from io import StringIO
 import customtkinter as ctk
 from CTkListbox import *
 from src.user_interfaces.ui import UI
-from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
-from src.search_models.tf_idf.tf_idf_search_model import TFIDFSearchModel
-from src.search_models.we_fasttext.embedding_search_model import EmbeddingSearchModel
+from src.refacto.front.services.search_service import SearchService
+
 
 # Configuration de l'apparence de CustomTkinter
 ctk.set_appearance_mode("System")  # Options: "Dark", "Light", ou "System"
 ctk.set_default_color_theme("blue")  # Couleur d'accentuation
 
 class GUI(ctk.CTk, UI):
-    def __init__(self):
+    def __init__(self, search_service: SearchService):
         ctk.CTk.__init__(self)
         # Build the UI
         self.configure_main_window()
@@ -27,7 +26,7 @@ class GUI(ctk.CTk, UI):
         self.stdout = StringIO()
         sys.stdout = self.stdout_writer(self.textbox_console)
 
-        UI.__init__(self)
+        UI.__init__(self, search_service)
         self.build_window_last_section()
 
     def run(self):
@@ -239,10 +238,10 @@ class GUI(ctk.CTk, UI):
     def on_model_selected(self, selected_model):
         """Mise à jour du modèle en fonction de la sélection de l'utilisateur."""
         if selected_model == "TF-IDF":
-            self.set_model(TFIDFSearchModel)
+            self._search_service.change_model("tfidf")
             print("Modèle TF-IDF sélectionné.")
         elif selected_model == "Embeddings":
-            self.set_model(EmbeddingSearchModel)
+            self._search_service.change_model("embedding")
             print("Modèle Embeddings sélectionné.")
 
     def toggle_theme(self):
@@ -259,7 +258,7 @@ class GUI(ctk.CTk, UI):
         if query.strip():  # Vérifie si la requête n'est pas vide
             # Passe la requête au modèle pour obtenir les résultats
             start_time = time()
-            results = self.calculate_docs_to_answer_query_docs(query)
+            results = self._search_service.search(query)
             end_time = time()
             print(f"Requête effectuée : {query} en {round(end_time - start_time, 2)} secondes !\n")
             # Affiche les résultats dans la Listbox
@@ -274,7 +273,7 @@ class GUI(ctk.CTk, UI):
         self.listbox_query_results.delete("0", "end")  # Utilise "0" pour indiquer le début de la Listbox
         
         # Ajoute chaque résultat (nom de fichier) dans la Listbox
-        link = join(FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER))
+        link = None #TODO join(FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER))
         for i, result in enumerate(results.keys()):
             relevance_score = round(results[result] * 100, 2)
             with open(f"{link}/{result}", "r", encoding="utf-8") as file:
@@ -290,7 +289,7 @@ class GUI(ctk.CTk, UI):
         if idx_selection:
             file_name_and_info = self.listbox_query_results.get(idx_selection)
             file_name = file_name_and_info.split(".txt")[0] + ".txt"
-            file_path = join(FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER), file_name)
+            file_path = None #TODO join(FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER), file_name)
 
             # Lecture du contenu du fichier sélectionné
             with open(file_path, "r", encoding="utf-8") as file:

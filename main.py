@@ -2,6 +2,11 @@ import argparse
 from src.user_interfaces.cli import CLI
 from src.user_interfaces.gui import GUI
 
+from src.refacto.shared.mediator_factory import build_mediator
+from src.refacto.shared.controller import Controller
+from src.refacto.front.services.search_service import SearchService
+from src.refacto.front.state.search_state import SearchState
+
 def main():
     # Configuration de l'argument parser
     parser = argparse.ArgumentParser(description="Choisissez l'interface utilisateur.")
@@ -15,10 +20,11 @@ def main():
     args = parser.parse_args()
     
     # Initialisation de l'interface choisie
+    search_service = SearchService(Controller(build_mediator()), SearchState())
     if args.interface == "cli":
-        interface = CLI()
+        interface = CLI(search_service)
     else:
-        interface = GUI()
+        interface = GUI(search_service)
     
     # Lancement de l'application
     interface.run()

@@ -1,22 +1,23 @@
-from abc import ABC, abstractmethod
-
-from src.utils.result_file_ensurer import ResultFileEnsurer
+from abc import ABC
+from time import time
 
 class Calculator(ABC):
-    """
-    Classe de base pour tous les calculateurs. Implique que les classes filles 
-    doivent redéfinir la méthode pour obtenir une carte de méthodes vers les fichiers.
-    """
-    def __init__(self, preprocessor, file_handler, class_name_to_check):
-        #### -----------------------
-        self.preprocessor = preprocessor
-        self.preprocessor_name = preprocessor.name
-        self.result_files_ensurer = ResultFileEnsurer(self.get_file_processing_map(), file_handler)
-        self.result_files_ensurer.check_and_create_all(class_name_to_check, self.preprocessor_name)
 
-    @abstractmethod
-    def get_file_processing_map(self):
-        """
-        Doit retourner un dictionnaire associant les types de fichiers aux méthodes de traitement.
-        """
+    def __init__(self):
         pass
+
+
+    def calculate(self, calculation_func, *args, **kwargs):
+        print(f"Début du calcul...")
+        start_time = time.time()
+        calculated_data = calculation_func(*args, **kwargs)
+        end_time = time.time()
+        print(f"➥ Le calcul s'est terminée en {self.get_creation_duration_time(start_time, end_time)}!")
+        return calculated_data
+    
+
+    def get_creation_duration_time(self, start_time, end_time):
+        creation_time = end_time - start_time
+        if creation_time < 60:
+            return f"{creation_time:.4f} secondes"
+        return f"{creation_time / 60:.2f} minutes"
