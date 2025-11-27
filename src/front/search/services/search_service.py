@@ -1,4 +1,4 @@
-from src.refacto.front.state.search_state import SearchState
+from src.front.search.state.search_state import SearchState
 from src.refacto.shared.controller import Controller
 
 class SearchService:

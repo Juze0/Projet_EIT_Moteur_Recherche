@@ -4,8 +4,8 @@ from src.front.search.ui.gui import GUI
 
 from src.refacto.shared.mediator_factory import build_mediator
 from src.refacto.shared.controller import Controller
-from src.refacto.front.services.search_service import SearchService
-from src.refacto.front.state.search_state import SearchState
+from src.front.search.services.search_service import SearchService
+from src.front.search.state.search_state import SearchState
 
 def main():
     # Configuration de l'argument parser

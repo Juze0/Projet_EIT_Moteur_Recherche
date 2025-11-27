@@ -5,8 +5,8 @@ from io import StringIO
 
 import customtkinter as ctk
 from CTkListbox import *
-from src.user_interfaces.ui import UI
-from src.refacto.front.services.search_service import SearchService
+from src.front.search.ui.ui import UI
+from src.front.search.services.search_service import SearchService
 
 
 # Configuration de l'apparence de CustomTkinter
