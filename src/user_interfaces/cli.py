@@ -4,16 +4,13 @@ from rich.table import Table
 from rich.text import Text
 
 from .ui import UI
-from src.preprocessing.nltk_preprocessor import NLTKPreprocessor
-from src.preprocessing.spacy_preprocessor import SpaCyPreprocessor
-from src.search_models.tf_idf.tf_idf_search_model import TFIDFSearchModel
-from src.search_models.we_fasttext.embedding_search_model import EmbeddingSearchModel
+from src.refacto.shared.controller import Controller
 
 class CLI(UI):
     """Class to manage CLI interactions for the document search engine."""
     
-    def __init__(self):
-        super().__init__()
+    def __init__(self, controller: Controller):
+        super().__init__(controller)
         self.console = Console()
         self.commands = {
             "H":("Affiche cette aide", self.display_help),
