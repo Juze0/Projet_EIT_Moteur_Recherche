@@ -20,10 +20,11 @@ def main():
     args = parser.parse_args()
     
     # Initialisation de l'interface choisie
+    search_service = SearchService(Controller(build_mediator()), SearchState())
     if args.interface == "cli":
-        interface = CLI(SearchService(Controller(build_mediator()), SearchState()))
+        interface = CLI(search_service)
     else:
-        interface = GUI()
+        interface = GUI(search_service)
     
     # Lancement de l'application
     interface.run()
