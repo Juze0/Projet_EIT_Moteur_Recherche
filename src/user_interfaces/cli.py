@@ -4,13 +4,13 @@ from rich.table import Table
 from rich.text import Text
 
 from .ui import UI
-from src.refacto.shared.controller import Controller
+from src.refacto.front.services.search_ui_service import SearchUiService
 
 class CLI(UI):
     """Class to manage CLI interactions for the document search engine."""
     
-    def __init__(self, controller: Controller):
-        super().__init__(controller)
+    def __init__(self, search_ui_service: SearchUiService):
+        super().__init__(search_ui_service)
         self.console = Console()
         self.commands = {
             "H":("Affiche cette aide", self.display_help),
@@ -44,9 +44,9 @@ class CLI(UI):
         self.console.print("2. SpaCy")
         prepro_choice = input("Entrez le numéro du préprocesseur: ")
         if prepro_choice == "1":
-            self.set_preprocessor(NLTKPreprocessor()) # Pas le choix il faut faire new Model(self.prepr)
+            self._search_ui_service.change_preprocessor("nltk")
         elif prepro_choice == "2":
-            self.set_preprocessor(SpaCyPreprocessor())
+            self._search_ui_service.change_preprocessor("spacy")
         else:
             self.console.print("Choix invalide, veuillez réessayer.")
             self.choose_preprocessor()
@@ -58,9 +58,9 @@ class CLI(UI):
         self.console.print("2. Embedding")
         model_choice = input("Entrez le numéro du modèle: ")
         if model_choice == "1":
-            self.set_model(TFIDFSearchModel)
+            self._search_ui_service.change_model("tfidf")
         elif model_choice == "2":
-            self.set_model(EmbeddingSearchModel)
+            self._search_ui_service.change_model("embedding")
         else:
             self.console.print("Choix invalide, veuillez réessayer.")
             self.choose_model()
@@ -91,7 +91,7 @@ class CLI(UI):
             self.console.print("Recherche des documents les plus pertinents en cours...\n")
 
             # Recherche des documents les + pertinents !
-            results = self.calculate_docs_to_answer_query_docs(query)
+            results = self._search_ui_service.search(query)
             if not results:
                 self.console.print("Aucun document n'a été trouvé pour votre recherche." + emojize(":neutral_face:"))
             else:

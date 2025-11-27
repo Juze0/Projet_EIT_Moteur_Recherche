@@ -1,20 +1,16 @@
 from abc import ABC, abstractmethod
 
-from src.refacto.shared.controller import Controller
+from src.refacto.front.services.search_ui_service import SearchUiService
 
 class UI(ABC):
 
-    def __init__(self, controller: Controller):
-        self._controller = controller
+    def __init__(self, search_ui_service: SearchUiService):
+        self._search_ui_service = search_ui_service
 
 
     @abstractmethod
     def run(self):
         raise NotImplementedError("La méthode n'est pas implémentée")
-
-
-    def calculate_docs_to_answer_query_docs(self, preprocessor: str, search_model: str, query: str):
-        return self._controller.calculate_docs_to_answer_query_docs(preprocessor, search_model, query)
     
     
     # TODO A rendre de nouveau fonctionnel (Donc définir une command d'évalutation)

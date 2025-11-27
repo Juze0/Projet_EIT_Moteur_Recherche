@@ -4,6 +4,8 @@ from src.user_interfaces.gui import GUI
 
 from src.refacto.shared.mediator_factory import build_mediator
 from src.refacto.shared.controller import Controller
+from src.refacto.front.services.search_ui_service import SearchUiService
+from src.refacto.front.state.search_state import SearchState
 
 def main():
     # Configuration de l'argument parser
@@ -18,9 +20,8 @@ def main():
     args = parser.parse_args()
     
     # Initialisation de l'interface choisie
-    controller = Controller(build_mediator())
     if args.interface == "cli":
-        interface = CLI(controller)
+        interface = CLI(SearchUiService(Controller(build_mediator()), SearchState()))
     else:
         interface = GUI()
     
