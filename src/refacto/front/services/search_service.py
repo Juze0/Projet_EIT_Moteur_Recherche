@@ -1,7 +1,7 @@
 from src.refacto.front.state.search_state import SearchState
 from src.refacto.shared.controller import Controller
 
-class SearchUiService:
+class SearchService:
 
     def __init__(self, controller: Controller, state: SearchState):
         self._controller = controller

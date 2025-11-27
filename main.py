@@ -4,7 +4,7 @@ from src.user_interfaces.gui import GUI
 
 from src.refacto.shared.mediator_factory import build_mediator
 from src.refacto.shared.controller import Controller
-from src.refacto.front.services.search_ui_service import SearchUiService
+from src.refacto.front.services.search_service import SearchService
 from src.refacto.front.state.search_state import SearchState
 
 def main():
@@ -21,7 +21,7 @@ def main():
     
     # Initialisation de l'interface choisie
     if args.interface == "cli":
-        interface = CLI(SearchUiService(Controller(build_mediator()), SearchState()))
+        interface = CLI(SearchService(Controller(build_mediator()), SearchState()))
     else:
         interface = GUI()
     

@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 
-from src.refacto.front.services.search_ui_service import SearchUiService
+from src.refacto.front.services.search_service import SearchService
 
 class UI(ABC):
 
-    def __init__(self, search_ui_service: SearchUiService):
-        self._search_ui_service = search_ui_service
+    def __init__(self, search_service: SearchService):
+        self._search_service = search_service
 
 
     @abstractmethod
