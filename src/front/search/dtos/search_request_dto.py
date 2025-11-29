@@ -1,0 +1,7 @@
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class SearchRequestDTO:
+    preprocessor: str
+    search_model: str
+    query: str

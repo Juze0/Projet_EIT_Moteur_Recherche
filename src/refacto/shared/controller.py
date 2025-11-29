@@ -1,4 +1,6 @@
 from src.refacto.shared.mediator import Mediator
+# dto
+from src.front.search.dtos.search_request_dto import SearchRequestDTO
 # command
 from src.refacto.shared.commands.raw_search_command import RawSearchCommand
 
@@ -8,6 +10,6 @@ class Controller:
         self._mediator = mediator
 
 
-    def calculate_docs_to_answer_query_docs(self, preprocessor: str, search_model: str, query: str):
-        return self._mediator.send(RawSearchCommand(preprocessor, search_model, query))
+    def calculate_docs_to_answer_query_docs(self, search_request_dto: SearchRequestDTO):
+        return self._mediator.send(RawSearchCommand(search_request_dto.preprocessor, search_request_dto.search_model, search_request_dto.query))
     

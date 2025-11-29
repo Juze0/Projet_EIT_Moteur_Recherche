@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from src.refacto.front.services.search_service import SearchService
+from src.front.search.services.search_service import SearchService
 
 class UI(ABC):
 

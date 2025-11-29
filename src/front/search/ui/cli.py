@@ -3,8 +3,8 @@ from rich.console import Console
 from rich.table import Table
 from rich.text import Text
 
-from .ui import UI
-from src.refacto.front.services.search_service import SearchService
+from src.front.search.ui.ui import UI
+from src.front.search.services.search_service import SearchService
 
 class CLI(UI):
     """Class to manage CLI interactions for the document search engine."""
