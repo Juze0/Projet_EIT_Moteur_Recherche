@@ -1,4 +1,5 @@
 from src.front.search.state.search_state import SearchState
+from src.front.search.dtos.search_request_dto import SearchRequestDTO
 from src.refacto.shared.controller import Controller
 
 class SearchService:
@@ -19,7 +20,5 @@ class SearchService:
     def search(self, query: str):
         self._state.set_last_query(query)
         return self._controller.calculate_docs_to_answer_query_docs(
-            preprocessor=self._state.get_preprocessor(),
-            search_model=self._state.get_model(),
-            query=self._state.get_last_query(),
+            SearchRequestDTO(self._state.get_preprocessor(), self._state.get_model(), self._state.get_last_query())
         )
