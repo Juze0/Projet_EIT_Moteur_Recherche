@@ -1,4 +1,4 @@
-from src.config.paths import OUTPUT_DIR, WIKI_CORPUS_DIR
+from src.back.config.paths import OUTPUT_DIR, WIKI_CORPUS_DIR
 from os import listdir
 from os.path import join
 
