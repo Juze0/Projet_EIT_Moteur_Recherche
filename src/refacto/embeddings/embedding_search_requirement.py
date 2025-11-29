@@ -1,4 +1,4 @@
-from src.refacto.shared.search_requirement.search_requirement import SearchRequirement
+from src.back.search.shared.search_requirement.search_requirement import SearchRequirement
 from src.file_handlers.file import File
 from src.search_models.we_fasttext.document_vector_calculator import DocumentVectorCalculator
 

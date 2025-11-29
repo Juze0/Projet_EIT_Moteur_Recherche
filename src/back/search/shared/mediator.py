@@ -1,6 +1,6 @@
 from typing import Type, Dict
-from src.refacto.shared.commands.command import Command
-from src.refacto.shared.handler.handler import Handler
+from src.back.search.shared.commands.command import Command
+from src.back.search.shared.handler.handler import Handler
 
 class Mediator:
 

@@ -1,8 +1,8 @@
-from src.refacto.shared.mediator import Mediator
+from src.back.search.shared.mediator import Mediator
 # dto
 from src.front.search.dtos.search_request_dto import SearchRequestDTO
 # command
-from src.refacto.shared.commands.raw_search_command import RawSearchCommand
+from src.back.search.shared.commands.raw_search_command import RawSearchCommand
 
 class Controller:
 

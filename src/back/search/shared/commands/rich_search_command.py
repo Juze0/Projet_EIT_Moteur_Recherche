@@ -2,7 +2,7 @@ from .rich_search_context_command import RichSearchContextCommand
 from src.search_models.search_model import SearchModel
 from src.preprocessing.preprocessor import Preprocessor
 
-from src.refacto.shared.service.search_file_service import SearchFileService
+from src.back.search.shared.service.search_file_service import SearchFileService
 
 class RichSearchCommand(RichSearchContextCommand):
     

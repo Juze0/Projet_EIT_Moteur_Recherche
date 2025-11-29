@@ -1,6 +1,6 @@
-from src.refacto.shared.handler.handler import Handler
-from src.refacto.shared.commands.command import Command
-from src.refacto.shared.commands.rich_search_command import RichSearchCommand
+from src.back.search.shared.handler.handler import Handler
+from src.back.search.shared.commands.command import Command
+from src.back.search.shared.commands.rich_search_command import RichSearchCommand
 # preprocessors
 from src.preprocessing.preprocessor import Preprocessor
 from src.preprocessing.nltk_preprocessor import NLTKPreprocessor
@@ -10,7 +10,7 @@ from src.search_models.search_model import SearchModel
 from src.search_models.we_fasttext.embedding_search_model import EmbeddingSearchModel
 from src.search_models.tf_idf.tf_idf_search_model import TFIDFSearchModel
 
-from src.refacto.shared.service.search_file_service import SearchFileService
+from src.back.search.shared.service.search_file_service import SearchFileService
 
 from re import sub
 
