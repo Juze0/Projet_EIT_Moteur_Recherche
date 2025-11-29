@@ -1,36 +1,29 @@
 from src.refacto.shared.handler.handler import Handler
-from src.file_handlers.file import File
-from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
+# dependencies resolver
+from src.refacto.embeddings.embedding_dependency_resolver import EmbeddingDependencyResolver
+from src.refacto.tf_idf.tf_idf_dependency_resolver import TfIdfDependencyResolver
+# search model
+from src.search_models.tf_idf.tf_idf_search_model import TFIDFSearchModel
+from src.search_models.we_fasttext.embedding_search_model import EmbeddingSearchModel
 
-from os import listdir
-from os.path import join
+from src.refacto.shared.commands.rich_search_command import RichSearchCommand # TODO Change that
 
 class DependenciesHandler(Handler):
 
     def __init__(self):
         super().__init__()
-    
-    
-    def if_file_not_found_launch_calculation(self, file: File, calculation_func, *args, **kwargs):
-        if file.exists():
-            print(f"[INFO] Le fichier {file.get_file_name()} est disponible ! Voici son chemin {file.get_path()}")
-            return
-        print("-----------------")
-        print(f"[CREATION START] Le fichier {file.get_path()} n'existe pas, création en cours...")
-        file.create_all_missing_folders() # TODO, délégué cette méthode 
-        data_to_save = calculation_func(*args, **kwargs)
-        if data_to_save is None:
-            # TODO changer ce comportement là, la sauvegarde est forcément réaliser par un DependencieHandler
-            print(f"[INFO] La sauvegarde du fichier a été déléguée au fichier de calcul correspondant")
+
+
+    def handle(self, command: RichSearchCommand):
+        self.resolve_dependencies(command)
+        return self._next.handle(command) # TODO retirer le return
+
+    def resolve_dependencies(self, command: RichSearchCommand):
+        preprocessor = command.get_preprocessor()
+        search_model = command.get_search_model()
+        search_file_service = command.get_search_file_service()
+        if isinstance(search_model, TFIDFSearchModel): TfIdfDependencyResolver(preprocessor, search_file_service).resolve_dependencies()
+        elif isinstance(search_model, EmbeddingSearchModel): EmbeddingDependencyResolver(preprocessor, search_file_service).resolve_dependencies()
         else:
-            file.save(data_to_save) # TODO, On addresse désormais ce problème
-        print("-----------------")
+            raise ValueError("Le modèle n'est pas renconu, impossible de résoudre ses dépendances")
 
-
-    # Récupérer depuis file_handler
-    def get_full_path_files_of_folder(self, folder_name: str) -> list[str]:
-        return [join(folder_name, filename) for filename in listdir(folder_name)]
-    
-    def get_file_path(self, filename_enum, filename_suffix=""):
-        """Utilise l'enum décrivant la hierarchie de fichier pour obtenir le chemin du fichier spéicifié !"""
-        return FileHierarchyEnum.get_file_path(filename_enum, filename_suffix)
