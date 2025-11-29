@@ -1,37 +1,19 @@
 from numpy import log10
 
 from src.search_models.calculator import Calculator
-from src.search_models.tf_idf.index_vocab_calculator import IndexAndVocabCalculator
-
-from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
-from src.file_handlers.json_file_handler import JSONFileHandler
+from src.file_handlers.file import File
 
 class TFIDFCalculator(Calculator):
 
-    def __init__(self, preprocessor):
-        #### EXTERN DEPENDENCIES !!!
-        IndexAndVocabCalculator(preprocessor)
-        #### -----------------------
-        super().__init__(preprocessor, JSONFileHandler(), "TF-IDF")
-
-    ### Method of Calculator class to override
-    def get_file_processing_map(self):
-        """Retourne une carte associant les types de fichiers aux méthodes de traitement."""
-        #### INTERN DEPENDENCIES => HERE THE ORDER MATTERS !!!
-        return {
-            FileHierarchyEnum.TF:            self.calculate_tf,
-            FileHierarchyEnum.IDF:           self.calculate_idf,
-            FileHierarchyEnum.TF_IDF:        self.calculate_tf_idf,
-            FileHierarchyEnum.TF_IDF_VECTORS:self.create_tf_idf_vectors,
-        }
-
-    ### all calculations methods
-    def calculate_tf(self):
+    def __init__(self):
+        super().__init__()
+    
+    def calculate_tf(self, index_file: File):
         """
         Prend un dictionnaire associant les fichiers à leur liste de mots.
         Retourne un dictionnaire associant les fichiers à leur liste de mots et leur fréquence normalisée.
         """
-        index = self.result_files_ensurer.load_using_enum(FileHierarchyEnum.INDEX, self.preprocessor_name)
+        index = index_file.load()
         tf = {}
         for filename in index:  # On itère sur les clés du dictionnaire index
             tf[filename] = {}  # On crée un dictionnaire vide pour chaque fichier, il contiendra les mots et leur fréquence
@@ -45,29 +27,27 @@ class TFIDFCalculator(Calculator):
                 tf[filename][token] = tf[filename][token] / count_words  # On divise le nombre d'occurrences de chaque mot par le nombre total de mots dans le fichier
         return tf
         
-    def calculate_idf(self):
+    def calculate_idf(self, inverse_index_file: File):
         """
         Prend un dictionnaire associant les mots à leur occurence dans les documents.
         Retourne un dictionnaire associant les mots à leur fréquence inverse de document.
         """
-        inverse_index = self.result_files_ensurer.load_using_enum(FileHierarchyEnum.INVERSE_INDEX, self.preprocessor_name)
+        inverse_index = inverse_index_file.load()
         idf = {}
-        #index = self.load_json("inverse_index_" + library + ".json")
         nb_docs = len(inverse_index.keys()) #On compte le nombre de documents
-        #nb_docs = len(inverse_index) #On compte le nombre de documents
         for token in inverse_index: #On itère sur les tokens de l'index inversé
             if token not in idf:
                 idf[token] = log10(((nb_docs)/(len(inverse_index[token].keys()))) + 1) #On calcule le logarithme du nombre de documents divisé par le nombre de documents contenant le mot
         return idf
 
-    def calculate_tf_idf(self):
+    def calculate_tf_idf(self, tf_file: File, idf_file: File):
         """
         Prend un dictionnaire associant les fichiers à leurs mots avec fréquence normalisée 
         et un dictionnaire associant les mots à leur fréquence inverse de document (IDF).
         Retourne un dictionnaire associant les fichiers à leurs mots avec les scores TF-IDF.
         """
-        tf_dict = self.result_files_ensurer.load_using_enum(FileHierarchyEnum.TF, self.preprocessor_name)
-        idf_dict = self.result_files_ensurer.load_using_enum(FileHierarchyEnum.IDF, self.preprocessor_name)
+        tf_dict = tf_file.load()
+        idf_dict = idf_file.load()
 
         tf_idf = {}
         #index_tf_idf = {}
@@ -81,13 +61,13 @@ class TFIDFCalculator(Calculator):
                     #index_tf_idf[filename].append((tf_idf_score))
         return tf_idf
     
-    def create_tf_idf_vectors(self):
+    def create_tf_idf_vectors(self, tf_idf_file: File, full_vocab_file: File):
         """
         Prend un dictionnaire associant les fichiers à leurs mots avec les scores TF-IDF et le vocabulaire complet.
         Retourne un dictionnaire associant les fichiers à leur vecteur TF-IDF.
         """
-        tf_idf_dict = self.result_files_ensurer.load_using_enum(FileHierarchyEnum.TF_IDF, self.preprocessor_name)
-        full_vocab = self.result_files_ensurer.load_using_enum(FileHierarchyEnum.FULL_VOCAB, self.preprocessor_name)
+        tf_idf_dict = tf_idf_file.load()
+        full_vocab = full_vocab_file.load()
 
         tf_idf_vectors = {}
         print("Taille du vocabulaire : ", len(full_vocab))

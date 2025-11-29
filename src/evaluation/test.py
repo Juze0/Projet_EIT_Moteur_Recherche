@@ -3,7 +3,6 @@ import math
 import json
 from collections import defaultdict
 # file hierarchy
-from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
 
 # Model
 from src.search_models.tf_idf.tf_idf_search_model import TFIDFSearchModel
@@ -143,7 +142,7 @@ class Test:
         """
         Charge les données à partir d'un fichier JSONL et regroupe les fichiers en fonction des questions.
         """
-        file_path_requete = FileHierarchyEnum.get_file_path(FileHierarchyEnum.CORRECTION_FOLDER)
+        file_path_requete = None #TODO FileHierarchyEnum.get_file_path(FileHierarchyEnum.CORRECTION_FOLDER)
         question_to_files = defaultdict(list)
         try:
             with open(file_path_requete, "r") as file:
@@ -224,9 +223,11 @@ class Test:
         model_class = self.model_to_test.__class__
         prepro_during_eval = self.model_to_test.get_model_preprocessor_name()
         if model_class == TFIDFSearchModel:
-            return FileHierarchyEnum.get_file_path(FileHierarchyEnum.EVAL_TFIDF, prepro_during_eval)
+            #TODO return FileHierarchyEnum.get_file_path(FileHierarchyEnum.EVAL_TFIDF, prepro_during_eval)
+            pass
         if model_class == EmbeddingSearchModel:
-            return FileHierarchyEnum.get_file_path(FileHierarchyEnum.EVAL_EMBEDDINGS, prepro_during_eval)
+            #TODO return FileHierarchyEnum.get_file_path(FileHierarchyEnum.EVAL_EMBEDDINGS, prepro_during_eval)
+            pass
 
     def complete_eval(self):
         eval_file_path = self.file_path_to_write_in()

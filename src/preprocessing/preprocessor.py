@@ -23,6 +23,9 @@ class Preprocessor(ABC):
     def lemmatize(self, tokens):
         raise NotImplementedError("This method in not implemented in the subclasses !")
     
+    def normalize_and_lemmatize(self, content: str) -> str:
+        return self.lemmatize(self.normalize_text(content))
+    
     @property
     def name(self):
         return self.__name

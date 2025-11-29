@@ -1,66 +1,39 @@
-import os
 from collections import defaultdict
 
 from src.search_models.calculator import Calculator
-from src.file_handlers.file_hierarchy_enum import FileHierarchyEnum
-from src.file_handlers.json_file_handler import JSONFileHandler
+from src.file_handlers.file import File
+from src.preprocessing.preprocessor import Preprocessor
 
 class IndexAndVocabCalculator(Calculator):
 
-    def __init__(self, preprocessor):
-        super().__init__(preprocessor, JSONFileHandler(), "le vocabulaire, l'index et l'index inversé")
+    def __init__(self):
+        super().__init__()
 
-    ### parent method to override
-    def get_file_processing_map(self):
-        """Retourne une carte associant les types de fichiers aux méthodes de traitement."""
-        #### INTERN DEPENDENCIES => HERE THE ORDER MATTERS !!!
-        return {
-            FileHierarchyEnum.INDEX:            self.create_index,
-            FileHierarchyEnum.INVERSE_INDEX:    self.create_inversed_index,
-            FileHierarchyEnum.FULL_VOCAB:       self.extract_full_vocab,
-        }
 
-    ### all calculations methods
-    def create_index(self):
+    def create_index(self, preprocessor: Preprocessor, files: list[File]):
         """
-        Prend un dossier en paramètre et crée un index (dictionnaire) associant les fichiers à leur liste de mots normalisés et lemmatisés.
+        Renvoie un index (normalisé et lemmatisé) associant les fichiers à leur liste de mots.
         """
-        index = {}
-        folder_name = FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER)
-        for filename in os.listdir(folder_name):
-            f = os.path.join(folder_name, filename)
-            if os.path.isfile(f) and f.endswith(".txt"):
-                # library
-                tokens_by_file = self.preprocessor.normalize_document(f)
-                lemmatized_tokens = self.preprocessor.lemmatize(tokens_by_file)
-                index[filename] = lemmatized_tokens
-                # ---
-        return index
+        return { f.get_file_name(): preprocessor.normalize_and_lemmatize(f.load()) for f in files}
     
-    def create_inversed_index(self):
+    
+    def create_inversed_index(self, index_file: File):
         """
-        Prend un dossier en paramètre et renvoie un index inversé (dictionnaire) associant les mots à leur occurence dans les documents.
+        Renvoie un index inversé associant les mots à leur occurence dans les documents.
         """
-        index = self.result_files_ensurer.load_using_enum(FileHierarchyEnum.INDEX, self.preprocessor.name)
+        index = index_file.load()
         inverse_index = defaultdict(lambda: defaultdict(int))
-        #index = self.create_index(directory_link, library_name)   => NORMALEMENT, il y aura un conflit sur les TYPES !!!!
         for filename in index:
             for token in index[filename]:
                 inverse_index[token][filename] += 1
         return inverse_index
     
-    def extract_full_vocab(self):
+
+    def extract_full_vocab(self, preprocessor: Preprocessor, files: list[File]):
         """
-        Prend un dossier de fichiers en paramètre et renvoie le vocabulaire complet (normalisé et lemmatisé) des fichiers.
+        Renvoie le vocabulaire complet (normalisé et lemmatisé) des fichiers.
         """
-        full_vocab = set() #Permet d'éviter les doublons
-        folder_name = FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER)
-        for filename in os.listdir(folder_name):
-            f = os.path.join(folder_name, filename)
-            if os.path.isfile(f) and f.endswith(".txt"):
-                # library
-                tokens_by_file = self.preprocessor.normalize_document(f)
-                lemmatized_tokens = self.preprocessor.lemmatize(tokens_by_file)
-                full_vocab.update(lemmatized_tokens)
-                # ---
+        full_vocab = set()
+        for f in files:
+            full_vocab.update(preprocessor.normalize_and_lemmatize(f.load()))
         return list(full_vocab)
