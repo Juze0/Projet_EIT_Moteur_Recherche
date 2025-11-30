@@ -1,7 +1,7 @@
 import fasttext
 
 from src.back.search.shared.calculator import Calculator
-from src.file_handlers.file import File
+from src.back.file_handlers.file import File
 from src.back.preprocessing.preprocessor import Preprocessor
 
 class WECalculator(Calculator):
