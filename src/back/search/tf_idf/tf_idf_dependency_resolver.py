@@ -1,5 +1,5 @@
 from src.back.search.shared.handler.search_model_dependency_resolver import SearchModelDependencyResolver
-from src.preprocessing.preprocessor import Preprocessor
+from src.back.preprocessing.preprocessor import Preprocessor
 from src.back.search.shared.service.search_file_service import SearchFileService
 from src.back.search.tf_idf.calculators.tf_idf_calculator import TFIDFCalculator
 from src.back.search.tf_idf.calculators.index_vocab_calculator import IndexAndVocabCalculator

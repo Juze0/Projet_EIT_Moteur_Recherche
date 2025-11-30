@@ -2,9 +2,9 @@ from src.back.search.shared.handler.handler import Handler
 from src.back.search.shared.commands.command import Command
 from src.back.search.shared.commands.rich_search_command import RichSearchCommand
 # preprocessors
-from src.preprocessing.preprocessor import Preprocessor
-from src.preprocessing.nltk_preprocessor import NLTKPreprocessor
-from src.preprocessing.spacy_preprocessor import SpaCyPreprocessor
+from src.back.preprocessing.preprocessor import Preprocessor
+from src.back.preprocessing.nltk_preprocessor import NLTKPreprocessor
+from src.back.preprocessing.spacy_preprocessor import SpaCyPreprocessor
 # search models
 from src.back.search.shared.search_model import SearchModel
 from src.back.search.embeddings.embedding_search_model import EmbeddingSearchModel

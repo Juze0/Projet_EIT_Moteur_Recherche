@@ -1,4 +1,4 @@
-from src.preprocessing.preprocessor import Preprocessor
+from src.back.preprocessing.preprocessor import Preprocessor
 from src.back.search.shared.service.search_file_service import SearchFileService
 from src.back.search.shared.handler.dependency_resolver import DependencyResolver
 from src.file_handlers.file import File

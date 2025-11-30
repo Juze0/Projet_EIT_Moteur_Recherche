@@ -2,7 +2,7 @@ from typing import TypeVar, Generic
 from abc import ABC
 
 from src.back.search.shared.search_model import SearchModel
-from src.preprocessing.preprocessor import Preprocessor
+from src.back.preprocessing.preprocessor import Preprocessor
 
 P = TypeVar("P", Preprocessor, str)
 S = TypeVar("M", SearchModel, str)

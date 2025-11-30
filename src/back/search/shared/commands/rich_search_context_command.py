@@ -1,6 +1,6 @@
 from .command import Command
 from src.back.search.shared.search_model import SearchModel
-from src.preprocessing.preprocessor import Preprocessor
+from src.back.preprocessing.preprocessor import Preprocessor
 
 
 class RichSearchContextCommand(Command[Preprocessor, SearchModel]):
