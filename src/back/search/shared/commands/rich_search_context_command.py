@@ -1,5 +1,5 @@
 from .command import Command
-from src.search_models.search_model import SearchModel
+from src.back.search.shared.search_model import SearchModel
 from src.preprocessing.preprocessor import Preprocessor
 
 

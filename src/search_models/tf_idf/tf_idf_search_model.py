@@ -1,7 +1,7 @@
 from sklearn.metrics.pairwise import cosine_similarity
 from heapq import nlargest
 
-from src.search_models.search_model import SearchModel
+from src.back.search.shared.search_model import SearchModel
 from src.file_handlers.file import File
 from src.back.search.tf_idf.tf_idf_search_requirement import TfIdfSearchRequirement
 

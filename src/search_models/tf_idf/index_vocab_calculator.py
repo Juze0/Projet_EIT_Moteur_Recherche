@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from src.search_models.calculator import Calculator
+from src.back.search.shared.calculator import Calculator
 from src.file_handlers.file import File
 from src.preprocessing.preprocessor import Preprocessor
 

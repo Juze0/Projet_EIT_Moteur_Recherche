@@ -1,6 +1,6 @@
 from numpy import zeros, mean, amax, concatenate
 
-from src.search_models.calculator import Calculator
+from src.back.search.shared.calculator import Calculator
 from src.file_handlers.file import File
 
 
