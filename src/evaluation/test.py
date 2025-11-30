@@ -6,7 +6,7 @@ from collections import defaultdict
 
 # Model
 from src.back.search.tf_idf.tf_idf_search_model import TFIDFSearchModel
-from src.search_models.we_fasttext.embedding_search_model import EmbeddingSearchModel
+from src.back.search.embeddings.embedding_search_model import EmbeddingSearchModel
 
 
 class Test:
