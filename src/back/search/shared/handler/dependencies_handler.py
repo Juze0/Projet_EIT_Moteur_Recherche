@@ -3,7 +3,7 @@ from src.back.search.shared.handler.handler import Handler
 from src.back.search.embeddings.embedding_dependency_resolver import EmbeddingDependencyResolver
 from src.back.search.tf_idf.tf_idf_dependency_resolver import TfIdfDependencyResolver
 # search model
-from src.search_models.tf_idf.tf_idf_search_model import TFIDFSearchModel
+from src.back.search.tf_idf.tf_idf_search_model import TFIDFSearchModel
 from src.search_models.we_fasttext.embedding_search_model import EmbeddingSearchModel
 
 from src.back.search.shared.commands.rich_search_command import RichSearchCommand # TODO Change that

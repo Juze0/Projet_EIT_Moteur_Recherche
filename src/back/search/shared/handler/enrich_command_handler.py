@@ -8,7 +8,7 @@ from src.preprocessing.spacy_preprocessor import SpaCyPreprocessor
 # search models
 from src.back.search.shared.search_model import SearchModel
 from src.search_models.we_fasttext.embedding_search_model import EmbeddingSearchModel
-from src.search_models.tf_idf.tf_idf_search_model import TFIDFSearchModel
+from src.back.search.tf_idf.tf_idf_search_model import TFIDFSearchModel
 
 from src.back.search.shared.service.search_file_service import SearchFileService
 

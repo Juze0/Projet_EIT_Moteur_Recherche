@@ -2,7 +2,7 @@ from src.back.search.shared.handler.handler import Handler
 from src.back.search.shared.commands.rich_search_command import RichSearchCommand
 # search models
 from src.search_models.we_fasttext.embedding_search_model import EmbeddingSearchModel
-from src.search_models.tf_idf.tf_idf_search_model import TFIDFSearchModel
+from src.back.search.tf_idf.tf_idf_search_model import TFIDFSearchModel
 from src.search_models.we_fasttext.document_vector_calculator import DocumentVectorCalculator
 # search requirements
 from src.back.search.tf_idf.tf_idf_search_requirement import TfIdfSearchRequirement
