@@ -3,7 +3,7 @@ from numpy.linalg import norm
 from heapq import nlargest
 
 from src.search_models.search_model import SearchModel
-from src.refacto.embeddings.embedding_search_requirement import EmbeddingSearchRequirement
+from src.back.search.embeddings.embedding_search_requirement import EmbeddingSearchRequirement
 
 class EmbeddingSearchModel(SearchModel):
     

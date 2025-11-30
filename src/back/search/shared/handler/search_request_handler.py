@@ -6,7 +6,7 @@ from src.search_models.tf_idf.tf_idf_search_model import TFIDFSearchModel
 from src.search_models.we_fasttext.document_vector_calculator import DocumentVectorCalculator
 # search requirements
 from src.refacto.tf_idf.tf_idf_search_requirement import TfIdfSearchRequirement
-from src.refacto.embeddings.embedding_search_requirement import EmbeddingSearchRequirement
+from src.back.search.embeddings.embedding_search_requirement import EmbeddingSearchRequirement
 
 
 class SearchRequestHandler(Handler):
