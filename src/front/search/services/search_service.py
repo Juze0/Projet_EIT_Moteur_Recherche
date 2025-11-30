@@ -1,6 +1,6 @@
 from src.front.search.state.search_state import SearchState
 from src.front.search.dtos.search_request_dto import SearchRequestDTO
-from src.refacto.shared.controller import Controller
+from src.back.search.shared.controller import Controller
 
 class SearchService:
 

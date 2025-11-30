@@ -2,8 +2,8 @@ import argparse
 from src.front.search.ui.cli import CLI
 from src.front.search.ui.gui import GUI
 
-from src.refacto.shared.mediator_factory import build_mediator
-from src.refacto.shared.controller import Controller
+from src.back.search.shared.mediator_factory import build_mediator
+from src.back.search.shared.controller import Controller
 from src.front.search.services.search_service import SearchService
 from src.front.search.state.search_state import SearchState
 
