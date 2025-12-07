@@ -6,7 +6,7 @@ from src.back.preprocessing.preprocessor import Preprocessor
 from src.back.preprocessing.nltk_preprocessor import NLTKPreprocessor
 from src.back.preprocessing.spacy_preprocessor import SpaCyPreprocessor
 # search models
-from src.back.search.shared.search_model import SearchModel
+from src.back.search.domain.search_model import SearchModel
 from src.back.search.embeddings.embedding_search_model import EmbeddingSearchModel
 from src.back.search.tf_idf.tf_idf_search_model import TFIDFSearchModel
 

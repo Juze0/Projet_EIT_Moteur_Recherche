@@ -1,4 +1,4 @@
-from src.back.search.shared.search_requirement.search_requirement import SearchRequirement
+from src.back.search.domain.search_requirement import SearchRequirement
 from src.back.file_handlers.file import File
 
 class TfIdfSearchRequirement(SearchRequirement):

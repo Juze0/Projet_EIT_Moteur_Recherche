@@ -1,5 +1,5 @@
 from .rich_search_context_command import RichSearchContextCommand
-from src.back.search.shared.search_model import SearchModel
+from src.back.search.domain.search_model import SearchModel
 from src.back.preprocessing.preprocessor import Preprocessor
 
 from src.back.search.shared.service.search_file_service import SearchFileService

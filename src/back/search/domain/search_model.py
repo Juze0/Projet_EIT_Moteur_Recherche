@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from src.back.search.shared.search_requirement.search_requirement import SearchRequirement
+from src.back.search.domain.search_requirement import SearchRequirement
 
 class SearchModel(ABC):
 
