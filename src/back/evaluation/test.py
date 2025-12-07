@@ -5,8 +5,8 @@ from collections import defaultdict
 # file hierarchy
 
 # Model
-from src.back.search.tf_idf.tf_idf_search_model import TFIDFSearchModel
-from src.back.search.embeddings.embedding_search_model import EmbeddingSearchModel
+from src.back.search.infrastructure.searchmodel.tf_idf_search_model import TFIDFSearchModel
+from src.back.search.infrastructure.searchmodel.embedding_search_model import EmbeddingSearchModel
 
 
 class Test:
