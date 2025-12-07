@@ -1,6 +1,6 @@
 import fasttext
 
-from .file import File
+from ..search.application.ports.file import File
 
 class FasttextFile(File):
     

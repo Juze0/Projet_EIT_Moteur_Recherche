@@ -1,7 +1,7 @@
 from numpy import log10
 
 from src.back.search.shared.calculator import Calculator
-from src.back.file_handlers.file import File
+from src.back.search.application.ports.file import File
 
 class TFIDFCalculator(Calculator):
 

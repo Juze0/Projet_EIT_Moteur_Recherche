@@ -1,4 +1,4 @@
-from .file import File
+from ..search.application.ports.file import File
 
 class TextFile(File):
     

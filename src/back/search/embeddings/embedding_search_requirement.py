@@ -1,5 +1,5 @@
 from src.back.search.domain.search_requirement import SearchRequirement
-from src.back.file_handlers.file import File
+from src.back.search.application.ports.file import File
 from src.back.search.embeddings.calculators.document_vector_calculator import DocumentVectorCalculator
 
 class EmbeddingSearchRequirement(SearchRequirement):

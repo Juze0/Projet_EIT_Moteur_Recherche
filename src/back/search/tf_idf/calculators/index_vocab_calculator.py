@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 from src.back.search.shared.calculator import Calculator
-from src.back.file_handlers.file import File
+from src.back.search.application.ports.file import File
 from src.back.preprocessing.preprocessor import Preprocessor
 
 class IndexAndVocabCalculator(Calculator):

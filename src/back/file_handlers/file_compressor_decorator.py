@@ -1,6 +1,6 @@
 import lzma
 from time import time
-from .file import File
+from ..search.application.ports.file import File
 
 class FileCompressorDecorator(File):
     """Implémentaton d'un decorator de FileHandler afin de traiter la compression/décomrpession de fichier gérés par FileHandler.
