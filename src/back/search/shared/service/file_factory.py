@@ -3,9 +3,9 @@ from os import listdir
 from os.path import join
 
 from src.back.search.application.ports.file import File
-from src.back.file_handlers.json_file import JSONFile
-from src.back.file_handlers.text_file import TextFile
-from src.back.file_handlers.fasttext_file import FasttextFile
+from src.back.search.infrastructure.file.json_file import JSONFile
+from src.back.search.infrastructure.file.text_file import TextFile
+from src.back.search.infrastructure.file.fasttext_file import FasttextFile
 
 
 class FileFactory:

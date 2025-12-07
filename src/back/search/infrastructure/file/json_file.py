@@ -1,5 +1,5 @@
 import json
-from ..search.application.ports.file import File
+from src.back.search.application.ports.file import File
 
 class JSONFile(File):
     
