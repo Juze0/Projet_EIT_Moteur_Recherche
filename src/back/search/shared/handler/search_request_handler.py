@@ -1,4 +1,4 @@
-from src.back.search.shared.handler.handler import Handler
+from src.back.core.application.handler import Handler
 from src.back.search.shared.commands.rich_search_command import RichSearchCommand
 # search models
 from src.back.search.infrastructure.searchmodel.embedding_search_model import EmbeddingSearchModel

@@ -1,5 +1,5 @@
-from src.back.search.shared.handler.handler import Handler
-from src.back.search.shared.commands.command import Command
+from src.back.core.application.handler import Handler
+from src.back.search.application.commands.search_command import SearchCommand
 from src.back.search.shared.commands.rich_search_command import RichSearchCommand
 # preprocessors
 from src.back.preprocessing.preprocessor import Preprocessor
@@ -16,10 +16,10 @@ from re import sub
 
 class EnrichCommandHandler(Handler):
 
-    def handle(self, command: Command):
+    def handle(self, command: SearchCommand):
         return self._next.handle(self._enrich_command(command)) # TODO Procéder sans return
 
-    def _enrich_command(self, command: Command) -> Command:
+    def _enrich_command(self, command: SearchCommand) -> SearchCommand:
         cmd_search_model = command.get_search_model()
         cmd_preprocessor = command.get_preprocessor()
         search_file_service = SearchFileService(cmd_search_model, cmd_preprocessor)

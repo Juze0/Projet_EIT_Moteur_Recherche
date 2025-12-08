@@ -1,9 +1,9 @@
-from .command import Command
+from ...application.commands.search_command import SearchCommand
 from src.back.search.domain.search_model import SearchModel
 from src.back.preprocessing.preprocessor import Preprocessor
 
 
-class RichSearchContextCommand(Command[Preprocessor, SearchModel]):
+class RichSearchContextCommand(SearchCommand[Preprocessor, SearchModel]):
     
     def __init__(self, preprocessor: Preprocessor, search_model: SearchModel):
         super().__init__(preprocessor, search_model)

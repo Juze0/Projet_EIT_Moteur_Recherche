@@ -1,4 +1,4 @@
-from src.back.search.shared.handler.handler import Handler
+from src.back.core.application.handler import Handler
 # dependencies resolver
 from src.back.search.embeddings.embedding_dependency_resolver import EmbeddingDependencyResolver
 from src.back.search.tf_idf.tf_idf_dependency_resolver import TfIdfDependencyResolver
