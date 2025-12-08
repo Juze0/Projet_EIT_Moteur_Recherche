@@ -1,5 +1,5 @@
 from typing import Type, Dict
-from src.back.search.application.commands.search_command import SearchCommand
+from src.back.core.application.command import Command
 from src.back.core.application.handler import Handler
 
 class Mediator:
@@ -14,18 +14,18 @@ class Mediator:
 
     def __init__(self):
         if not hasattr(self, '_initialized'):
-            self._handlers: Dict[Type[SearchCommand], Handler] = {}
+            self._handlers: Dict[Type[Command], Handler] = {}
             self._initialized = True
 
 
-    def register_handler(self, command_type: Type[SearchCommand], handler: Handler):
+    def register_handler(self, command_type: Type[Command], handler: Handler):
         self._handlers[command_type] = handler
 
 
-    def send(self, command: SearchCommand):
+    def send(self, command: Command):
         command_type = type(command)
         if command_type not in self._handlers:
-            raise Exception("La commande ne peut pas etre traité")
+            raise Exception("This command can not be handled")
         handler = self._handlers[command_type]
         return handler.handle(command)
     

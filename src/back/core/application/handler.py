@@ -1,5 +1,7 @@
-from src.back.search.application.commands.search_command import SearchCommand
 from abc import ABC, abstractmethod
+
+from src.back.core.application.command import Command
+
 
 class Handler(ABC):
     def __init__(self):
@@ -10,5 +12,5 @@ class Handler(ABC):
         return self._next
 
     @abstractmethod
-    def handle(self, command: SearchCommand):
+    def handle(self, command: Command):
         raise NotImplementedError("This method in not implemented !")

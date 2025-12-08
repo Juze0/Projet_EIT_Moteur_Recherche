@@ -3,9 +3,14 @@ from numpy.linalg import norm
 from heapq import nlargest
 
 from src.back.search.domain.search_model import SearchModel
-from src.back.search.infrastructure.searchrequirement.embedding_search_requirement import EmbeddingSearchRequirement
+from src.back.search.domain.search_query import SearchQuery
+from src.back.search.infrastructure.search_model_dependency.embedding_search_model_dependency import EmbeddingSearchModelDependency
 
 class EmbeddingSearchModel(SearchModel):
+
+    def __init__(self, model_dependency: EmbeddingSearchModelDependency):
+        super.__init__(model_dependency)
+    
     
     def cosine_similarity(self, vector1, vector2):
         """Calcule la similarité cosinus entre deux vecteurs."""
@@ -14,7 +19,7 @@ class EmbeddingSearchModel(SearchModel):
         return dot(vector1, vector2) / (norm(vector1) * norm(vector2))
     
 
-    def calculate_docs_to_answer_query_docs(self, search_requirement: EmbeddingSearchRequirement):
+    def calculate_docs_to_answer_query_docs(self, search_query: SearchQuery):
         """
         Trouve les documents les plus pertinents pour une requête utilisateur.
         :param query: Texte brut de la requête utilisateur.
@@ -22,10 +27,10 @@ class EmbeddingSearchModel(SearchModel):
         :return: Liste de tuples (nom du fichier, score de similarité) des documents les plus pertinents.
         """
         # 1/3 - Calculer l'embedding de la requête
-        query_embedding = search_requirement.get_document_vector_calculator().create_document_embedding(search_requirement.get_preprocessed_query())
+        query_embedding = self._model_dependency.get_document_vector_calculator().create_document_embedding(search_query.query)
 
         # 2/3 - Calculer la similarité entre la requête et chaque document 
-        document_embeddings = search_requirement.get_document_embeddings().load()
+        document_embeddings = self._model_dependency.get_document_embeddings().load()
         docs_to_answer_query = {}
         for doc_name, doc_embedding in document_embeddings.items():
             # Vérification que les dimensions sont compatibles avant de calculer la similarité

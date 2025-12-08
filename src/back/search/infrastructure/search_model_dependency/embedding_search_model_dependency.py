@@ -1,11 +1,11 @@
-from src.back.search.domain.search_requirement import SearchRequirement
+from src.back.search.domain.search_model_dependency import SearchModelDependency
 from src.back.search.application.ports.file import File
 from src.back.search.embeddings.calculators.document_vector_calculator import DocumentVectorCalculator
 
-class EmbeddingSearchRequirement(SearchRequirement):
+class EmbeddingSearchModelDependency(SearchModelDependency):
 
-    def __init__(self, query: str, top_n: int, document_vector_calculator: DocumentVectorCalculator,  document_embeddings:File):
-        super().__init__(query, top_n)
+    def __init__(self, document_vector_calculator: DocumentVectorCalculator,  document_embeddings:File):
+        super().__init__()
         self._document_vector_calculator = document_vector_calculator
         self._document_embeddings = document_embeddings
 

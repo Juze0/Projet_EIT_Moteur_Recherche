@@ -2,8 +2,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from heapq import nlargest
 
 from src.back.search.domain.search_model import SearchModel
-from src.back.search.application.ports.file import File
-from src.back.search.infrastructure.searchrequirement.tf_idf_search_requirement import TfIdfSearchRequirement
+from src.back.search.domain.search_query import SearchQuery
+from src.back.search.infrastructure.search_model_dependency.tf_idf_search_model_dependency import TfIdfSearchModelDependency
 
 """ La lemmatisation avec Spacy est plus précise que celle de NLTK, on doit choisir entre les deux """
 
@@ -11,11 +11,11 @@ class TFIDFSearchModel(SearchModel):
 
     nlp = None
 
-    def __init__(self):
-        pass
+    def __init__(self, model_dependency: TfIdfSearchModelDependency):
+        super.__init__(model_dependency)
     
    
-    def calculate_docs_to_answer_query_docs(self, search_requirement: TfIdfSearchRequirement):
+    def calculate_docs_to_answer_query_docs(self, search_query: SearchQuery):
         """
         Prend une requête utilisateur, le dictionnaire de tf*idf des documents et le dictionnaire des idf des mots.
         Retourne un dictionnaire associant les documents et leur similarité cosinus avec la requête utilisateur. Le dictionnaire est en ordre décroissant.
@@ -26,10 +26,10 @@ class TFIDFSearchModel(SearchModel):
         # comme un espace vectoriel d'embeddings.
 
         # [ALL] Prétraitement de la requête
-        idf_dict = search_requirement.get_idf().load()
+        idf_dict = self._model_dependency.get_idf().load()
         query_tf = {}
-        dict_tokens = self.count_words(search_requirement.get_preprocessed_query())
-        nb_words = len(search_requirement.get_preprocessed_query())
+        dict_tokens = self.count_words(search_query.query)
+        nb_words = len(search_query.query)
         print("Nombre de mots dans la requête : ", nb_words)
         print("Mots de la requête : ", dict_tokens)
         for token in dict_tokens:
@@ -47,7 +47,7 @@ class TFIDFSearchModel(SearchModel):
         # [ALL] Préparation du vecteur de la requête
         #print("Tokens de la requête : ")
         #print(query_tf)
-        full_vocab = search_requirement.get_full_vocab().load()
+        full_vocab = self._model_dependency.get_full_vocab().load()
         query_vector = [0.0] * len(full_vocab)
         
         # [SPECIFIC] Construction du vecteur en utilisant des scores TF-IDF
@@ -63,7 +63,7 @@ class TFIDFSearchModel(SearchModel):
         # [SPECIFIC] Utilisation de la similarité cosinus pour TF-IDF (sauf si un autre modèle aussi utilise cosinus).
         # Par exemple, Word Embeddings ou BERT peuvent aussi utiliser cosinus, mais certains modèles peuvent opter pour d’autres mesures.
         docs_to_answer_query = {}
-        for filename, vector in search_requirement.get_tf_idf_vectors().load().items():
+        for filename, vector in self._model_dependency.get_tf_idf_vectors().load().items():
            
             # Vérification que les dimensions sont compatibles avant de calculer la similarité
             if len(query_vector) == len(vector):

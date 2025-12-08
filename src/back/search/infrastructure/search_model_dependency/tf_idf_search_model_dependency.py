@@ -1,10 +1,9 @@
-from src.back.search.domain.search_requirement import SearchRequirement
+from src.back.search.domain.search_model_dependency import SearchModelDependency
 from src.back.search.application.ports.file import File
 
-class TfIdfSearchRequirement(SearchRequirement):
+class TfIdfSearchModelDependency(SearchModelDependency):
 
-    def __init__(self, query: str, top_n: int, idf_dict:File, tf_idf_vectors:File, full_vocab:File):
-        super().__init__(query, top_n)
+    def __init__(self, idf_dict:File, tf_idf_vectors:File, full_vocab:File):
         self._idf_dict = idf_dict
         self._tf_idf_vectors = tf_idf_vectors
         self._full_vocab = full_vocab
