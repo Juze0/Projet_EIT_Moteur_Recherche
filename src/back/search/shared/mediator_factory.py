@@ -1,4 +1,4 @@
-from src.back.search.shared.mediator import Mediator
+from src.back.core.application.mediator import Mediator
 # command
 from src.back.search.shared.commands.raw_search_command import RawSearchCommand
 # handlers

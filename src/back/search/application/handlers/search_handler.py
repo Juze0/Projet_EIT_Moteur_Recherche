@@ -5,7 +5,7 @@ from src.back.search.application.commands.search_command import SearchCommand
 
 from src.back.search.domain.search_query import SearchQuery
 from src.back.search.domain.search_model import SearchModel
-from src.back.search.shared.handler.dependency_resolver import DependencyResolver
+from src.back.search.domain.dependency_resolver import DependencyResolver
 
 M = TypeVar("M", bound=SearchModel)
 R = TypeVar("R", bound=DependencyResolver)

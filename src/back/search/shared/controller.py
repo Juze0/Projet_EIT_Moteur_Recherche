@@ -1,4 +1,4 @@
-from src.back.search.shared.mediator import Mediator
+from src.back.core.application.mediator import Mediator
 # dto
 from src.front.search.dtos.search_request_dto import SearchRequestDTO
 # command
