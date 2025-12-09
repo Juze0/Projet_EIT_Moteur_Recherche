@@ -2,7 +2,7 @@ import fasttext
 
 from src.back.search.shared.calculator import Calculator
 from src.back.search.application.ports.file import File
-from src.back.preprocessing.preprocessor import Preprocessor
+from src.back.preprocessor.domain.preprocessor import Preprocessor
 
 class WECalculator(Calculator):
 
@@ -15,7 +15,7 @@ class WECalculator(Calculator):
         # TODO statuer sur le max_docs
         merged_content = []
         for f in files:
-            merged_content.append(" ".join(preprocessor.normalize_text(f.load())))
+            merged_content.append(" ".join(preprocessor.normalize(f.load())))
         return "\n".join(merged_content)
 
     ######## MODEL TRAINING PART (training, save and load operations)

@@ -1,18 +1,18 @@
-from .preprocessor import Preprocessor
+from src.back.preprocessor.infrastructure.preprocessor.base_preprocessor import BasePreprocessor
 
 # NLTK import part 
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 from nltk.stem import SnowballStemmer
 
-class NLTKPreprocessor(Preprocessor):
+class NLTKPreprocessor(BasePreprocessor):
 
     def __init__(self):
-        super().__init__("nltk")
+        super().__init__()
         self.stopwords = set(stopwords.words("french"))
         self.lemmatizer = SnowballStemmer("french")
 
-    def normalize_text(self, text):
+    def normalize(self, text):
         """
         Cette fonction prend un texte en paramètre et le normalise (retire la ponctuation, les espaces, les caractères spéciaux, les stopwords, etc.) en fonction de la librairie choisie.
         """

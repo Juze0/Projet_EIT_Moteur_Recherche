@@ -2,7 +2,7 @@ from collections import defaultdict
 
 from src.back.search.shared.calculator import Calculator
 from src.back.search.application.ports.file import File
-from src.back.preprocessing.preprocessor import Preprocessor
+from src.back.preprocessor.domain.preprocessor import Preprocessor
 
 class IndexAndVocabCalculator(Calculator):
 
@@ -14,7 +14,7 @@ class IndexAndVocabCalculator(Calculator):
         """
         Renvoie un index (normalisé et lemmatisé) associant les fichiers à leur liste de mots.
         """
-        return { f.get_file_name(): preprocessor.normalize_and_lemmatize(f.load()) for f in files}
+        return { f.get_file_name(): preprocessor.normalize_then_lemmatize(f.load()) for f in files}
     
     
     def create_inversed_index(self, index_file: File):
@@ -35,5 +35,5 @@ class IndexAndVocabCalculator(Calculator):
         """
         full_vocab = set()
         for f in files:
-            full_vocab.update(preprocessor.normalize_and_lemmatize(f.load()))
+            full_vocab.update(preprocessor.normalize_then_lemmatize(f.load()))
         return list(full_vocab)

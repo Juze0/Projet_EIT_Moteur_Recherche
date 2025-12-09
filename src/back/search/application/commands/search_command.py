@@ -2,7 +2,7 @@ from typing import TypeVar, Generic
 
 from src.back.core.application.command import Command
 from src.back.search.domain.search_model import SearchModel
-from src.back.preprocessing.preprocessor import Preprocessor
+from src.back.preprocessor.domain.preprocessor import Preprocessor
 
 P = TypeVar("P", Preprocessor, str)
 S = TypeVar("M", SearchModel, str)

@@ -1,16 +1,16 @@
-from .preprocessor import Preprocessor
+from src.back.preprocessor.infrastructure.preprocessor.base_preprocessor import BasePreprocessor
 
 # SpaCy import part 
 from spacy import load 
 
-class SpaCyPreprocessor(Preprocessor):
+class SpaCyPreprocessor(BasePreprocessor):
 
     def __init__(self):
-        super().__init__("spacy")
+        super().__init__()
         self.nlp = load("fr_core_news_md")
         self.stopwords = set(self.nlp.Defaults.stop_words)
 
-    def normalize_text(self, text):
+    def normalize(self, text):
         """
         Cette fonction prend un texte en paramètre et le normalise (retire la ponctuation, les espaces, les caractères spéciaux, les stopwords, etc.) en fonction de la librairie choisie.
         """
