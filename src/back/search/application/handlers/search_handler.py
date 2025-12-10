@@ -21,4 +21,7 @@ class SearchHandler(Handler, Generic[M, R]):
 
     def handle(self, command: SearchCommand):
         self.dependency_resolver.resolve_dependencies()
-        return self.search_model.calculate_docs_to_answer_query_docs(SearchQuery())
+        return self.search_model.calculate_docs_to_answer_query_docs(SearchQuery(
+            query=command.get_query(),
+            top_n=10
+        ))

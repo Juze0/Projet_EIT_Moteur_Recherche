@@ -1,6 +1,0 @@
-from src.back.search.application.handlers.search_handler import SearchHandler
-from src.back.search.infrastructure.searchmodel.embedding_search_model import EmbeddingSearchModel
-from src.back.search.infrastructure.search_model_dependency.embedding_search_model_dependency import EmbeddingSearchModelDependency
-
-class EmbeddingSearchHandler(SearchHandler[EmbeddingSearchModel, EmbeddingSearchModelDependency]):
-    pass
