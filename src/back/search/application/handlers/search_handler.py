@@ -1,7 +1,7 @@
 from typing import TypeVar, Generic
 
 from src.back.core.application.handler import Handler
-from src.back.search.application.commands.search_command import SearchCommand
+from src.back.search.application.usecases.search_command import SearchCommand
 
 from src.back.search.domain.search_query import SearchQuery
 from src.back.search.domain.search_model import SearchModel
@@ -23,5 +23,5 @@ class SearchHandler(Handler, Generic[M, R]):
         self.dependency_resolver.resolve_dependencies()
         return self.search_model.calculate_docs_to_answer_query_docs(SearchQuery(
             query=command.get_query(),
-            top_n=10
+            top_n=command.get_top_n()
         ))
