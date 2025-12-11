@@ -1,14 +1,11 @@
 from src.back.core.application.mediator import Mediator
-# command
-from src.back.search.shared.commands.raw_search_command import RawSearchCommand
-# handlers
-from src.back.search.shared.handler.enrich_command_handler import EnrichCommandHandler
+
+from src.back.search.application.usecases.search_command import SearchCommand
+from src.back.search.application.usecases.search_command_handler import SearchCommandHandler
+from src.back.search.infrastructure.factories.search_handler_factory import SearchHandlerFactory
 
 
 def build_mediator() -> Mediator:
     mediator = Mediator()
-
-    handler = EnrichCommandHandler()
-
-    mediator.register_handler(RawSearchCommand, handler)
+    mediator.register_handler(SearchCommand, SearchCommandHandler(SearchHandlerFactory()))
     return mediator

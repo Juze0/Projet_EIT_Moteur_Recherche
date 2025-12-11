@@ -1,7 +1,7 @@
 class SearchState:
     def __init__(self):
-        self._preprocessor = "SpaCy"
-        self._model = "Embedding"
+        self._preprocessor = "spacy"
+        self._model = "embedding"
         self._last_query = None
         self._search_history = []
 

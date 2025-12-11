@@ -1,3 +1,15 @@
+from src.back.preprocessor.domain.preprocessor_name import PreprocessorName
+from src.back.search.domain.search_model_name import SearchModelName
+from src.back.preprocessor.infrastructure.preprocessor_factory import PreprocessorFactory
+
+from src.back.search.shared.service.search_file_service import SearchFileService
+
+from src.back.search.tf_idf.tf_idf_dependency_resolver import TfIdfDependencyResolver
+from src.back.search.embeddings.embedding_dependency_resolver import EmbeddingDependencyResolver
+from src.back.preprocessor.domain.preprocessor import Preprocessor
+
+from src.back.search.embeddings.calculators.document_vector_calculator import DocumentVectorCalculator
+
 from src.back.search.application.usecases.search_command import SearchCommand
 from src.back.search.application.handlers.search_handler import SearchHandler
 from src.back.search.application.ports.search_handler_factory import SearchHandlerFactory
@@ -10,14 +22,38 @@ from src.back.search.infrastructure.search_model_dependency.tf_idf_search_model_
 
 class SearchHandlerFactory(SearchHandlerFactory):
 
-    _search_handler_map = {
-        "embedding": SearchHandler[EmbeddingSearchModel, EmbeddingSearchModelDependency],
-        "tfidf": SearchHandler[TFIDFSearchModel, TfIdfSearchModelDependency]
-    }
+    def __init__(self):
+        self._preprocessor_factory = PreprocessorFactory()
+
 
     def get_command_handler(self, command: SearchCommand) -> SearchHandler:
-        # TODO Dois-je utiliser les VO ?
-        #if search_model_name.value not in self._search_handler_map:
-        #    raise ValueError(f"Search model '{search_model_name.value}' is not recognized by the factory but is known by business rule!")
-        return self._search_handler_map[search_model_name.value]()
+        preprocessor_name = PreprocessorName(command.get_preprocessor())
+        model_name = SearchModelName(command.get_search_model())
+
+        preprocessor = self._preprocessor_factory.get_preprocessor(preprocessor_name.value)
+        search_file_service = SearchFileService(model_name.value, preprocessor_name.value)
+
+        search_handler = None
+        match model_name.value:
+            case "embedding": search_handler = self.build_embedding_handler(preprocessor, search_file_service)
+            case "tfidf": search_handler = self.build_tfidf_handler(preprocessor, search_file_service)
+        return search_handler
+        
+
+    def build_tfidf_handler(preprocessor: Preprocessor, search_file_service: SearchFileService) -> SearchHandler[TFIDFSearchModel, TfIdfDependencyResolver]:
+        model_dependency = TfIdfSearchModelDependency(
+            search_file_service.get_idf(),
+            search_file_service.get_tf_idf_vectors(),
+            search_file_service.get_full_vocab()
+        )
+        return SearchHandler(TFIDFSearchModel(model_dependency),
+                             TfIdfDependencyResolver(preprocessor, search_file_service))
     
+
+    def build_embedding_handler(preprocessor: Preprocessor, search_file_service: SearchFileService) -> SearchHandler[EmbeddingSearchModel, EmbeddingDependencyResolver]:
+        model_dependency = EmbeddingSearchModelDependency(
+            DocumentVectorCalculator(search_file_service.get_fassttext_model()),
+            search_file_service.get_documents_embeddings()
+        )
+        return SearchHandler(EmbeddingSearchModel(model_dependency),
+                             EmbeddingDependencyResolver(preprocessor, search_file_service))
