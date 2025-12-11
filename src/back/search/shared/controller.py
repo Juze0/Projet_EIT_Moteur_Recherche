@@ -10,7 +10,7 @@ class Controller:
 
 
     def calculate_docs_to_answer_query_docs(self, search_request_dto: SearchRequestDTO):
-        return self._mediator.send(SearchCommand(search_request_dto.query, 10,                                                10,
+        return self._mediator.send(SearchCommand(search_request_dto.query, 10,
                                                  search_request_dto.preprocessor,
                                                  search_request_dto.search_model))
     

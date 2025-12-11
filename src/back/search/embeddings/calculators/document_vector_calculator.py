@@ -8,9 +8,10 @@ class DocumentVectorCalculator(Calculator):
 
     def __init__(self, embedding_model_file:File, max_docs=None):
         super().__init__()
-        self.embedding_model = embedding_model_file.load()
+        self.embedding_model = embedding_model_file
         self.max_docs = max_docs
-
+        self.model_loaded = False
+        # TODO, la notion de calcul doit etre rendu au model généré !!
 
     def create_mean_embedding(self, words):
         """Calcule l'embedding moyen pour une liste de mots."""
@@ -33,11 +34,17 @@ class DocumentVectorCalculator(Calculator):
         :param words: liste de mots du document
         :return: Le vecteur renvoyé est de dimension 2 * d et réprésente le document
         """
+        if not self.model_loaded:
+            self.embedding_model = self.embedding_model.load()
+            self.model_loaded = True
         return concatenate([self.create_mean_embedding(words), self.create_max_embedding(words)])
 
 
     def calculate_embeddings_for_all_documents(self, preprocessed_merged_corpus: File, ordered_file_list: list[str]):
         """Calcule les embeddings pour chaque document pré-traité dans le fichier unique de corpus."""
+        if not self.model_loaded:
+            self.embedding_model = self.embedding_model.load()
+            self.model_loaded = True
         document_embeddings = {}
         for idx, line in enumerate(preprocessed_merged_corpus.load(use_iterator=True)):
             processed_words = line.strip().split()

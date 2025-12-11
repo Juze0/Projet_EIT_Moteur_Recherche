@@ -1,6 +1,6 @@
-from src.back.search.application.ports.file import File
+from src.back.search.infrastructure.file.base_file import BaseFile
 
-class TextFile(File):
+class TextFile(BaseFile):
     
     def __init__(self, file_path: str):
         super().__init__(file_path)

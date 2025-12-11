@@ -9,7 +9,7 @@ from src.back.search.infrastructure.search_model_dependency.embedding_search_mod
 class EmbeddingSearchModel(SearchModel):
 
     def __init__(self, model_dependency: EmbeddingSearchModelDependency):
-        super.__init__(model_dependency)
+        super().__init__(model_dependency)
     
     
     def cosine_similarity(self, vector1, vector2):

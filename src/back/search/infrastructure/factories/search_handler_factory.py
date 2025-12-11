@@ -30,7 +30,7 @@ class SearchHandlerFactory(SearchHandlerFactory):
         preprocessor_name = PreprocessorName(command.get_preprocessor())
         model_name = SearchModelName(command.get_search_model())
 
-        preprocessor = self._preprocessor_factory.get_preprocessor(preprocessor_name.value)
+        preprocessor = self._preprocessor_factory.get_preprocessor(preprocessor_name)
         search_file_service = SearchFileService(model_name.value, preprocessor_name.value)
 
         search_handler = None
@@ -40,7 +40,7 @@ class SearchHandlerFactory(SearchHandlerFactory):
         return search_handler
         
 
-    def build_tfidf_handler(preprocessor: Preprocessor, search_file_service: SearchFileService) -> SearchHandler[TFIDFSearchModel, TfIdfDependencyResolver]:
+    def build_tfidf_handler(self, preprocessor: Preprocessor, search_file_service: SearchFileService) -> SearchHandler[TFIDFSearchModel, TfIdfDependencyResolver]:
         model_dependency = TfIdfSearchModelDependency(
             search_file_service.get_idf(),
             search_file_service.get_tf_idf_vectors(),
@@ -50,7 +50,7 @@ class SearchHandlerFactory(SearchHandlerFactory):
                              TfIdfDependencyResolver(preprocessor, search_file_service))
     
 
-    def build_embedding_handler(preprocessor: Preprocessor, search_file_service: SearchFileService) -> SearchHandler[EmbeddingSearchModel, EmbeddingDependencyResolver]:
+    def build_embedding_handler(self, preprocessor: Preprocessor, search_file_service: SearchFileService) -> SearchHandler[EmbeddingSearchModel, EmbeddingDependencyResolver]:
         model_dependency = EmbeddingSearchModelDependency(
             DocumentVectorCalculator(search_file_service.get_fassttext_model()),
             search_file_service.get_documents_embeddings()

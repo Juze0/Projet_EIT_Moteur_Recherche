@@ -19,7 +19,7 @@ class SearchCommand(Command, Generic[P, S]):
         return self._query
     
     def get_top_n(self) -> int:
-        return self._query
+        return self._top_n
 
     def get_search_model(self) -> str:
         return self.search_model
