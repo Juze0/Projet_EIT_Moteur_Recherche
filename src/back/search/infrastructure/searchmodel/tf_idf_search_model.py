@@ -12,7 +12,7 @@ class TFIDFSearchModel(SearchModel):
     nlp = None
 
     def __init__(self, model_dependency: TfIdfSearchModelDependency):
-        super().__init__(model_dependency)
+        self._model_dependency = model_dependency
     
    
     def calculate_docs_to_answer_query_docs(self, search_query: SearchQuery):
