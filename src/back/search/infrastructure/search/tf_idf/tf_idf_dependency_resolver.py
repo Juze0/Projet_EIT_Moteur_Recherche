@@ -1,8 +1,8 @@
 from src.back.search.infrastructure.search.search_model_dependency_resolver import SearchModelDependencyResolver
 from src.back.preprocessor.domain.preprocessor import Preprocessor
 from src.back.search.shared.service.search_file_service import SearchFileService
-from src.back.search.tf_idf.calculators.tf_idf_calculator import TFIDFCalculator
-from src.back.search.tf_idf.calculators.index_vocab_calculator import IndexAndVocabCalculator
+from src.back.search.infrastructure.search.tf_idf.calculators.tf_idf_calculator import TFIDFCalculator
+from src.back.search.infrastructure.search.tf_idf.calculators.index_vocab_calculator import IndexAndVocabCalculator
 
 
 class TfIdfDependencyResolver(SearchModelDependencyResolver):

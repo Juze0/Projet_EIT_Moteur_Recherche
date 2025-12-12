@@ -8,7 +8,7 @@ from src.back.search.infrastructure.search.tf_idf.tf_idf_dependency_resolver imp
 from src.back.search.infrastructure.search.embedding.embedding_dependency_resolver import EmbeddingDependencyResolver
 from src.back.preprocessor.domain.preprocessor import Preprocessor
 
-from src.back.search.embeddings.calculators.document_vector_calculator import DocumentVectorCalculator
+from src.back.search.infrastructure.search.embedding.calculators.document_vector_calculator import DocumentVectorCalculator
 
 from src.back.search.application.usecases.search_command import SearchCommand
 from src.back.search.application.usecases.search_command_handler import SearchCommandHandler

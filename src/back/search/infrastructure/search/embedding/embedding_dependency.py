@@ -1,6 +1,6 @@
 from src.back.search.application.ports.search.search_model_dependency import SearchModelDependency
 from src.back.search.application.ports.persistence.file import File
-from src.back.search.embeddings.calculators.document_vector_calculator import DocumentVectorCalculator
+from src.back.search.infrastructure.search.embedding.calculators.document_vector_calculator import DocumentVectorCalculator
 
 class EmbeddingDependency(SearchModelDependency):
 
