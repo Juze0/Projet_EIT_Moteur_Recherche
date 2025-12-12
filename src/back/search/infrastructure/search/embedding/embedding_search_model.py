@@ -4,7 +4,7 @@ from heapq import nlargest
 
 from src.back.search.domain.search_model import SearchModel
 from src.back.search.domain.search_query import SearchQuery
-from src.back.search.infrastructure.search.dependencies.embedding_dependency import EmbeddingDependency
+from src.back.search.infrastructure.search.embedding.embedding_dependency import EmbeddingDependency
 
 class EmbeddingSearchModel(SearchModel):
 

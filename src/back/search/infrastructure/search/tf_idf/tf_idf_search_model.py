@@ -3,7 +3,7 @@ from heapq import nlargest
 
 from src.back.search.domain.search_model import SearchModel
 from src.back.search.domain.search_query import SearchQuery
-from src.back.search.infrastructure.search.dependencies.tf_idf_dependency import TfIdfDependency
+from src.back.search.infrastructure.search.tf_idf.tf_idf_dependency import TfIdfDependency
 
 """ La lemmatisation avec Spacy est plus précise que celle de NLTK, on doit choisir entre les deux """
 

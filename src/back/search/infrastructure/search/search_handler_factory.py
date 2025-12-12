@@ -4,8 +4,8 @@ from src.back.preprocessor.infrastructure.preprocessor_factory import Preprocess
 
 from src.back.search.shared.service.search_file_service import SearchFileService
 
-from src.back.search.infrastructure.search_model_dependency_resolver.tf_idf_dependency_resolver import TfIdfDependencyResolver
-from src.back.search.infrastructure.search_model_dependency_resolver.embedding_dependency_resolver import EmbeddingDependencyResolver
+from src.back.search.infrastructure.search.tf_idf.tf_idf_dependency_resolver import TfIdfDependencyResolver
+from src.back.search.infrastructure.search.embedding.embedding_dependency_resolver import EmbeddingDependencyResolver
 from src.back.preprocessor.domain.preprocessor import Preprocessor
 
 from src.back.search.embeddings.calculators.document_vector_calculator import DocumentVectorCalculator
@@ -14,11 +14,11 @@ from src.back.search.application.usecases.search_command import SearchCommand
 from src.back.search.application.usecases.search_command_handler import SearchCommandHandler
 from src.back.search.application.ports.search.search_command_handler_factory import SearchCommandHandlerFactory
 ## embedding (TODO à cacher derrière le container)
-from src.back.search.infrastructure.searchmodel.embedding_search_model import EmbeddingSearchModel
-from src.back.search.infrastructure.search.dependencies.embedding_dependency import EmbeddingDependency
+from src.back.search.infrastructure.search.embedding.embedding_search_model import EmbeddingSearchModel
+from src.back.search.infrastructure.search.embedding.embedding_dependency import EmbeddingDependency
 ## tfidf
-from src.back.search.infrastructure.searchmodel.tf_idf_search_model import TFIDFSearchModel
-from src.back.search.infrastructure.search.dependencies.tf_idf_dependency import TfIdfDependency
+from src.back.search.infrastructure.search.tf_idf.tf_idf_search_model import TFIDFSearchModel
+from src.back.search.infrastructure.search.tf_idf.tf_idf_dependency import TfIdfDependency
 
 class SearchHandlerFactory(SearchCommandHandlerFactory):
 

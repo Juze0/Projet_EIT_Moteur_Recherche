@@ -1,4 +1,4 @@
-from src.back.search.infrastructure.search_model_dependency_resolver.search_model_dependency_resolver import SearchModelDependencyResolver
+from src.back.search.infrastructure.search.embedding.search_model_dependency_resolver import SearchModelDependencyResolver
 from src.back.preprocessor.domain.preprocessor import Preprocessor
 from src.back.search.shared.service.search_file_service import SearchFileService
 from src.back.search.embeddings.calculators.we_calculator import WECalculator
