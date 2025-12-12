@@ -2,7 +2,7 @@ from src.back.shared.config.paths import OUTPUT_DIR, WIKI_CORPUS_DIR
 from os import listdir
 from os.path import join
 
-from src.back.search.application.ports.file import File
+from src.back.search.application.ports.persistence.file import File
 from src.back.search.infrastructure.file.json_file import JSONFile
 from src.back.search.infrastructure.file.text_file import TextFile
 from src.back.search.infrastructure.file.fasttext_file import FasttextFile

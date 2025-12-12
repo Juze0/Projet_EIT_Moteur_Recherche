@@ -12,7 +12,7 @@ from src.back.search.embeddings.calculators.document_vector_calculator import Do
 
 from src.back.search.application.usecases.search_command import SearchCommand
 from src.back.search.application.usecases.search_command_handler import SearchCommandHandler
-from src.back.search.application.ports.search_handler_factory import SearchHandlerFactory
+from src.back.search.application.ports.search.search_command_handler_factory import SearchCommandHandlerFactory
 ## embedding (TODO à cacher derrière le container)
 from src.back.search.infrastructure.searchmodel.embedding_search_model import EmbeddingSearchModel
 from src.back.search.infrastructure.search_model_dependency.embedding_search_model_dependency import EmbeddingSearchModelDependency
@@ -20,7 +20,7 @@ from src.back.search.infrastructure.search_model_dependency.embedding_search_mod
 from src.back.search.infrastructure.searchmodel.tf_idf_search_model import TFIDFSearchModel
 from src.back.search.infrastructure.search_model_dependency.tf_idf_search_model_dependency import TfIdfSearchModelDependency
 
-class SearchHandlerFactory(SearchHandlerFactory):
+class SearchHandlerFactory(SearchCommandHandlerFactory):
 
     def __init__(self):
         self._preprocessor_factory = PreprocessorFactory()
