@@ -1,8 +1,8 @@
 from src.back.search.domain.search_model_name import SearchModelName
-from src.back.search.domain.dependency_resolver import DependencyResolver
+from src.back.search.application.ports.dependency_resolver import DependencyResolver
 
-from src.back.search.embeddings.embedding_dependency_resolver import EmbeddingDependencyResolver
-from src.back.search.tf_idf.tf_idf_dependency_resolver import TfIdfDependencyResolver
+from src.back.search.infrastructure.search_model_dependency_resolver.embedding_dependency_resolver import EmbeddingDependencyResolver
+from src.back.search.infrastructure.search_model_dependency_resolver.tf_idf_dependency_resolver import TfIdfDependencyResolver
 
 class DependencyResolverFactory():
 

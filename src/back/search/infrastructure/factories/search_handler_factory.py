@@ -4,8 +4,8 @@ from src.back.preprocessor.infrastructure.preprocessor_factory import Preprocess
 
 from src.back.search.shared.service.search_file_service import SearchFileService
 
-from src.back.search.tf_idf.tf_idf_dependency_resolver import TfIdfDependencyResolver
-from src.back.search.embeddings.embedding_dependency_resolver import EmbeddingDependencyResolver
+from src.back.search.infrastructure.search_model_dependency_resolver.tf_idf_dependency_resolver import TfIdfDependencyResolver
+from src.back.search.infrastructure.search_model_dependency_resolver.embedding_dependency_resolver import EmbeddingDependencyResolver
 from src.back.preprocessor.domain.preprocessor import Preprocessor
 
 from src.back.search.embeddings.calculators.document_vector_calculator import DocumentVectorCalculator
