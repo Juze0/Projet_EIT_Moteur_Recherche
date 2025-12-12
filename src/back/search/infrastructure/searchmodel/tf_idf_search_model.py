@@ -3,7 +3,7 @@ from heapq import nlargest
 
 from src.back.search.domain.search_model import SearchModel
 from src.back.search.domain.search_query import SearchQuery
-from src.back.search.infrastructure.search_model_dependency.tf_idf_search_model_dependency import TfIdfSearchModelDependency
+from src.back.search.infrastructure.search.dependencies.tf_idf_dependency import TfIdfDependency
 
 """ La lemmatisation avec Spacy est plus précise que celle de NLTK, on doit choisir entre les deux """
 
@@ -11,7 +11,7 @@ class TFIDFSearchModel(SearchModel):
 
     nlp = None
 
-    def __init__(self, model_dependency: TfIdfSearchModelDependency):
+    def __init__(self, model_dependency: TfIdfDependency):
         self._model_dependency = model_dependency
     
    

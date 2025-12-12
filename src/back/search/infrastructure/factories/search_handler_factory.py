@@ -15,10 +15,10 @@ from src.back.search.application.usecases.search_command_handler import SearchCo
 from src.back.search.application.ports.search.search_command_handler_factory import SearchCommandHandlerFactory
 ## embedding (TODO à cacher derrière le container)
 from src.back.search.infrastructure.searchmodel.embedding_search_model import EmbeddingSearchModel
-from src.back.search.infrastructure.search_model_dependency.embedding_search_model_dependency import EmbeddingSearchModelDependency
+from src.back.search.infrastructure.search.dependencies.embedding_dependency import EmbeddingDependency
 ## tfidf
 from src.back.search.infrastructure.searchmodel.tf_idf_search_model import TFIDFSearchModel
-from src.back.search.infrastructure.search_model_dependency.tf_idf_search_model_dependency import TfIdfSearchModelDependency
+from src.back.search.infrastructure.search.dependencies.tf_idf_dependency import TfIdfDependency
 
 class SearchHandlerFactory(SearchCommandHandlerFactory):
 
@@ -41,7 +41,7 @@ class SearchHandlerFactory(SearchCommandHandlerFactory):
         
 
     def build_tfidf_handler(self, preprocessor: Preprocessor, search_file_service: SearchFileService) -> SearchCommandHandler[TFIDFSearchModel, TfIdfDependencyResolver]:
-        model_dependency = TfIdfSearchModelDependency(
+        model_dependency = TfIdfDependency(
             search_file_service.get_idf(),
             search_file_service.get_tf_idf_vectors(),
             search_file_service.get_full_vocab()
@@ -51,7 +51,7 @@ class SearchHandlerFactory(SearchCommandHandlerFactory):
     
 
     def build_embedding_handler(self, preprocessor: Preprocessor, search_file_service: SearchFileService) -> SearchCommandHandler[EmbeddingSearchModel, EmbeddingDependencyResolver]:
-        model_dependency = EmbeddingSearchModelDependency(
+        model_dependency = EmbeddingDependency(
             DocumentVectorCalculator(search_file_service.get_fassttext_model()),
             search_file_service.get_documents_embeddings()
         )

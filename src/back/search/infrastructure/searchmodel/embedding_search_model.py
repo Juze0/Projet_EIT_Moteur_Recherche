@@ -4,11 +4,11 @@ from heapq import nlargest
 
 from src.back.search.domain.search_model import SearchModel
 from src.back.search.domain.search_query import SearchQuery
-from src.back.search.infrastructure.search_model_dependency.embedding_search_model_dependency import EmbeddingSearchModelDependency
+from src.back.search.infrastructure.search.dependencies.embedding_dependency import EmbeddingDependency
 
 class EmbeddingSearchModel(SearchModel):
 
-    def __init__(self, model_dependency: EmbeddingSearchModelDependency):
+    def __init__(self, model_dependency: EmbeddingDependency):
         self._model_dependency = model_dependency
     
     

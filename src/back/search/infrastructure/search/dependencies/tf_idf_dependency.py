@@ -1,7 +1,7 @@
 from src.back.search.application.ports.search.search_model_dependency import SearchModelDependency
 from src.back.search.application.ports.persistence.file import File
 
-class TfIdfSearchModelDependency(SearchModelDependency):
+class TfIdfDependency(SearchModelDependency):
 
     def __init__(self, idf_dict:File, tf_idf_vectors:File, full_vocab:File):
         self._idf_dict = idf_dict

@@ -2,7 +2,7 @@ from src.back.search.application.ports.search.search_model_dependency import Sea
 from src.back.search.application.ports.persistence.file import File
 from src.back.search.embeddings.calculators.document_vector_calculator import DocumentVectorCalculator
 
-class EmbeddingSearchModelDependency(SearchModelDependency):
+class EmbeddingDependency(SearchModelDependency):
 
     def __init__(self, document_vector_calculator: DocumentVectorCalculator,  document_embeddings:File):
         self._document_vector_calculator = document_vector_calculator
