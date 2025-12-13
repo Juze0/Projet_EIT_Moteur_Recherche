@@ -1,9 +1,9 @@
 from src.back.core.application.mediator import Mediator
 
-from src.front.search.dtos.search_request_dto import SearchRequestDTO
+from src.back.search.application.dtos.search_request_dto import SearchRequestDTO
 from src.back.search.application.usecases.search_command import SearchCommand
 
-class Controller:
+class SearchController:
 
     def __init__(self, mediator: Mediator):
         self._mediator = mediator

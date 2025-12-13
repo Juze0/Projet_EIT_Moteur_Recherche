@@ -2,8 +2,8 @@ import argparse
 from src.front.search.ui.cli import CLI
 from src.front.search.ui.gui import GUI
 
-from src.back.search.shared.mediator_factory import build_mediator
-from src.back.search.shared.controller import Controller
+from src.back.core.infrastructure.mediator_factory import build_mediator
+from src.back.search.application.search_controller import SearchController
 from src.front.search.services.search_service import SearchService
 from src.front.search.state.search_state import SearchState
 
@@ -20,7 +20,7 @@ def main():
     args = parser.parse_args()
     
     # Initialisation de l'interface choisie
-    search_service = SearchService(Controller(build_mediator()), SearchState())
+    search_service = SearchService(SearchController(build_mediator()), SearchState())
     if args.interface == "cli":
         interface = CLI(search_service)
     else:

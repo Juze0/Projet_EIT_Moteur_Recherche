@@ -1,10 +1,10 @@
 from src.front.search.state.search_state import SearchState
-from src.front.search.dtos.search_request_dto import SearchRequestDTO
-from src.back.search.shared.controller import Controller
+from src.back.search.application.dtos.search_request_dto import SearchRequestDTO
+from src.back.search.application.search_controller import SearchController
 
 class SearchService:
 
-    def __init__(self, controller: Controller, state: SearchState):
+    def __init__(self, controller: SearchController, state: SearchState):
         self._controller = controller
         self._state = state
 
