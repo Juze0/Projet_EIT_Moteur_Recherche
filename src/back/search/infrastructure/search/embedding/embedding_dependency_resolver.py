@@ -1,12 +1,12 @@
 from src.back.search.infrastructure.search.search_model_dependency_resolver import SearchModelDependencyResolver
 from src.back.preprocessor.domain.preprocessor import Preprocessor
-from src.back.search.shared.service.search_file_service import SearchFileService
+from src.back.core.application.search_model_file_service import SearchModelFileService
 from src.back.search.infrastructure.search.embedding.calculators.we_calculator import WECalculator
 from src.back.search.infrastructure.search.embedding.calculators.document_vector_calculator import DocumentVectorCalculator
 
 class EmbeddingDependencyResolver(SearchModelDependencyResolver):
 
-    def __init__(self, preprocessor: Preprocessor, search_file_service: SearchFileService):
+    def __init__(self, preprocessor: Preprocessor, search_file_service: SearchModelFileService):
         super().__init__(preprocessor, search_file_service)
 
 
@@ -20,7 +20,7 @@ class EmbeddingDependencyResolver(SearchModelDependencyResolver):
         print(f"\n#####  Vérification des prérequis pour utiliser les word embeddings")
         we_calculator = WECalculator("skipgram")
 
-        corpus_files = self._search_file_service.get_corpus_files()
+        corpus_files = self._search_file_service.create_corpus_file()
         preprocessed_merged_corpus_file = self._search_file_service.get_preprocessed_corpus()
         fasttext_model = self._search_file_service.get_fassttext_model()
 
@@ -33,7 +33,7 @@ class EmbeddingDependencyResolver(SearchModelDependencyResolver):
         fasttext_model = self._search_file_service.get_fassttext_model()
         document_vector_calculator = DocumentVectorCalculator(fasttext_model)
 
-        corpus_files = self._search_file_service.get_corpus_files()
+        corpus_files = self._search_file_service.create_corpus_file()
         preprocessed_merged_corpus_file = self._search_file_service.get_preprocessed_corpus()
         doc_embeddings = self._search_file_service.get_documents_embeddings()
 
