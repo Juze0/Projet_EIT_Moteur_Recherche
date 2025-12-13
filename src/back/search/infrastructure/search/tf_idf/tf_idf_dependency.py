@@ -1,5 +1,5 @@
-from src.back.search.application.ports.search.search_model_dependency import SearchModelDependency
-from src.back.search.application.ports.persistence.file import File
+from src.back.search.application.ports.output.search.search_model_dependency import SearchModelDependency
+from src.back.search.application.ports.output.persistence.file import File
 
 class TfIdfDependency(SearchModelDependency):
 

@@ -1,7 +1,7 @@
 from src.back.preprocessor.domain.preprocessor import Preprocessor
 from src.back.core.application.search_model_file_service import SearchModelFileService
-from src.back.search.application.ports.search.dependency_resolver import DependencyResolver
-from src.back.search.application.ports.persistence.file import File
+from src.back.search.application.ports.output.search.dependency_resolver import DependencyResolver
+from src.back.search.application.ports.output.persistence.file import File
 
 class SearchModelDependencyResolver(DependencyResolver):
 

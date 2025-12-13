@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
 
-from src.back.search.application.ports.persistence.file import File
+from src.back.search.application.ports.output.persistence.file import File
 
 
 class FileFactory(ABC):

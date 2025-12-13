@@ -3,7 +3,7 @@ from src.back.core.application.search_model_file_service import SearchModelFileS
 ## command/handler
 from src.back.search.application.usecases.search_command import SearchCommand
 from src.back.search.application.usecases.search_command_handler import SearchCommandHandler
-from src.back.search.application.ports.search.search_command_handler_factory import SearchCommandHandlerFactory
+from src.back.search.application.ports.output.search.search_command_handler_factory import SearchCommandHandlerFactory
 ## preprocessor
 from src.back.preprocessor.domain.preprocessor import Preprocessor
 from src.back.preprocessor.domain.preprocessor_name import PreprocessorName
