@@ -5,6 +5,10 @@ from rich.text import Text
 
 from src.front.search.ui.ui import UI
 from src.front.search.services.search_service import SearchService
+from src.back.search.application.dtos.search_response_dto import SearchResponseDTO
+
+import json
+from dataclasses import asdict
 
 class CLI(UI):
     """Class to manage CLI interactions for the document search engine."""
@@ -75,7 +79,6 @@ class CLI(UI):
 
     def search_and_display_results(self):
         """Prompts user for a query and displays search results."""
-        link = None #TODO FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER)
         
         while True:
             query = input("Veuillez entrer votre requête (ou tapez 'help' pour voir les commandes disponibles) : ")
@@ -92,23 +95,19 @@ class CLI(UI):
 
             # Recherche des documents les + pertinents !
             results = self._search_service.search(query)
+            print(json.dumps(asdict(results), indent=2, ensure_ascii=False))
             if not results:
                 self.console.print("Aucun document n'a été trouvé pour votre recherche." + emojize(":neutral_face:"))
             else:
-                self.display_results_table(results, link)
+                self.display_results_table(results)
 
-    def display_results_table(self, results, link):
+    def display_results_table(self, query_result: SearchResponseDTO):
         """Displays the search results in a formatted table."""
         table = Table(show_header=True, header_style="bold magenta", expand=True)
         table.add_column("Document", style="dim", width=12, justify="center", no_wrap=True)
         table.add_column("Pourcentage de pertinence par rapport à la requête", style="dim", width=12, justify="center", no_wrap=True)
 
-        for i, result in enumerate(results.keys()):
-            if i >= 10:
-                break
-            relevance_score = round(results[result] * 100, 2)
-            with open(f"{link}/{result}", "r", encoding="utf-8") as file:
-                title = file.readline().strip()
-            table.add_row(f"{result}: {title}", f"{relevance_score}%", style="white")
+        for result in query_result.results:
+            table.add_row(f"{result.document_name}: {"title"}", f"{round(result.score * 100, 2)}%", style="white")
 
         self.console.print(table)

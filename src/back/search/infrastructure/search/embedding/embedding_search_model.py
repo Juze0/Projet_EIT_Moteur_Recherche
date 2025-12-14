@@ -5,6 +5,7 @@ from heapq import nlargest
 from src.back.search.domain.search_model import SearchModel
 from src.back.search.domain.search_query import SearchQuery
 from src.back.search.infrastructure.search.embedding.embedding_dependency import EmbeddingDependency
+from src.back.search.application.dtos.search_response_dto import SearchResponseDTO, SearchResultDTO
 
 class EmbeddingSearchModel(SearchModel):
 
@@ -31,18 +32,18 @@ class EmbeddingSearchModel(SearchModel):
 
         # 2/3 - Calculer la similarité entre la requête et chaque document 
         document_embeddings = self._model_dependency.get_document_embeddings().load()
-        docs_to_answer_query = {}
+        docs_scores = {}
         for doc_name, doc_embedding in document_embeddings.items():
             # Vérification que les dimensions sont compatibles avant de calculer la similarité
             if len(query_embedding) == len(doc_embedding):
                 similarity_score = self.cosine_similarity(query_embedding, doc_embedding)
-                docs_to_answer_query[doc_name] = similarity_score
+                docs_scores[doc_name] = similarity_score
             else:
                 print(f"Dimensions incompatibles pour le document '{doc_name}' : {len(query_embedding)} vs {len(doc_embedding)}")
 
-        # 3/3 - Tri des résultats de recherche
-        docs_to_answer_query = dict(sorted(docs_to_answer_query.items(), key=lambda x: x[1], reverse=True))
-        top_documents = nlargest(10, docs_to_answer_query.items(), key=lambda item: item[1])
-        for tuple in top_documents:
-            print(f"{tuple[0]}:{tuple[1]}")
-        return docs_to_answer_query
+        top_documents = nlargest(search_query.top_n, docs_scores.items(), key=lambda item: item[1])
+        results = [ SearchResultDTO(document_name=doc,  score=score) for doc, score in top_documents ]
+        return SearchResponseDTO(
+            query=search_query.query,
+            results=results
+        )

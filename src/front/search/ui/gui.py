@@ -7,6 +7,7 @@ import customtkinter as ctk
 from CTkListbox import *
 from src.front.search.ui.ui import UI
 from src.front.search.services.search_service import SearchService
+from src.back.search.application.dtos.search_response_dto import SearchResponseDTO
 
 
 # Configuration de l'apparence de CustomTkinter
@@ -267,18 +268,12 @@ class GUI(ctk.CTk, UI):
             print("Veuillez entrer une requête valide.")
 
     
-    def display_results(self, results):
+    def display_results(self, query_result: SearchResponseDTO):
         """Affiche les résultats sous forme de liste cliquable dans la TextBox."""
-        # Efface les anciens résultats
-        self.listbox_query_results.delete("0", "end")  # Utilise "0" pour indiquer le début de la Listbox
+        self.listbox_query_results.delete("0", "end")
         
-        # Ajoute chaque résultat (nom de fichier) dans la Listbox
-        link = None #TODO join(FileHierarchyEnum.get_file_path(FileHierarchyEnum.WIKI_CORPUS_FOLDER))
-        for i, result in enumerate(results.keys()):
-            relevance_score = round(results[result] * 100, 2)
-            with open(f"{link}/{result}", "r", encoding="utf-8") as file:
-                title = file.readline().strip()
-            self.listbox_query_results.insert("end", f"{result}: {title}, {relevance_score}%",)
+        for result in query_result.results:
+            self.listbox_query_results.insert("end", f"{result.document_name}: {"result"}, {round(result.score * 100, 2)}%",)
 
 
     def show_file_content(self, event):

@@ -7,7 +7,6 @@ from src.back.core.application.ports.paths_provider import PathsProvider
 #│   ├── /output
 
 BASE_DIR = Path(__file__).resolve().parents[4]
-print("ATTENTION: " + str(BASE_DIR))
 DATA_DIR = BASE_DIR / "data"
 WIKI_CORPUS_DIR = DATA_DIR / "wiki-corpus"
 CORRECTION_DIR = DATA_DIR / "correction"

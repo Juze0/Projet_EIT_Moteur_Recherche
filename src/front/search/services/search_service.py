@@ -20,5 +20,7 @@ class SearchService:
     def search(self, query: str):
         self._state.set_last_query(query)
         return self._search_input.search(
-            SearchRequestDTO(self._state.get_preprocessor(), self._state.get_model(), self._state.get_last_query())
-        )
+            SearchRequestDTO(preprocessor=self._state.get_preprocessor(),
+                             search_model=self._state.get_model(),
+                             query=self._state.get_last_query(),
+                             top_n=15))

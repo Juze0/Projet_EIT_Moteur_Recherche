@@ -10,7 +10,8 @@ class SearchController(SearchInput):
 
 
     def search(self, search_request_dto: SearchRequestDTO):
-        return self._mediator.send(SearchCommand(search_request_dto.query, 10,
-                                                 search_request_dto.preprocessor,
-                                                 search_request_dto.search_model))
+        return self._mediator.send(SearchCommand(query=search_request_dto.query,
+                                                 top_n=search_request_dto.top_n,
+                                                 preprocessor=search_request_dto.preprocessor,
+                                                 search_model=search_request_dto.search_model))
     

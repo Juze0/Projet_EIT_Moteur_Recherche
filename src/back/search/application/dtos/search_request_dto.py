@@ -5,3 +5,4 @@ class SearchRequestDTO:
     preprocessor: str
     search_model: str
     query: str
+    top_n: int
