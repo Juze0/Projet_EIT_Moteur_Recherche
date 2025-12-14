@@ -1,7 +1,7 @@
 from numpy import zeros, mean, amax, concatenate
 
 from src.back.search.infrastructure.search.calculator import Calculator
-from src.back.search.application.ports.output.persistence.file import File
+from src.back.core.application.ports.file import File
 
 
 class DocumentVectorCalculator(Calculator):

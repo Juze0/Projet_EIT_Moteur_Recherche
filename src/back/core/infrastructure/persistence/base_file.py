@@ -2,7 +2,7 @@ from os import makedirs, remove, listdir
 from os.path import exists, join, dirname, getsize
 from sys import exit
 
-from src.back.search.application.ports.output.persistence.file import File
+from src.back.core.application.ports.file import File
 
 class BaseFile(File):
 

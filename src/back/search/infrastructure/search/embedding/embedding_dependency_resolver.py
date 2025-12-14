@@ -20,7 +20,7 @@ class EmbeddingDependencyResolver(SearchModelDependencyResolver):
         print(f"\n#####  Vérification des prérequis pour utiliser les word embeddings")
         we_calculator = WECalculator("skipgram")
 
-        corpus_files = self._search_file_service.create_corpus_file()
+        corpus_files = self._search_file_service.get_corpus_files()
         preprocessed_merged_corpus_file = self._search_file_service.get_preprocessed_corpus()
         fasttext_model = self._search_file_service.get_fassttext_model()
 
@@ -33,7 +33,7 @@ class EmbeddingDependencyResolver(SearchModelDependencyResolver):
         fasttext_model = self._search_file_service.get_fassttext_model()
         document_vector_calculator = DocumentVectorCalculator(fasttext_model)
 
-        corpus_files = self._search_file_service.create_corpus_file()
+        corpus_files = self._search_file_service.get_corpus_files()
         preprocessed_merged_corpus_file = self._search_file_service.get_preprocessed_corpus()
         doc_embeddings = self._search_file_service.get_documents_embeddings()
 

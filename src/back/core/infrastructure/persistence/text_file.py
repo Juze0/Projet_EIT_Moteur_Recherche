@@ -1,4 +1,4 @@
-from src.back.search.infrastructure.file.base_file import BaseFile
+from src.back.core.infrastructure.persistence.base_file import BaseFile
 
 class TextFile(BaseFile):
     

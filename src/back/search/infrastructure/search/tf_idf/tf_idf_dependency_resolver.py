@@ -20,7 +20,7 @@ class TfIdfDependencyResolver(SearchModelDependencyResolver):
         print(f"\n#####  Vérification des prérequis pour utiliser le vocabulaire, l'index et l'index inversé")
         index_voc_calculator = IndexAndVocabCalculator()
 
-        corpus_files = self._search_file_service.create_corpus_file()
+        corpus_files = self._search_file_service.get_corpus_files()
         index_file = self._search_file_service.get_index()
         inverse_index_file = self._search_file_service.get_inverse_index()
         full_vocab_file = self._search_file_service.get_full_vocab()
