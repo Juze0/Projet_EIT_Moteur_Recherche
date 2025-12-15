@@ -3,9 +3,9 @@ from src.back.core.application.ports.paths_provider import PathsProvider
 from src.back.core.application.ports.file import File
 
 
-class SearchModelFileService: # TODO à renommer: FileRetrieverService et casser la classe ...
+class FileContextAccessor: # TODO casser la classe ...
 
-    def __init__(self, file_factory: FileFactory, paths_provider: PathsProvider, search_model_name: str, preprocessor_name: str):
+    def __init__(self, paths_provider: PathsProvider, file_factory: FileFactory, search_model_name: str, preprocessor_name: str):
         self._file_factory = file_factory
         self._paths_provider = paths_provider
         self._output_path = self._paths_provider.output_dir() / search_model_name / preprocessor_name

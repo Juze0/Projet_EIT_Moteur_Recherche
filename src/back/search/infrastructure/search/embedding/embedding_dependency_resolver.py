@@ -1,12 +1,12 @@
 from src.back.search.infrastructure.search.search_model_dependency_resolver import SearchModelDependencyResolver
 from src.back.preprocessor.domain.preprocessor import Preprocessor
-from src.back.core.application.search_model_file_service import SearchModelFileService
+from src.back.core.application.file_context_accessor import FileContextAccessor
 from src.back.search.infrastructure.search.embedding.calculators.we_calculator import WECalculator
 from src.back.search.infrastructure.search.embedding.calculators.document_vector_calculator import DocumentVectorCalculator
 
 class EmbeddingDependencyResolver(SearchModelDependencyResolver):
 
-    def __init__(self, preprocessor: Preprocessor, search_file_service: SearchModelFileService):
+    def __init__(self, preprocessor: Preprocessor, search_file_service: FileContextAccessor):
         super().__init__(preprocessor, search_file_service)
 
 

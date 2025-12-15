@@ -8,8 +8,11 @@ from src.back.core.infrastructure.file_factory import FileFactory
 from src.back.core.infrastructure.local_paths_provider import LocalPathsProvider
 from src.back.preprocessor.infrastructure.preprocessor_factory import PreprocessorFactory
 
+from src.back.core.application.file_context_accessor_factory import FileContextAccessorFactory
+
 
 def build_mediator() -> Mediator:
     mediator = Mediator()
-    mediator.register_handler(SearchCommand, SearchHandlerRouter(SearchHandlerFactory(FileFactory(), LocalPathsProvider(), PreprocessorFactory())))
+    file_context_accessor_factory = FileContextAccessorFactory(LocalPathsProvider(), FileFactory())
+    mediator.register_handler(SearchCommand, SearchHandlerRouter(SearchHandlerFactory(file_context_accessor_factory, PreprocessorFactory())))
     return mediator

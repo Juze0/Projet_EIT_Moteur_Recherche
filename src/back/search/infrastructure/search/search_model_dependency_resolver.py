@@ -1,11 +1,11 @@
 from src.back.preprocessor.domain.preprocessor import Preprocessor
-from src.back.core.application.search_model_file_service import SearchModelFileService
+from src.back.core.application.file_context_accessor import FileContextAccessor
 from src.back.search.application.ports.output.search.dependency_resolver import DependencyResolver
 from src.back.core.application.ports.file import File
 
 class SearchModelDependencyResolver(DependencyResolver):
 
-    def __init__(self, preprocessor: Preprocessor, search_file_service: SearchModelFileService):
+    def __init__(self, preprocessor: Preprocessor, search_file_service: FileContextAccessor):
         self._preprocessor = preprocessor
         self._search_file_service = search_file_service
 
