@@ -1,10 +1,9 @@
 from sklearn.metrics.pairwise import cosine_similarity
 from heapq import nlargest
 
-from src.back.search.domain.search_model import SearchModel
+from src.back.search.domain.search_model import SearchModel, ScoredDocument
 from src.back.search.domain.search_query import SearchQuery
 from src.back.search.infrastructure.search.tf_idf.tf_idf_dependency import TfIdfDependency
-from src.back.search.application.dtos.search_response_dto import SearchResponseDTO, SearchResultDTO
 
 """ La lemmatisation avec Spacy est plus précise que celle de NLTK, on doit choisir entre les deux """
 
@@ -16,7 +15,7 @@ class TFIDFSearchModel(SearchModel):
         self._model_dependency = model_dependency
     
    
-    def calculate_docs_to_answer_query_docs(self, search_query: SearchQuery):
+    def calculate_docs_to_answer_query_docs(self, search_query: SearchQuery) -> list[ScoredDocument]:
         """
         Prend une requête utilisateur, le dictionnaire de tf*idf des documents et le dictionnaire des idf des mots.
         Retourne un dictionnaire associant les documents et leur similarité cosinus avec la requête utilisateur. Le dictionnaire est en ordre décroissant.
@@ -52,11 +51,7 @@ class TFIDFSearchModel(SearchModel):
                 print(f"Dimensions incompatibles pour le document '{filename}' : {len(query_vector)} vs {len(vector)}")
 
         top_documents = nlargest(search_query.top_n, docs_scores.items(), key=lambda item: item[1])
-        results = [ SearchResultDTO(document_name=doc, score=score) for doc, score in top_documents ]
-        return SearchResponseDTO(
-            query=search_query.query,
-            results=results
-        )
+        return [ScoredDocument(doc, score) for doc, score in top_documents]
 
     def count_words(self,tokens):
         """

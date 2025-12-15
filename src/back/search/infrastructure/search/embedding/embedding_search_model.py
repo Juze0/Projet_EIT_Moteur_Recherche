@@ -2,10 +2,9 @@ from numpy import dot
 from numpy.linalg import norm
 from heapq import nlargest
 
-from src.back.search.domain.search_model import SearchModel
+from src.back.search.domain.search_model import SearchModel, ScoredDocument
 from src.back.search.domain.search_query import SearchQuery
 from src.back.search.infrastructure.search.embedding.embedding_dependency import EmbeddingDependency
-from src.back.search.application.dtos.search_response_dto import SearchResponseDTO, SearchResultDTO
 
 class EmbeddingSearchModel(SearchModel):
 
@@ -20,7 +19,7 @@ class EmbeddingSearchModel(SearchModel):
         return dot(vector1, vector2) / (norm(vector1) * norm(vector2))
     
 
-    def calculate_docs_to_answer_query_docs(self, search_query: SearchQuery):
+    def calculate_docs_to_answer_query_docs(self, search_query: SearchQuery) -> list[ScoredDocument]:
         """
         Trouve les documents les plus pertinents pour une requête utilisateur.
         :param query: Texte brut de la requête utilisateur.
@@ -42,8 +41,5 @@ class EmbeddingSearchModel(SearchModel):
                 print(f"Dimensions incompatibles pour le document '{doc_name}' : {len(query_embedding)} vs {len(doc_embedding)}")
 
         top_documents = nlargest(search_query.top_n, docs_scores.items(), key=lambda item: item[1])
-        results = [ SearchResultDTO(document_name=doc,  score=score) for doc, score in top_documents ]
-        return SearchResponseDTO(
-            query=search_query.query,
-            results=results
-        )
+        return [ScoredDocument(doc, score) for doc, score in top_documents]
+

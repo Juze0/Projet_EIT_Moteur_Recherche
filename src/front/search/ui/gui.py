@@ -273,7 +273,8 @@ class GUI(ctk.CTk, UI):
         self.listbox_query_results.delete("0", "end")
         
         for result in query_result.results:
-            self.listbox_query_results.insert("end", f"{result.document_name}: {"result"}, {round(result.score * 100, 2)}%",)
+            self.listbox_query_results.insert("end", f"{result.document_name}: {result.content.split("\n", 1)[0][:50]}, {round(result.score * 100, 2)}%")
+
 
 
     def show_file_content(self, event):

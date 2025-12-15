@@ -108,6 +108,6 @@ class CLI(UI):
         table.add_column("Pourcentage de pertinence par rapport à la requête", style="dim", width=12, justify="center", no_wrap=True)
 
         for result in query_result.results:
-            table.add_row(f"{result.document_name}: {"title"}", f"{round(result.score * 100, 2)}%", style="white")
+            table.add_row(f"{result.document_name}: {result.content.split("\n", 1)[0][:50]}", f"{round(result.score * 100, 2)}%", style="white")
 
         self.console.print(table)

@@ -3,8 +3,8 @@ from dataclasses import dataclass
 @dataclass(frozen=True)
 class SearchResultDTO:
     document_name: str
-    #document_first_line: str TODO à valoriser
     score: float
+    content: str
 
 
 @dataclass(frozen=True)
